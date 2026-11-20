@@ -1,1346 +1,159 @@
 <!doctype html>
 <html lang="ca">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Pogo i Dolçaina</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Archivo:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap">
-<style>
-/* Layout: fanzine fotocopiat — barra de tauler escacat d'ska, enganxines rotades, vistes per pestanyes */
-:root {
-  --paper: #efeee9;
-  --paper-2: #e2e1da;
-  --ink: #17161a;
-  --ink-soft: #55535c;
-  --pink: #ff2e74;
-  --blue: #2752d6;
-  --yellow: #ffcc2e;
-  --green: #11966a;
-  --orange: #ff7a1a;
-  --purple: #a56cf0;
-  --card: #fbfaf7;
-  --line: #17161a;
-  --dot: rgba(23,22,26,.09);
-  --f-display: "Bungee", "Impact", "Arial Black", sans-serif;
-  --f-body: "Archivo", "Helvetica Neue", Arial, sans-serif;
-  --f-mono: "Space Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  color-scheme: light;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper: #141317; --paper-2: #1e1d23; --ink: #f1efe9; --ink-soft: #a7a4ae;
-    --pink: #ff4f8b; --blue: #6f93ff; --yellow: #ffd54f; --green: #2fc28f; --orange: #ff9447; --purple: #b98cff;
-    --card: #1c1b21; --line: #f1efe9; --dot: rgba(241,239,233,.07);
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --paper: #141317; --paper-2: #1e1d23; --ink: #f1efe9; --ink-soft: #a7a4ae;
-  --pink: #ff4f8b; --blue: #6f93ff; --yellow: #ffd54f; --green: #2fc28f; --orange: #ff9447; --purple: #b98cff;
-  --card: #1c1b21; --line: #f1efe9; --dot: rgba(241,239,233,.07);
-  color-scheme: dark;
-}
-
-* { box-sizing: border-box; }
-[hidden] { display: none !important; }
-html, body { margin: 0; }
-body {
-  background-color: var(--paper);
-  background-image: radial-gradient(var(--dot) 1px, transparent 1.2px);
-  background-size: 6px 6px;
-  color: var(--ink);
-  font-family: var(--f-body);
-  font-size: 16px;
-  line-height: 1.5;
-}
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--ink); }
-.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-button { font: inherit; color: inherit; cursor: pointer; }
-:focus-visible { outline: 3px solid var(--pink); outline-offset: 2px; }
-a { color: inherit; }
-
-/* ---------- capçalera ---------- */
-.checker {
-  height: 18px;
-  background-color: var(--ink);
-  background-image:
-    linear-gradient(45deg, var(--paper) 25%, transparent 25%, transparent 75%, var(--paper) 75%),
-    linear-gradient(45deg, var(--paper) 25%, transparent 25%, transparent 75%, var(--paper) 75%);
-  background-size: 18px 18px;
-  background-position: 0 0, 9px 9px;
-}
-header.hero { background: var(--ink); color: var(--paper); }
-header.hero .wrap { padding-block: 28px 22px; display: grid; gap: 10px; }
-.kicker { font-family: var(--f-mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--yellow); }
-h1 {
-  font-family: var(--f-display); font-weight: 400; margin: 0;
-  font-size: clamp(38px, 8vw, 86px); line-height: .92; letter-spacing: -.01em;
-  text-wrap: balance;
-}
-h1 .i { color: var(--pink); }
-h1 .d { display: inline-block; background: var(--yellow); color: #17161a; padding: 0 .12em; transform: rotate(-2deg); }
-.lede { max-width: 62ch; margin: 4px 0 0; color: color-mix(in srgb, var(--paper) 82%, transparent); }
-.lede b { color: var(--paper); }
-
-nav.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--paper); border-bottom: 3px solid var(--line); }
-nav.tabs .wrap { display: flex; gap: 6px; overflow-x: auto; padding-block: 10px; scrollbar-width: none; }
-nav.tabs a {
-  flex: none; text-decoration: none; font-family: var(--f-display); font-size: 15px;
-  padding: 7px 14px; border: 2px solid var(--line); background: var(--card); box-shadow: 3px 3px 0 var(--line);
-}
-nav.tabs a[aria-current="page"] { background: var(--pink); color: #17161a; }
-nav.tabs a:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--line); }
-
-main .wrap { padding-block: 26px 60px; }
-section[data-view] { display: grid; gap: 22px; }
-h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(24px, 4vw, 36px); margin: 0; line-height: 1; text-wrap: balance; }
-.sub { color: var(--ink-soft); margin: 4px 0 0; max-width: 70ch; }
-
-/* ---------- filtres ---------- */
-.controls { display: grid; gap: 12px; }
-.search-row { display: flex; gap: 10px; flex-wrap: wrap; }
-.search-row input {
-  flex: 1 1 240px; min-width: 0; font: inherit; padding: 10px 12px; border: 2px solid var(--line);
-  background: var(--card); color: var(--ink);
-}
-.btn {
-  border: 2px solid var(--line); background: var(--yellow); color: #17161a; padding: 9px 14px;
-  font-family: var(--f-display); font-size: 14px; box-shadow: 3px 3px 0 var(--line);
-}
-.btn:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--line); }
-.btn:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--line); }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip {
-  border: 2px solid var(--line); background: var(--card); padding: 3px 10px; font-family: var(--f-mono);
-  font-size: 12px; text-transform: uppercase; letter-spacing: .06em;
-}
-.chip[aria-pressed="true"] { background: var(--g, var(--ink)); color: #17161a; }
-.chip.status[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
-.filter-label { font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--ink-soft); margin-right: 4px; align-self: center; }
-.count { font-family: var(--f-mono); font-size: 13px; color: var(--ink-soft); }
-
-/* ---------- targetes ---------- */
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px 18px; }
-.card {
-  position: relative; background: var(--card); border: 2.5px solid var(--line); box-shadow: 5px 5px 0 var(--line);
-  padding: 14px 14px 12px; display: grid; gap: 8px; align-content: start; text-align: left;
-  transform: rotate(var(--r, 0deg)); transition: transform .15s ease;
-}
-.card:hover { transform: rotate(0deg) translateY(-3px); }
-.card .band-stripe { position: absolute; inset: 0 0 auto 0; height: 7px; background: var(--g, var(--ink)); }
-.card h3 { font-family: var(--f-display); font-weight: 400; font-size: 22px; line-height: 1.02; margin: 6px 0 0; text-wrap: balance; }
-.card .open { all: unset; cursor: pointer; display: grid; gap: 6px; }
-.card .open:focus-visible { outline: 3px solid var(--pink); outline-offset: 4px; }
-.meta { font-family: var(--f-mono); font-size: 12px; color: var(--ink-soft); display: flex; flex-wrap: wrap; gap: 4px 10px; font-variant-numeric: tabular-nums; }
-.card p { margin: 0; font-size: 14px; color: var(--ink-soft); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.tags { display: flex; flex-wrap: wrap; gap: 4px; }
-.tag { font-family: var(--f-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; padding: 1px 6px; border: 1.5px solid var(--line); background: var(--g); color: #17161a; }
-.card-actions { display: flex; gap: 6px; margin-top: 2px; }
-.icon-btn {
-  display: inline-flex; align-items: center; gap: 5px; border: 2px solid var(--line); background: transparent;
-  padding: 3px 8px; font-family: var(--f-mono); font-size: 11px; text-transform: uppercase;
-}
-.icon-btn svg { width: 15px; height: 15px; }
-.icon-btn[aria-pressed="true"].fav { background: var(--pink); color: #17161a; }
-.icon-btn[aria-pressed="true"].seen { background: var(--green); color: #17161a; }
-.status-stamp {
-  position: absolute; top: 12px; right: 10px; font-family: var(--f-mono); font-size: 10px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: .1em; padding: 1px 6px; border: 2px solid currentColor; transform: rotate(6deg);
-}
-.st-actiu { color: var(--green); }
-.st-comiat { color: var(--pink); }
-.st-aturat { color: var(--ink-soft); }
-.empty { padding: 30px; border: 2.5px dashed var(--line); text-align: center; font-family: var(--f-mono); }
-
-/* ---------- cronologia ---------- */
-.panel { background: var(--card); border: 2.5px solid var(--line); box-shadow: 5px 5px 0 var(--line); padding: 16px; min-width: 0; }
-.scroll-x { overflow-x: auto; }
-.tl-svg text { font-family: var(--f-mono); }
-.tl-row { cursor: pointer; }
-.tl-row:hover rect.bar, .tl-row:focus rect.bar { stroke-width: 3; }
-.tl-row:focus { outline: none; }
-.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-family: var(--f-mono); font-size: 12px; }
-.legend span { display: inline-flex; align-items: center; gap: 6px; }
-.legend i { width: 14px; height: 14px; border: 1.5px solid var(--line); display: inline-block; }
-.milestones { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
-.milestones li { display: grid; grid-template-columns: 92px 1fr; gap: 14px; padding: 10px 0; border-top: 2px dashed color-mix(in srgb, var(--line) 30%, transparent); }
-.milestones li:first-child { border-top: 0; }
-.milestones .when { font-family: var(--f-display); font-size: 15px; font-variant-numeric: tabular-nums; }
-.milestones .what { min-width: 0; }
-.milestones .what b { font-weight: 800; }
-.linkish { all: unset; cursor: pointer; text-decoration: underline; text-decoration-thickness: 2px; text-decoration-color: var(--pink); font-weight: 800; }
-.linkish:focus-visible { outline: 2px solid var(--pink); }
-
-/* ---------- mapa ---------- */
-.map-layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 18px; align-items: start; }
-@media (max-width: 820px) { .map-layout { grid-template-columns: 1fr; } }
-.map-svg { width: 100%; height: auto; display: block; }
-.map-svg .coast { fill: none; stroke: var(--line); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
-.map-svg .island { fill: var(--paper-2); stroke: var(--line); stroke-width: 2.5; }
-.map-svg .town { cursor: pointer; }
-.map-svg .town circle.pin { stroke: var(--line); stroke-width: 2.5; }
-.map-svg .town:hover circle.pin, .map-svg .town.on circle.pin { stroke-width: 4; }
-.map-svg .town text { font-family: var(--f-mono); font-size: 11px; fill: var(--ink); paint-order: stroke; stroke: var(--card); stroke-width: 4px; }
-.map-svg .sea { font-family: var(--f-display); fill: color-mix(in srgb, var(--blue) 35%, transparent); font-size: 22px; letter-spacing: .3em; }
-.town-list { display: grid; gap: 10px; }
-.town-list h3 { font-family: var(--f-display); font-weight: 400; margin: 0; font-size: 22px; }
-.town-item { display: flex; align-items: center; gap: 10px; justify-content: space-between; border: 2px solid var(--line); padding: 8px 10px; background: var(--paper); text-align: left; width: 100%; }
-.town-item small { font-family: var(--f-mono); color: var(--ink-soft); }
-.terr-bars { display: grid; gap: 8px; }
-.terr-bar { display: grid; grid-template-columns: 150px 1fr 26px; gap: 10px; align-items: center; font-size: 14px; }
-.terr-bar .track { height: 16px; border: 2px solid var(--line); background: var(--paper); }
-.terr-bar .fill { height: 100%; background: var(--blue); }
-.terr-bar b { font-family: var(--f-mono); text-align: right; font-variant-numeric: tabular-nums; }
-@media (max-width: 480px) { .terr-bar { grid-template-columns: 110px 1fr 24px; font-size: 13px; } }
-
-/* ---------- carnet ---------- */
-.carnet { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 18px; align-items: start; }
-@media (max-width: 820px) { .carnet { grid-template-columns: 1fr; } }
-.pass {
-  background: var(--yellow); color: #17161a; border: 3px solid #17161a; box-shadow: 6px 6px 0 var(--line);
-  padding: 18px; display: grid; gap: 12px; transform: rotate(-1deg);
-}
-.pass h3 { font-family: var(--f-display); font-weight: 400; margin: 0; font-size: 26px; line-height: 1; }
-.pass .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.pass .stat { border: 2px solid #17161a; background: #fbfaf7; padding: 8px; text-align: center; }
-.pass .stat b { display: block; font-family: var(--f-display); font-size: 30px; line-height: 1; font-variant-numeric: tabular-nums; }
-.pass .stat span { font-family: var(--f-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em; }
-.pass .perf { border-top: 3px dashed #17161a; margin: 0 -18px; }
-.pass .note { font-family: var(--f-mono); font-size: 12px; }
-.badges { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
-.badge { border: 2.5px solid var(--line); padding: 10px; background: var(--card); display: grid; gap: 4px; opacity: .45; }
-.badge.got { opacity: 1; box-shadow: 4px 4px 0 var(--line); background: var(--pink); color: #17161a; }
-.badge b { font-family: var(--f-display); font-weight: 400; font-size: 15px; line-height: 1.1; }
-.badge span { font-size: 12.5px; line-height: 1.3; }
-.stubs { display: grid; gap: 8px; }
-.stub { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; border: 2px solid var(--line); background: var(--card); padding: 8px 10px; }
-.stub .num { font-family: var(--f-mono); font-size: 11px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
-.stub .n { font-family: var(--f-display); font-size: 16px; min-width: 0; }
-
-/* ---------- fitxa ---------- */
-dialog {
-  border: 3px solid var(--line); box-shadow: 8px 8px 0 var(--line); padding: 0; background: var(--card); color: var(--ink);
-  width: min(760px, calc(100vw - 24px)); max-height: calc(100dvh - 40px);
-}
-dialog::backdrop { background: rgba(10,10,12,.62); }
-.sheet { display: grid; }
-.sheet-head { background: var(--g, var(--ink)); color: #17161a; padding: 18px 18px 14px; position: relative; display: grid; gap: 6px; }
-.sheet-head h2 { font-size: clamp(28px, 6vw, 46px); padding-right: 40px; }
-.sheet-head .meta { color: #17161a; opacity: .85; }
-.close { position: absolute; top: 10px; right: 10px; width: 36px; height: 36px; border: 2.5px solid #17161a; background: #fbfaf7; color: #17161a; font-family: var(--f-display); font-size: 18px; line-height: 1; }
-.sheet-body { padding: 18px; display: grid; gap: 18px; }
-.sheet-body p { margin: 0; max-width: 66ch; }
-.two { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 18px; }
-@media (max-width: 600px) { .two { grid-template-columns: 1fr; } }
-.h-mini { font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; letter-spacing: .14em; color: var(--ink-soft); margin: 0 0 6px; }
-.tracklist { list-style: none; margin: 0; padding: 0; border: 2px solid var(--line); }
-.tracklist li { display: grid; grid-template-columns: 52px 1fr; gap: 8px; padding: 6px 10px; border-top: 1.5px solid color-mix(in srgb, var(--line) 25%, transparent); font-size: 14.5px; }
-.tracklist li:first-child { border-top: 0; }
-.tracklist .y { font-family: var(--f-mono); color: var(--ink-soft); font-variant-numeric: tabular-nums; }
-.listen { display: flex; flex-wrap: wrap; gap: 8px; }
-.listen a { text-decoration: none; border: 2px solid var(--line); padding: 6px 10px; font-family: var(--f-mono); font-size: 12px; text-transform: uppercase; background: var(--paper); }
-.listen a:hover { background: var(--yellow); color: #17161a; }
-.recs { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
-.rec { border: 2px solid var(--line); background: var(--paper); padding: 8px 10px; text-align: left; display: grid; gap: 2px; }
-.rec b { font-family: var(--f-display); font-weight: 400; font-size: 15px; line-height: 1.1; }
-.rec small { font-family: var(--f-mono); font-size: 11px; color: var(--ink-soft); }
-.notebox { border-left: 6px solid var(--pink); padding: 6px 12px; background: var(--paper); font-size: 14px; }
-.sheet-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-
-footer { border-top: 3px solid var(--line); }
-footer .wrap { padding-block: 18px 30px; font-size: 13px; color: var(--ink-soft); display: grid; gap: 6px; }
-footer code { font-family: var(--f-mono); }
-
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } .card, .pass { transform: none; } }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SOLC · vinils, punk i intercanvi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Permanent+Marker&family=Special+Elite&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div class="grain" aria-hidden="true"></div>
 
-<header class="hero">
-  <div class="wrap">
-    <div class="kicker">Fanzine digital · ska · punk · folk · rock · festa major</div>
-    <h1>Pogo <span class="i">i</span> <span class="d">Dolçaina</span></h1>
-    <p class="lede">De <b>Fetus</b> a <b>La Ludwig Band</b>, passant per <b>Skatalà</b>, <b>Skalariak</b> i tota la colla. La música en català que es balla amb els peus enfangats, i els cosins d'Euskal Herria, la resta de l'Estat i l'ska i el punk en anglès: fitxes de grups, cronologia, mapa i el teu carnet de fan.</p>
-  </div>
-  <div class="checker" aria-hidden="true"></div>
-</header>
+  <header class="top">
+    <div class="logo">
+      <span class="logo-s">S</span><span class="logo-o">O</span><span class="logo-l">L</span><span class="logo-c">C</span>
+      <small>vinils · punk · intercanvi</small>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-view="crate">La meva caixa</button>
+      <button class="tab" data-view="market">Intercanvi</button>
+      <button class="tab" data-view="wish">Desitjos</button>
+      <button class="tab" data-view="deals">Tractes <span id="deals-count" class="badge" hidden>0</span></button>
+      <button class="sp-btn" id="sp-btn" hidden><span class="sp-dot"></span><span id="sp-label">Connecta Spotify</span></button>
+    </nav>
+  </header>
 
-<nav class="tabs" aria-label="Seccions">
-  <div class="wrap">
-    <a href="#grups" data-tab="grups">Grups</a>
-    <a href="#cronologia" data-tab="cronologia">Cronologia</a>
-    <a href="#mapa" data-tab="mapa">Mapa</a>
-    <a href="#carnet" data-tab="carnet">El meu carnet</a>
-  </div>
-</nav>
-
-<main>
-  <div class="wrap">
-
-    <section data-view="grups" aria-labelledby="h-grups">
-      <div>
-        <h2 id="h-grups">La colla</h2>
-        <p class="sub">Toca una enganxina per obrir la fitxa: discos, cançons per començar, on escoltar-los i a qui més t'agradarà.</p>
-      </div>
-      <div class="controls">
-        <div class="search-row">
-          <label class="filter-label" for="q" style="position:absolute;left:-9999px">Cerca</label>
-          <input id="q" type="search" placeholder="Cerca grup, poble, disc o cançó…" autocomplete="off">
-          <button class="btn" id="random" type="button">Sorprèn-me</button>
+  <section class="hero">
+    <div class="turntable" id="turntable">
+      <div class="plinth">
+        <div class="platter">
+          <div class="record" id="tt-record">
+            <div class="grooves"></div>
+            <div class="label" id="tt-label"><span>SOLC</span></div>
+          </div>
+          <div class="spindle"></div>
         </div>
-        <div class="chips" id="genre-chips" role="group" aria-label="Estil"><span class="filter-label">Estil</span></div>
-        <div class="chips" id="ambit-chips" role="group" aria-label="D'on són"><span class="filter-label">D'on</span></div>
-        <div class="chips" id="status-chips" role="group" aria-label="Estat"><span class="filter-label">Estat</span></div>
-        <div class="count" id="count" aria-live="polite"></div>
+        <div class="tonearm" id="tonearm"><div class="arm"></div><div class="head"></div></div>
+        <div class="knobs"><span></span><span></span><span class="led" id="led"></span></div>
       </div>
-      <div class="grid" id="grid"></div>
-    </section>
+    </div>
+    <div class="now">
+      <p class="kicker">ARA SONA</p>
+      <h1 id="now-title">Tria un disc<br>i deixa'l caure.</h1>
+      <p id="now-artist" class="now-artist">El soroll comença quan l'agulla toca el solc.</p>
+      <div class="vu" id="vu" aria-hidden="true"></div>
+      <p id="now-meta" class="now-meta">Prem ▶ a qualsevol disc. Puja el volum (i treu el mode silenci del mòbil).</p>
+      <div class="now-actions">
+        <button id="now-replay" class="btn btn-yellow" hidden>▶ Torna a sonar</button>
+        <button id="now-stop" class="btn btn-ghost" hidden>■ Atura</button>
+      </div>
+      <div class="stats" id="stats"></div>
+    </div>
+  </section>
 
-    <section data-view="cronologia" aria-labelledby="h-crono" hidden>
-      <div>
-        <h2 id="h-crono">Seixanta anys de bot</h2>
-        <p class="sub">Cada barra és la vida d'un grup sobre l'escenari, pintada pel seu estil principal. Les barres que acaben en fletxa encara toquen. Toca'n una per obrir la fitxa.</p>
-      </div>
-      <div class="legend" id="legend"></div>
-      <div class="count" id="tl-note"></div>
-      <div class="panel scroll-x"><div id="timeline"></div></div>
-      <div class="panel">
-        <h3 class="h-mini">Fites per recordar</h3>
-        <ul class="milestones" id="milestones"></ul>
-      </div>
-    </section>
-
-    <section data-view="mapa" aria-labelledby="h-mapa" hidden>
-      <div>
-        <h2 id="h-mapa">D'on surten</h2>
-        <p class="sub">Un mapa esquemàtic de la costa, del Cap de Creus a Alacant, amb una escapada a Iruñea. El cercle creix amb el nombre de grups del poble. Els grups de més lluny surten al recompte per territori.</p>
-      </div>
-      <div class="map-layout">
-        <div class="panel"><div id="map"></div></div>
-        <div class="panel town-list" id="town-panel"></div>
-      </div>
-      <div class="panel">
-        <h3 class="h-mini">Grups per territori</h3>
-        <div class="terr-bars" id="terr-bars"></div>
-      </div>
-    </section>
-
-    <section data-view="carnet" aria-labelledby="h-carnet" hidden>
-      <div>
-        <h2 id="h-carnet">El meu carnet de fan</h2>
-        <p class="sub">Marca els grups que estimes i els que ja has vist en directe. Es desa en aquest navegador; ningú més ho veu.</p>
-      </div>
-      <div class="carnet">
-        <div class="pass" id="pass"></div>
-        <div style="display:grid;gap:18px;min-width:0">
-          <div>
-            <h3 class="h-mini">Insígnies</h3>
-            <div class="badges" id="badges"></div>
-          </div>
-          <div>
-            <h3 class="h-mini">Entrades al calaix</h3>
-            <div class="stubs" id="stubs"></div>
-          </div>
+  <main>
+    <!-- LA MEVA CAIXA -->
+    <section class="view active" id="view-crate">
+      <div class="view-head">
+        <h2 class="tape">La meva caixa</h2>
+        <div class="filters">
+          <input id="search" type="search" placeholder="Busca banda o disc…">
+          <select id="genre-filter"><option value="">Tots els gèneres</option></select>
+          <button class="btn btn-pink" id="add-btn">+ Afegeix vinil</button>
         </div>
       </div>
+      <div class="grid" id="crate-grid"></div>
     </section>
 
-  </div>
-</main>
-
-<footer>
-  <div class="wrap">
-    <div>Dades recollides de premsa musical i fitxes públiques (Ara, VilaWeb, Surt de Casa, Nació Digital, El Temps, Valencia Plaza, Enderrock, Bandcamp, Wikipedia). Quan les fonts no quadren, la fitxa ho diu.</div>
-    <div>Falta el teu grup? Afegeix-lo a la llista <code>BANDS</code> d'aquest fitxer (camp <code>ambit</code>: pc, eh, es o int).</div>
-  </div>
-</footer>
-
-<dialog id="sheet" aria-labelledby="sheet-title"></dialog>
-
-<script>
-/* ======================================================================
-   DADES
-   inici / fi: anys d'activitat (fi = null → encara en actiu)
-   aprox: true quan les fonts discrepen sobre les dates
-   coord: [longitud, latitud] del poble d'origen
-   ====================================================================== */
-const byId = {};
-function byIdInit() { for (const b of BANDS) byId[b.id] = b; }
-
-const GENRES = {
-  ska:      { label: "Ska",      color: "var(--blue)" },
-  punk:     { label: "Punk",     color: "var(--pink)" },
-  folk:     { label: "Folk",     color: "var(--green)" },
-  reggae:   { label: "Reggae",   color: "var(--yellow)" },
-  rumba:    { label: "Rumba",    color: "var(--orange)" },
-  hardcore: { label: "Hardcore", color: "#9b9aa3" },
-  rock:     { label: "Rock",     color: "var(--purple)" },
-};
-
-const AMBITS = {
-  pc:  { label: "Països Catalans" },
-  eh:  { label: "Euskal Herria" },
-  es:  { label: "Resta de l'Estat" },
-  int: { label: "Internacional" },
-};
-
-const STATUS = {
-  actiu:  { label: "En actiu" },
-  comiat: { label: "Comiat recent" },
-  aturat: { label: "Llegenda" },
-};
-
-const BANDS = [
-  {
-    id: "fetus", nom: "Fetus", lloc: "La Bisbal d'Empordà", territori: "Empordà", coord: [3.04, 41.96],
-    inici: 2017, fi: null, aprox: true, estat: "actiu", generes: ["punk", "folk"], escena: "emporda",
-    desc: "Punk de garatge empordanès que s'ha anat enfangant de terra: romanços, cançó de taverna i The Pogues com a mirall gran. El nucli dur són Adrià Cortadellas (veu i guitarra), Telm Terradas (baix) i Adrià Jiménez (bateria).",
-    discos: [
-      { t: "L'epicentre del fangar", a: 2017 },
-      { t: "Terra cuita", a: 2019 },
-      { t: "Sota, cavall i rei", a: 2021 },
-      { t: "La serra dels perduts", a: 2022 },
-      { t: "Càntir nou fa aigua fresca", a: 2024 },
-      { t: "Romancer tartera", a: 2026 },
-    ],
-    cancons: [],
-    nota: "Sota, cavall i rei versiona romanços de Jaume Arnella. Discos amb el segell Bankrobber.",
-    bandcamp: "https://somfetus.bandcamp.com",
-    germans: ["pogues", "ludwig"],
-  },
-  {
-    id: "ludwig", nom: "La Ludwig Band", lloc: "Espolla", territori: "Empordà", coord: [3.00, 42.39],
-    inici: 2017, fi: null, estat: "actiu", generes: ["folk"], escena: "emporda",
-    desc: "Sis músics d'Espolla que van començar el 2017 a tocar les cançons que en Quim Carandell acumulava des de l'adolescència. Folk de poble, humor negre i cròniques de veïnat amb ofici de pop-rock clàssic.",
-    discos: [
-      { t: "La mateixa sort", a: 2021 },
-      { t: "Pel barri es comenta", a: 2026 },
-    ],
-    cancons: ["S'ha mort l'home més vell d'Espolla"],
-    nota: "«S'ha mort l'home més vell d'Espolla» va guanyar el Premi Cerverí a la millor lletra. La mateixa sort, premi Enderrock al millor disc (les fonts dubten entre 2021 i 2022).",
-    bandcamp: "https://laludwigband.bandcamp.com",
-  },
-  {
-    id: "skatala", nom: "Skatalà", lloc: "Barcelona", territori: "Barcelona i rodalia", coord: [2.17, 41.39],
-    inici: 1985, fi: 1998, estat: "aturat", generes: ["ska", "punk"], escena: "pioners",
-    desc: "Els pioners. Neixen a Barcelona el 1985 i el nom ho diu tot: ska, oi! i català. Referència mítica de l'escena ska de tot l'Estat.",
-    discos: [
-      { t: "Fent d'aquí", a: 1991 },
-      { t: "Borinot borinot", a: 1993 },
-      { t: "Un de nou", a: 1995 },
-    ],
-    cancons: [],
-    nota: "El 2010 es va editar el disc d'homenatge Embolingats pels 25 anys. El setembre de 2026 va morir Josep Manel Pugés, guitarrista fundador. Les fonts no coincideixen en les dates d'alguns discos.",
-  },
-  {
-    id: "calypso", nom: "Dr. Calypso", lloc: "Barcelona", territori: "Barcelona i rodalia", coord: [2.17, 41.39],
-    inici: 1989, fi: 2018, estat: "aturat", generes: ["ska"], escena: "pioners",
-    desc: "Primer concert el 18 de març de 1989, encara com a The Barcelonians. Ska de metall i dues tonalitats que va col·laborar amb mitja escena i va obrir camí a Catalunya.",
-    discos: [
-      { t: "Barbarossaplatz", a: 1999 },
-      { t: "Early Years", a: 2004 },
-      { t: "Apolo 10 (directe)", a: 2019 },
-    ],
-    cancons: [],
-    nota: "Comiat amb la gira dels 30 anys i concerts finals a la sala Apolo el 2018. Barbarossaplatz es va enregistrar a Alemanya.",
-  },
-  {
-    id: "skalariak", nom: "Skalariak", lloc: "Iruñea", territori: "Euskal Herria", coord: [-1.64, 42.81], ambit: "eh",
-    inici: 1994, fi: 2008, estat: "aturat", generes: ["ska", "punk", "reggae"], escena: "germans",
-    desc: "Els germans bascos de la colla. Ska combatiu de Navarra fundat el 1994 pels germans Juantxo i Peio Skalari, amb lletres en basc i castellà. Imprescindibles a qualsevol Diada amb pogo.",
-    discos: [
-      { t: "Skalariak", a: 1997 },
-      { t: "Klub Ska", a: 1999 },
-      { t: "En la kalle", a: 2001 },
-      { t: "Radio Ghetto", a: 2003 },
-      { t: "Luz rebelde", a: 2005 },
-      { t: "Ska Republik Concert (directe)", a: 2008 },
-    ],
-    cancons: ["Txapeldunak", "La kalle ska"],
-    nota: "No canten en català, però a la pista de ball no hi ha fronteres. Debut discogràfic amb «Txapeldunak» al recopilatori Latin Ska Vol. II (1996).",
-  },
-  {
-    id: "obrintpas", nom: "Obrint Pas", lloc: "València", territori: "País Valencià", coord: [-0.38, 39.47],
-    inici: 1993, fi: 2014, estat: "aturat", generes: ["ska", "punk", "folk"], escena: "valencia",
-    desc: "Nascuts a l'Institut Benlliure de València el 1993. Ska-punk amb dolçaina, consignes i una manera de fer que va encendre tota una generació del País Valencià.",
-    discos: [
-      { t: "La revolta de l'ànima", a: 1997 },
-      { t: "Terra", a: 2002 },
-      { t: "Benvingut al paradís", a: 2005 },
-      { t: "La flama", a: 2007 },
-      { t: "Coratge", a: 2011 },
-    ],
-    cancons: ["La flama"],
-    nota: "Guanyen el Tirant de Rock el 1994 amb la primera maqueta. El 2013 anuncien una aturada «indefinida».",
-  },
-  {
-    id: "gossa", nom: "La Gossa Sorda", lloc: "Pego", territori: "País Valencià", coord: [-0.12, 38.84],
-    inici: 1999, fi: 2016, aprox: true, estat: "aturat", generes: ["ska", "punk", "folk"], escena: "valencia",
-    desc: "Ska-rock de la Marina amb dolçaina i mala llet. Van alçar Pego com a capital de la música combativa en valencià i s'hi van acomiadar davant d'unes 20.000 persones.",
-    discos: [
-      { t: "Vigília", a: 2003 },
-      { t: "Garrotades", a: 2005 },
-      { t: "Saó", a: 2008 },
-      { t: "L'últim heretge", a: 2010 },
-      { t: "La polseguera", a: 2014 },
-    ],
-    cancons: ["Esbarzers"],
-    nota: "Les fonts dubten entre 1996 i 1999 per a la fundació, i entre 2005 i 2006 per a Garrotades. Recopilatori Batalles i cançons pels 20 anys de la primera maqueta.",
-  },
-  {
-    id: "smoking", nom: "Smoking Souls", lloc: "Pego", territori: "País Valencià", coord: [-0.12, 38.84],
-    inici: 2010, fi: 2025, estat: "comiat", generes: ["punk"], escena: "valencia",
-    desc: "Punk-rock de Pego amb guitarres esmolades i tornades per cridar. Quinze anys de carretera que es van tancar a casa.",
-    discos: [],
-    cancons: [],
-    nota: "Darrer concert el 14 de juny de 2025 a Pego, amb la gira del «fins aviat».",
-  },
-  {
-    id: "aspencat", nom: "Aspencat", lloc: "Xaló", territori: "País Valencià", coord: [-0.01, 38.74],
-    inici: 2010, fi: 2021, aprox: true, estat: "aturat", generes: ["ska", "reggae"], escena: "valencia",
-    desc: "Ska, reggae i electrònica de la Marina Alta, amb músics d'Orba, Xaló, Benissa i Llíber. Prenen el nom d'un plat de la zona.",
-    discos: [],
-    cancons: ["Música naix de la ràbia", "Som moviment"],
-    nota: "Es van acomiadar amb set concerts especials a l'octubre, la gira «La història és nostra… per sempre!». Les fonts no concreten l'any exacte d'inici ni del comiat.",
-  },
-  {
-    id: "fumiga", nom: "La Fúmiga", lloc: "Alzira", territori: "País Valencià", coord: [-0.43, 39.15],
-    inici: 2012, fi: 2026, estat: "comiat", generes: ["ska", "punk", "rumba"], escena: "valencia",
-    desc: "Banda de la Ribera nascuda el 2012: mestissatge, ska-punk i vent a dojo. La festa gran del país en valencià dels darrers anys.",
-    discos: [{ t: "Espremedors", a: null }],
-    cancons: [],
-    nota: "Comiat multitudinari al Roig Arena de València l'1 de novembre de 2026.",
-  },
-  {
-    id: "auxili", nom: "Auxili", lloc: "Ontinyent", territori: "País Valencià", coord: [-0.61, 38.82],
-    inici: 2014, fi: null, estat: "actiu", generes: ["reggae", "ska"], escena: "valencia",
-    desc: "Reggae i ska de la Vall d'Albaida, nascuts a Ontinyent el 2014. Ritme constant i lletres de terra.",
-    discos: [{ t: "Aborigen", a: 2025 }],
-    cancons: [],
-    nota: "Gira 2026 amb vuit concerts al País Valencià, començant al Parc del Fòrum de Barcelona.",
-  },
-  {
-    id: "txarango", nom: "Txarango", lloc: "Ripoll", territori: "Ripollès i Osona", coord: [2.19, 42.20],
-    inici: 2010, fi: 2021, aprox: true, estat: "aturat", generes: ["rumba", "reggae", "folk"], escena: "festa",
-    desc: "Rumba, reggae i circ des de Ripoll, amb Alguer Miquel al capdavant. Van omplir places de tot el país amb missatge i acordió.",
-    discos: [
-      { t: "Som riu", a: 2014 },
-      { t: "El gran ball (recopilatori)", a: 2021 },
-    ],
-    cancons: ["Som riu", "Músic de carrer"],
-    nota: "Van anunciar el comiat el desembre de 2019. La gira «El gran circ» es va suspendre definitivament per la pandèmia.",
-  },
-  {
-    id: "pepet", nom: "Pepet i Marieta", lloc: "Ulldecona", territori: "Terres de l'Ebre", coord: [0.45, 40.60],
-    inici: 2003, fi: 2026, estat: "comiat", generes: ["reggae", "ska", "rumba"], escena: "festa",
-    desc: "Reggae, ska i rumba del Montsià liderat per Josep Bordes, «Pepet». Més de vint anys fent ballar les festes majors.",
-    discos: [],
-    cancons: ["La placeta de les iaies"],
-    nota: "El 2026 anuncien la gira de comiat i un darrer disc, avançat amb «La placeta de les iaies».",
-  },
-  {
-    id: "roba", nom: "Roba Estesa", lloc: "Camp de Tarragona", territori: "Camp de Tarragona", coord: [1.15, 41.15],
-    inici: 2014, fi: 2025, aprox: true, estat: "comiat", generes: ["folk", "rumba"], escena: "festa",
-    desc: "Sis dones del Camp de Tarragona amb acordió, violí i puny alçat. Elles en deien «folk calentó»: cançó tradicional, rumba i cúmbia, i al final electrònica.",
-    discos: [
-      { t: "Descalces", a: 2016 },
-      { t: "Desglaç", a: 2018 },
-      { t: "Rosa permanent", a: 2021 },
-      { t: "De lo bo, lo millor", a: 2024 },
-    ],
-    cancons: ["Viu"],
-    nota: "Comiat amb «L'última estesa», els dies 11 i 12 de desembre de 2025 a la sala Paral·lel 62. Venen del projecte Ai, Carai!",
-  },
-  {
-    id: "ebri", nom: "Ebri Knight", lloc: "Argentona", territori: "Maresme", coord: [2.40, 41.55],
-    inici: 2004, fi: null, aprox: true, estat: "actiu", generes: ["folk", "punk"], escena: "folkpunk",
-    desc: "«Folk-rock hooligan en català» des del Maresme: melodies populars catalanes amb esperit celta i punk. La banda de folk-punk que no falla a cap festa major.",
-    discos: [
-      { t: "La palla va cara", a: null },
-      { t: "Foc!", a: null },
-      { t: "Guerrilla", a: null },
-      { t: "La voz dormida (EP)", a: 2019 },
-      { t: "Carrer", a: null },
-    ],
-    cancons: ["Tornaria", "Guerrilla", "Foc"],
-    nota: "Fundats el 2004 o 2005 segons la font. L'EP La voz dormida recorda els 80 anys de la derrota republicana.",
-    bandcamp: "https://ebriknight.bandcamp.com",
-    germans: ["dropkick", "pogues"],
-  },
-  {
-    id: "brams", nom: "Brams", lloc: "Berga", territori: "Berguedà", coord: [1.85, 42.10],
-    inici: 1990, fi: 2006, estat: "aturat", generes: ["punk"], escena: "combatiu",
-    desc: "Neixen al Berguedà el juny de 1990 amb Francesc Ribera, «Titot», a la veu. Punta de llança del rock independentista català.",
-    discos: [],
-    cancons: [],
-    nota: "Quan es dissolen, part del grup crea Aramateix (2006).",
-  },
-  {
-    id: "inadaptats", nom: "Inadaptats", lloc: "Vilafranca del Penedès", territori: "Penedès", coord: [1.70, 41.35],
-    inici: 1992, fi: 2005, estat: "aturat", generes: ["hardcore", "ska", "punk"], escena: "combatiu",
-    desc: "Col·lectiu polític i musical de Vilafranca: hardcore, rap, ska i oi! barrejats amb ràbia. Rage Against the Machine i Negu Gorriak com a referents.",
-    discos: [],
-    cancons: [],
-    nota: "Després de la separació, els membres formen Eina.",
-    germans: ["negugorriak"],
-  },
-  {
-    id: "buhos", nom: "Buhos", lloc: "Calafell", territori: "Penedès", coord: [1.57, 41.20],
-    inici: 2005, fi: null, estat: "actiu", generes: ["rumba", "ska"], escena: "festa",
-    desc: "Rock festiu del Baix Penedès amb vent, rumba i ska. Una de les bandes més rodades de les festes majors.",
-    discos: [{ t: "Lluna plena", a: 2016 }],
-    cancons: [],
-    nota: "Lluna plena va ser Disc Català de l'Any 2016.",
-  },
-  {
-    id: "doctorprats", nom: "Doctor Prats", lloc: "Terrassa", territori: "Vallès", coord: [2.01, 41.56],
-    inici: 2015, fi: null, aprox: true, estat: "actiu", generes: ["ska", "rumba"], escena: "festa",
-    desc: "Va començar com un projecte només a internet i ha acabat fent saltar places senceres: ska, rumba i vent amb aire festiu.",
-    discos: [
-      { t: "Patates amb peix", a: 2015 },
-      { t: "Aham Sigah", a: 2016 },
-      { t: "Venim de lluny", a: 2018 },
-      { t: "Pel cantó bo", a: 2022 },
-    ],
-    cancons: ["Caminem lluny"],
-    nota: "Algunes fonts situen l'inici el 2014.",
-  },
-  {
-    id: "pegatina", nom: "La Pegatina", lloc: "Montcada i Reixac", territori: "Barcelona i rodalia", coord: [2.19, 41.48],
-    inici: 2003, fi: null, estat: "actiu", generes: ["rumba", "ska"], escena: "festa",
-    desc: "Rumba-ska de Montcada que ha girat mig món. Canten en català, castellà i el que calgui.",
-    discos: [],
-    cancons: ["Lloverá y yo veré"],
-    nota: "Bilingües: perfectes per arrossegar els amics que encara no s'hi han posat.",
-  },
-  {
-    id: "pirats", nom: "Pirat's Sound Sistema", lloc: "Barcelona", territori: "Barcelona i rodalia", coord: [2.17, 41.39],
-    inici: 2002, fi: null, estat: "actiu", generes: ["reggae"], escena: "festa",
-    desc: "El sound system català de reggae, ragga i dancehall, nascut a Barcelona el 2002.",
-    discos: [
-      { t: "Sants Sistema", a: null },
-      { t: "Vol. II", a: null },
-      { t: "Reggae in Pandemia (EP)", a: null },
-    ],
-    cancons: [],
-    nota: "",
-  },
-  {
-    id: "oprimits", nom: "Oprimits", lloc: "Mallorca", territori: "Illes Balears", coord: [2.95, 39.66],
-    inici: null, fi: null, estat: "actiu", generes: ["ska", "punk"], escena: "germans",
-    desc: "Ska-punk en català des de Mallorca, per demostrar que el pogo també es fa entre ametllers.",
-    discos: [{ t: "Seguirem lluitant", a: null }],
-    cancons: [],
-    nota: "Fitxa incompleta: si en saps les dates, completa-la.",
-  },
-  {
-    id: "kop", nom: "KOP", lloc: "Barcelona", territori: "Barcelona i rodalia", coord: [2.17, 41.39],
-    inici: 1998, fi: null, estat: "actiu", generes: ["hardcore", "punk"], escena: "combatiu",
-    desc: "Hardcore punk combatiu de Barcelona, nascut el 1998 a partir de tres membres de Speereth, amb en Juanra a la veu. Cançons en català, castellà i basc, i zero concessions.",
-    discos: [
-      { t: "No et rendeixis / No te rindas / Ez etsi", a: 2001 },
-      { t: "Acció directa", a: null },
-    ],
-    cancons: ["BCN", "Antinazis"],
-    nota: "Després d'uns anys de dispersió, els membres originals es van tornar a reunir als escenaris.",
-  },
-  {
-    id: "gertrudis", nom: "Gertrudis", lloc: "La Garriga", territori: "Vallès", coord: [2.28, 41.68],
-    inici: 2000, fi: 2024, aprox: true, estat: "comiat", generes: ["rumba", "folk"], escena: "festa",
-    desc: "Rumba catalana de La Garriga, fundada per Xavi Freire, Xavi Ciurans i Eduard Acedo. Diuen que van començar a fer rumba sense saber-ho, fins que un locutor els ho va dir.",
-    discos: [
-      { t: "Quinze15XV", a: 2015 },
-      { t: "No em dona la gana", a: 2019 },
-    ],
-    cancons: [],
-    nota: "Gira de comiat pels 25 anys, que es va tancar el novembre de 2024. Algunes fonts situen el primer disc el 2004.",
-  },
-  /* ---------------- RESTA DE L'ESTAT ---------------- */
-  {
-    id: "extremoduro", nom: "Extremoduro", lloc: "Plasencia", territori: "Extremadura", coord: [-6.09, 40.03], ambit: "es",
-    inici: 1987, fi: 2019, estat: "aturat", generes: ["rock"], escena: "estatal",
-    desc: "El rock transgressiu de Robe Iniesta: poesia bruta, guitarres pesades i cançons que ha cantat mig país a cor.",
-    discos: [{ t: "Agila", a: 1996 }, { t: "Yo, minoría absoluta", a: 2002 }, { t: "La ley innata", a: 2008 }],
-    cancons: ["So payaso", "Salir", "Standby"],
-    nota: "Anuncien la separació el 2019; la gira de comiat del 2020 es va cancel·lar per la pandèmia. Robe Iniesta va morir el desembre de 2025.",
-  },
-  {
-    id: "skap", nom: "Ska-P", lloc: "Madrid (Vallecas)", territori: "Madrid", coord: [-3.65, 40.39], ambit: "es",
-    inici: 1994, fi: null, estat: "actiu", generes: ["ska", "punk"], escena: "estatal",
-    desc: "Ska-punk de Vallecas, combatiu i amb el gat Pepe com a mascota. Van portar l'ska de l'Estat per tot Europa i Llatinoamèrica.",
-    discos: [{ t: "El vals del obrero", a: 1996 }, { t: "Eurosis", a: 1998 }, { t: "Planeta Eskoria", a: 2000 }],
-    cancons: ["Cannabis", "El vals del obrero"],
-    nota: "",
-  },
-  {
-    id: "boikot", nom: "Boikot", lloc: "Madrid", territori: "Madrid", coord: [-3.70, 40.42], ambit: "es",
-    inici: 1987, fi: null, estat: "actiu", generes: ["punk", "ska"], escena: "estatal",
-    desc: "Punk-rock amb tocs d'ska i molt de compromís, una de les bandes més rodades del circuit alternatiu.",
-    discos: [{ t: "La ruta del Che (trilogia)", a: null }],
-    cancons: [],
-    nota: "",
-  },
-  {
-    id: "reincidentes", nom: "Reincidentes", lloc: "Sevilla", territori: "Andalusia", coord: [-5.98, 37.39], ambit: "es",
-    inici: 1987, fi: null, estat: "actiu", generes: ["punk", "rock"], escena: "estatal",
-    desc: "Punk-rock sevillà amb lletres socials, clàssic dels festivals de l'Estat durant més de tres dècades.",
-    discos: [], cancons: [], nota: "",
-  },
-  {
-    id: "celtas", nom: "Celtas Cortos", lloc: "Valladolid", territori: "Castella", coord: [-4.72, 41.65], ambit: "es",
-    inici: 1984, fi: null, estat: "actiu", generes: ["folk", "rock"], escena: "estatal",
-    desc: "Folk-rock amb flautes, violí i gaites. La banda que va posar el folk celta a les ràdios dels noranta.",
-    discos: [{ t: "Cuéntame un cuento", a: 1991 }],
-    cancons: ["20 de abril"],
-    nota: "",
-  },
-  {
-    id: "siniestro", nom: "Siniestro Total", lloc: "Vigo", territori: "Galícia", coord: [-8.72, 42.24], ambit: "es",
-    inici: 1981, fi: null, estat: "actiu", generes: ["punk", "rock"], escena: "estatal",
-    desc: "Punk gallec amb humor absurd, nascut a la Movida viguesa.",
-    discos: [{ t: "¿Cuándo se come aquí?", a: 1982 }],
-    cancons: ["Bailaré sobre tu tumba"],
-    nota: "",
-  },
-  {
-    id: "laraiz", nom: "La Raíz", lloc: "Gandia", territori: "País Valencià", coord: [-0.18, 38.97], ambit: "pc",
-    inici: 2005, fi: null, aprox: true, estat: "actiu", generes: ["rock", "ska", "reggae"], escena: "estatal",
-    desc: "Mestissatge combatiu de la Safor (en castellà): rock, ska, reggae i rap amb vent. Van tornar per tot l'alt.",
-    discos: [], cancons: [],
-    nota: "Després del comiat del 2018, la Gira Reencuentro va començar el 22 de novembre de 2024 al WiZink Center amb entrades exhaurides.",
-  },
-
-  /* ---------------- EUSKAL HERRIA ---------------- */
-  {
-    id: "kortatu", nom: "Kortatu", lloc: "Irun", territori: "Euskal Herria", coord: [-1.79, 43.34], ambit: "eh",
-    inici: 1984, fi: 1988, estat: "aturat", generes: ["punk", "ska"], escena: "rrv",
-    desc: "Els germans Muguruza i companyia: punk i ska amb l'ombra de The Clash. Peça clau del rock radical basc.",
-    discos: [{ t: "Kortatu", a: 1985 }, { t: "El estado de las cosas", a: 1986 }, { t: "Kolpez kolpe", a: 1988 }],
-    cancons: ["Sarri, Sarri", "Hotel Monbar"],
-    nota: "Quan plegen, part del grup forma Negu Gorriak.",
-    germans: ["negugorriak", "clash"],
-  },
-  {
-    id: "negugorriak", nom: "Negu Gorriak", lloc: "Irun", territori: "Euskal Herria", coord: [-1.79, 43.34], ambit: "eh",
-    inici: 1990, fi: 2001, estat: "aturat", generes: ["hardcore", "punk", "ska"], escena: "rrv",
-    desc: "Fermin i Iñigo Muguruza amb Kaki Arkarazo: hardcore, rap, ska i dub en basc, autogestió i segell propi.",
-    discos: [{ t: "Negu Gorriak", a: 1990 }, { t: "Borreroak baditu milaka aurpegi", a: 1993 }],
-    cancons: ["Esan ozenki"],
-    nota: "Referent declarat d'Inadaptats.",
-    germans: ["kortatu", "inadaptats"],
-  },
-  {
-    id: "lapolla", nom: "La Polla Records", lloc: "Agurain", territori: "Euskal Herria", coord: [-2.39, 42.85], ambit: "eh",
-    inici: 1979, fi: 2003, estat: "aturat", generes: ["punk"], escena: "rrv",
-    desc: "Evaristo Páramos i el punk més sarcàstic i salvatge de l'Estat. Himnes per cridar amb el puny enlaire.",
-    discos: [{ t: "Salve", a: 1984 }],
-    cancons: [],
-    nota: "Reunió el 2019 amb la gira Ni descanso ni paz. Evaristo continua girant amb el seu nom el 2025 i 2026.",
-  },
-  {
-    id: "eskorbuto", nom: "Eskorbuto", lloc: "Santurtzi", territori: "Euskal Herria", coord: [-3.03, 43.33], ambit: "eh",
-    inici: 1980, fi: 1992, aprox: true, estat: "aturat", generes: ["punk"], escena: "rrv",
-    desc: "Punk fosc i nihilista del marge esquerre de la ria. «Anti todo» com a manera de viure.",
-    discos: [],
-    cancons: ["Mucha policía, poca diversión", "Cerebros destruidos"],
-    nota: "",
-  },
-  {
-    id: "hertzainak", nom: "Hertzainak", lloc: "Vitoria-Gasteiz", territori: "Euskal Herria", coord: [-2.67, 42.85], ambit: "eh",
-    inici: 1981, fi: 1993, estat: "aturat", generes: ["punk", "ska", "rock"], escena: "rrv",
-    desc: "Punk i ska en basc des de Gasteiz, de les primeres bandes que van fer ballar en euskara.",
-    discos: [], cancons: ["Pakean utzi arte"], nota: "",
-  },
-  {
-    id: "soziedad", nom: "Soziedad Alkoholika", lloc: "Vitoria-Gasteiz", territori: "Euskal Herria", coord: [-2.67, 42.85], ambit: "eh",
-    inici: 1988, fi: null, estat: "actiu", generes: ["hardcore", "punk"], escena: "rrv",
-    desc: "Crossover de hardcore i metall des de Gasteiz. Contundència pura en directe.",
-    discos: [], cancons: [], nota: "",
-  },
-  {
-    id: "barricada", nom: "Barricada", lloc: "Iruñea", territori: "Euskal Herria", coord: [-1.64, 42.81], ambit: "eh",
-    inici: 1982, fi: 2013, estat: "aturat", generes: ["rock", "punk"], escena: "rrv",
-    desc: "Rock dur del barri de la Txantrea, de les bandes més estimades de l'escena navarresa.",
-    discos: [{ t: "No hay tregua", a: 1986 }], cancons: [], nota: "",
-  },
-  {
-    id: "lendakaris", nom: "Lendakaris Muertos", lloc: "Iruñea", territori: "Euskal Herria", coord: [-1.64, 42.81], ambit: "eh",
-    inici: 2004, fi: null, estat: "actiu", generes: ["punk"], escena: "rrv",
-    desc: "Punk ràpid, curt i amb un humor corrosiu que no deixa ningú dret.",
-    discos: [], cancons: [], nota: "",
-  },
-  {
-    id: "marea", nom: "Marea", lloc: "Berriozar", territori: "Euskal Herria", coord: [-1.67, 42.83], ambit: "eh",
-    inici: 1997, fi: null, aprox: true, estat: "actiu", generes: ["rock"], escena: "estatal",
-    desc: "Rock urbà navarrès amb la veu esquinçada d'El Kutxi i lletres de poeta de taverna.",
-    discos: [{ t: "28.000 puñaladas", a: 2004 }, { t: "Los potros del tiempo", a: null }],
-    cancons: [],
-    nota: "Gira «Sin riendas» el 2026.",
-  },
-  {
-    id: "platero", nom: "Platero y Tú", lloc: "Bilbao", territori: "Euskal Herria", coord: [-2.93, 43.26], ambit: "eh",
-    inici: 1989, fi: 2001, estat: "aturat", generes: ["rock"], escena: "estatal",
-    desc: "Rock'n'roll de Bilbao amb Fito Cabrales a la guitarra i la veu. Cervesa, riffs i bon rotllo.",
-    discos: [], cancons: ["Hay poco rock & roll", "Si tú te vas"], nota: "",
-  },
-  {
-    id: "berri", nom: "Berri Txarrak", lloc: "Lekunberri", territori: "Euskal Herria", coord: [-1.89, 43.00], ambit: "eh",
-    inici: 1994, fi: 2019, estat: "aturat", generes: ["rock", "hardcore"], escena: "rrv",
-    desc: "El trio basc més internacional, amb Gorka Urbizu al capdavant: rock dur i melòdic, sempre en euskara.",
-    discos: [{ t: "Payola", a: 2009 }, { t: "Infrasoinuak", a: 2017 }],
-    cancons: [],
-    nota: "Aturada indefinida des de la gira de comiat Ikusi Arte del 2019.",
-  },
-
-  /* ---------------- INTERNACIONAL ---------------- */
-  {
-    id: "skatalites", nom: "The Skatalites", lloc: "Kingston", territori: "Jamaica", coord: [-76.8, 18.0], ambit: "int",
-    inici: 1964, fi: null, estat: "actiu", generes: ["ska"], escena: "jamaica",
-    desc: "On comença tot. Els músics de sessió que van inventar el so de l'ska jamaicà.",
-    discos: [], cancons: ["Guns of Navarone", "Freedom Sound"], nota: "",
-  },
-  {
-    id: "toots", nom: "Toots and the Maytals", lloc: "Kingston", territori: "Jamaica", coord: [-76.8, 18.0], ambit: "int",
-    inici: 1962, fi: 2020, aprox: true, estat: "aturat", generes: ["ska", "reggae"], escena: "jamaica",
-    desc: "Del ska al reggae amb la veu de Toots Hibbert. Diuen que una cançó seva va donar nom al reggae.",
-    discos: [], cancons: ["Pressure Drop", "54-46 That's My Number", "Monkey Man"],
-    nota: "Toots Hibbert va morir el 2020.",
-  },
-  {
-    id: "specials", nom: "The Specials", lloc: "Coventry", territori: "Anglaterra", coord: [-1.51, 52.41], ambit: "int",
-    inici: 1977, fi: 2022, aprox: true, estat: "aturat", generes: ["ska", "punk"], escena: "twotone",
-    desc: "El segell 2 Tone, el blanc i negre i l'ska amb ràbia punk de la Gran Bretanya de Thatcher.",
-    discos: [{ t: "The Specials", a: 1979 }, { t: "More Specials", a: 1980 }, { t: "Encore", a: 2019 }],
-    cancons: ["Ghost Town", "A Message to You Rudy", "Too Much Too Young"],
-    nota: "Terry Hall, la veu, va morir el desembre de 2022.",
-    germans: ["skatala", "selecter"],
-  },
-  {
-    id: "selecter", nom: "The Selecter", lloc: "Coventry", territori: "Anglaterra", coord: [-1.51, 52.41], ambit: "int",
-    inici: 1979, fi: null, estat: "actiu", generes: ["ska"], escena: "twotone",
-    desc: "L'altra gran banda de Coventry del 2 Tone, amb Pauline Black al micro.",
-    discos: [{ t: "Too Much Pressure", a: 1980 }], cancons: ["On My Radio"], nota: "",
-  },
-  {
-    id: "madness", nom: "Madness", lloc: "Londres", territori: "Anglaterra", coord: [-0.13, 51.51], ambit: "int",
-    inici: 1976, fi: null, estat: "actiu", generes: ["ska"], escena: "twotone",
-    desc: "El «nutty sound» de Camden: ska, pop i ball de tren a tota pastilla.",
-    discos: [{ t: "One Step Beyond…", a: 1979 }, { t: "Absolutely", a: 1980 }, { t: "The Liberty of Norton Folgate", a: 2009 }],
-    cancons: ["One Step Beyond", "Baggy Trousers", "Our House"], nota: "",
-  },
-  {
-    id: "clash", nom: "The Clash", lloc: "Londres", territori: "Anglaterra", coord: [-0.13, 51.51], ambit: "int",
-    inici: 1976, fi: 1986, estat: "aturat", generes: ["punk", "reggae"], escena: "uk77",
-    desc: "«The only band that matters». Punk obert al reggae, el dub i el rockabilly, i consciència política.",
-    discos: [{ t: "The Clash", a: 1977 }, { t: "London Calling", a: 1979 }, { t: "Sandinista!", a: 1980 }, { t: "Combat Rock", a: 1982 }],
-    cancons: ["London Calling", "Should I Stay or Should I Go", "Rock the Casbah"],
-    nota: "Joe Strummer va morir el 2002.",
-    germans: ["kortatu"],
-  },
-  {
-    id: "pistols", nom: "Sex Pistols", lloc: "Londres", territori: "Anglaterra", coord: [-0.13, 51.51], ambit: "int",
-    inici: 1975, fi: 1978, estat: "aturat", generes: ["punk"], escena: "uk77",
-    desc: "Un sol disc d'estudi i l'explosió del punk britànic.",
-    discos: [{ t: "Never Mind the Bollocks, Here's the Sex Pistols", a: 1977 }],
-    cancons: ["Anarchy in the U.K.", "God Save the Queen"], nota: "",
-  },
-  {
-    id: "ramones", nom: "Ramones", lloc: "Nova York", territori: "Estats Units", coord: [-73.9, 40.7], ambit: "int",
-    inici: 1974, fi: 1996, estat: "aturat", generes: ["punk"], escena: "uk77",
-    desc: "Tres acords, cazadora de cuir i «Hey! Ho! Let's go!». El punk en estat pur.",
-    discos: [{ t: "Ramones", a: 1976 }], cancons: ["Blitzkrieg Bop"], nota: "",
-  },
-  {
-    id: "pogues", nom: "The Pogues", lloc: "Londres", territori: "Anglaterra", coord: [-0.13, 51.51], ambit: "int",
-    inici: 1982, fi: 2014, estat: "aturat", generes: ["folk", "punk"], escena: "celtic",
-    desc: "Shane MacGowan i el folk irlandès tocat amb energia punk. El gran mirall de Fetus i de tot el folk-punk.",
-    discos: [{ t: "Red Roses for Me", a: 1984 }, { t: "Rum Sodomy & the Lash", a: 1985 }, { t: "If I Should Fall from Grace with God", a: 1988 }],
-    cancons: ["Fairytale of New York", "Dirty Old Town", "The Irish Rover"],
-    nota: "Shane MacGowan va morir el novembre de 2023.",
-    germans: ["fetus", "ebri", "dropkick"],
-  },
-  {
-    id: "dropkick", nom: "Dropkick Murphys", lloc: "Quincy (Boston)", territori: "Estats Units", coord: [-71.0, 42.25], ambit: "int",
-    inici: 1996, fi: null, estat: "actiu", generes: ["punk", "folk"], escena: "celtic",
-    desc: "Punk celta de la classe treballadora de Boston: gaites, cors de pub i street punk.",
-    discos: [{ t: "Do or Die", a: 1998 }, { t: "The Warrior's Code", a: 2005 }],
-    cancons: ["I'm Shipping Up to Boston", "Rose Tattoo"], nota: "",
-    germans: ["ebri", "pogues"],
-  },
-  {
-    id: "flogging", nom: "Flogging Molly", lloc: "Los Angeles", territori: "Estats Units", coord: [-118.2, 34.05], ambit: "int",
-    inici: 1997, fi: null, estat: "actiu", generes: ["punk", "folk"], escena: "celtic",
-    desc: "Folk-punk irlandès nascut en un pub de Los Angeles, amb Dave King a la veu.",
-    discos: [{ t: "Swagger", a: 2000 }, { t: "Drunken Lullabies", a: 2002 }], cancons: [], nota: "",
-  },
-  {
-    id: "opivy", nom: "Operation Ivy", lloc: "Berkeley", territori: "Estats Units", coord: [-122.27, 37.87], ambit: "int",
-    inici: 1987, fi: 1989, estat: "aturat", generes: ["ska", "punk"], escena: "thirdwave",
-    desc: "Dos anys de vida i un sol disc que va fundar l'ska-punk californià.",
-    discos: [{ t: "Energy", a: 1989 }], cancons: ["Knowledge", "Sound System"],
-    nota: "Quan plegen, Tim Armstrong i Matt Freeman formen Rancid.",
-    germans: ["rancid"],
-  },
-  {
-    id: "rancid", nom: "Rancid", lloc: "Berkeley", territori: "Estats Units", coord: [-122.27, 37.87], ambit: "int",
-    inici: 1991, fi: null, estat: "actiu", generes: ["punk", "ska"], escena: "thirdwave",
-    desc: "Street punk amb ànima d'ska, hereus directes d'Operation Ivy i de The Clash.",
-    discos: [{ t: "…And Out Come the Wolves", a: 1995 }], cancons: ["Time Bomb", "Ruby Soho"], nota: "",
-    germans: ["opivy", "clash"],
-  },
-  {
-    id: "bosstones", nom: "The Mighty Mighty Bosstones", lloc: "Boston", territori: "Estats Units", coord: [-71.06, 42.36], ambit: "int",
-    inici: 1983, fi: 2022, estat: "aturat", generes: ["ska", "punk"], escena: "thirdwave",
-    desc: "Ska-core amb vent i quadres escocesos. Van portar la tercera onada de l'ska a la MTV.",
-    discos: [{ t: "Let's Face It", a: 1997 }], cancons: ["The Impression That I Get"], nota: "",
-  },
-  {
-    id: "rbf", nom: "Reel Big Fish", lloc: "Huntington Beach", territori: "Estats Units", coord: [-118.0, 33.66], ambit: "int",
-    inici: 1991, fi: null, estat: "actiu", generes: ["ska", "punk"], escena: "thirdwave",
-    desc: "Ska-punk californià amb trompetes i humor, festa garantida.",
-    discos: [{ t: "Turn the Radio Off", a: 1996 }], cancons: ["Sell Out"], nota: "",
-  },
-  {
-    id: "ltj", nom: "Less Than Jake", lloc: "Gainesville", territori: "Estats Units", coord: [-82.32, 29.65], ambit: "int",
-    inici: 1992, fi: null, estat: "actiu", generes: ["ska", "punk"], escena: "thirdwave",
-    desc: "Ska-punk de Florida, ràpid i melòdic, incansables a la carretera.",
-    discos: [], cancons: [], nota: "",
-  },
-  {
-    id: "sublime", nom: "Sublime", lloc: "Long Beach", territori: "Estats Units", coord: [-118.19, 33.77], ambit: "int",
-    inici: 1988, fi: 1996, estat: "aturat", generes: ["ska", "reggae", "punk"], escena: "thirdwave",
-    desc: "Ska, reggae i punk de platja californiana amb Bradley Nowell.",
-    discos: [{ t: "40oz. to Freedom", a: 1992 }, { t: "Sublime", a: 1996 }],
-    cancons: ["Santeria", "What I Got"],
-    nota: "Bradley Nowell va morir el 1996.",
-  },
-  {
-    id: "nofx", nom: "NOFX", lloc: "Los Angeles", territori: "Estats Units", coord: [-118.24, 34.05], ambit: "int",
-    inici: 1983, fi: 2024, estat: "comiat", generes: ["punk"], escena: "thirdwave",
-    desc: "Punk melòdic californià, sarcasme i autogestió amb el segell Fat Wreck Chords.",
-    discos: [{ t: "Punk in Drublic", a: 1994 }], cancons: [],
-    nota: "Concerts finals el 2024 després de 40 anys.",
-  },
-  {
-    id: "mano", nom: "Mano Negra", lloc: "París", territori: "França", coord: [2.35, 48.86], ambit: "int",
-    inici: 1987, fi: 1995, estat: "aturat", generes: ["punk", "rumba", "ska"], escena: "estatal",
-    desc: "Manu Chao i la «patchanka»: punk, rumba, ska i raï en francès, castellà i anglès.",
-    discos: [{ t: "Puta's Fever", a: 1989 }, { t: "King of Bongo", a: 1991 }, { t: "Casa Babylon", a: 1994 }],
-    cancons: ["Mala vida"], nota: "",
-  },
-];
-
-// àmbit per defecte: Països Catalans
-BANDS.forEach(b => { b.ambit ||= "pc"; b.germans ||= []; });
-byIdInit();
-
-const ESCENES = {
-  emporda: "Escena empordanesa",
-  pioners: "Pioners de l'ska a Barcelona",
-  valencia: "Onada valenciana",
-  festa: "Circuit de festa major",
-  folkpunk: "Folk-punk",
-  combatiu: "Rock combatiu dels 90",
-  germans: "Germans de fora del Principat",
-  estatal: "Rock i mestissatge de l'Estat",
-  rrv: "Rock radical basc i hereus",
-  jamaica: "Jamaica, on va començar tot",
-  twotone: "2 Tone britànic",
-  uk77: "Punk del 77",
-  celtic: "Punk celta",
-  thirdwave: "Tercera onada (EUA)",
-};
-
-const MILESTONES = [
-  { y: "1985", txt: "Neix <x>skatala</x> a Barcelona. Ska, oi! i català en un sol nom." },
-  { y: "1989", txt: "18 de març: primer concert de <x>calypso</x>, encara com a The Barcelonians." },
-  { y: "1990", txt: "Juny: neixen <x>brams</x> al Berguedà." },
-  { y: "1993", txt: "<x>obrintpas</x> neix a l'Institut Benlliure de València." },
-  { y: "1994", txt: "Els germans Skalari funden <x>skalariak</x> a Navarra. Obrint Pas guanya el Tirant de Rock." },
-  { y: "1998", txt: "Neixen <x>kop</x> a Barcelona, hardcore en tres llengües." },
-  { y: "2003", txt: "Surten Vigília de <x>gossa</x> i el primer Pepet i Marieta a Ulldecona." },
-  { y: "2007", txt: "<x>obrintpas</x> publica La flama." },
-  { y: "2013", txt: "<x>obrintpas</x> anuncia l'aturada «indefinida»." },
-  { y: "2016", txt: "<x>buhos</x> fan el Disc Català de l'Any amb Lluna plena. <x>roba</x> debuta amb Descalces." },
-  { y: "2017", txt: "<x>fetus</x> publica L'epicentre del fangar. <x>ludwig</x> comença a assajar a Espolla." },
-  { y: "2018", txt: "<x>calypso</x> s'acomiada a la sala Apolo després de 30 anys." },
-  { y: "2021", txt: "<x>txarango</x> tanca amb el recopilatori El gran ball." },
-  { y: "nov 2024", txt: "<x>gertrudis</x> tanca la gira de comiat després de 25 anys de rumba." },
-  { y: "jun 2025", txt: "<x>smoking</x> fa el darrer concert a Pego." },
-  { y: "des 2025", txt: "<x>roba</x> diu adeu amb L'última estesa al Paral·lel 62." },
-  { y: "2026", txt: "<x>fetus</x> treu Romancer tartera i <x>ludwig</x>, Pel barri es comenta. <x>pepet</x> anuncia la gira de comiat." },
-  { y: "set 2026", txt: "Mor Josep Manel Pugés, guitarrista fundador de <x>skatala</x>." },
-  { y: "nov 2026", txt: "<x>fumiga</x> s'acomiada al Roig Arena de València." },
-];
-
-/* ======================================================================
-   ESTAT I EMMAGATZEMATGE
-   ====================================================================== */
-const STORE_KEY = "pogo-dolcaina-v1";
-function loadState() {
-  try { const raw = localStorage.getItem(STORE_KEY); if (raw) { const s = JSON.parse(raw); return { fav: s.fav || [], seen: s.seen || [] }; } } catch (e) {}
-  return { fav: [], seen: [] };
-}
-const state = loadState();
-function saveState() { try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {} }
-function toggle(list, id) {
-  const arr = state[list]; const i = arr.indexOf(id);
-  if (i >= 0) arr.splice(i, 1); else arr.push(id);
-  saveState(); renderAll();
-}
-
-const filters = { q: "", genres: new Set(), status: new Set(), ambit: new Set() };
-
-const THIS_YEAR = 2026;
-
-/* ======================================================================
-   UTILITATS
-   ====================================================================== */
-const $ = s => document.querySelector(s);
-const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const mainColor = b => GENRES[b.generes[0]].color;
-function years(b) {
-  if (!b.inici) return "dates per confirmar";
-  const c = b.aprox ? "c. " : "";
-  return b.fi ? `${c}${b.inici}–${b.fi}` : `${c}${b.inici}–ara`;
-}
-function rot(id) { let h = 0; for (const ch of id) h = (h * 31 + ch.charCodeAt(0)) % 997; return ((h % 7) - 3) * 0.45; }
-const ICON_HEART = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.2 1.7-2 3.2-3.2 5.3-3.2 3.7 0 5.8 3.8 4.3 7.3C19.5 16.4 12 21 12 21z" fill="currentColor"/></svg>';
-const ICON_TICKET = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18v3a2 2 0 0 0 0 4v3H3v-3a2 2 0 0 0 0-4V7z" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M14 7v10" stroke="currentColor" stroke-width="2" stroke-dasharray="2 2"/></svg>';
-
-function matches(b) {
-  if (filters.genres.size && !b.generes.some(g => filters.genres.has(g))) return false;
-  if (filters.status.size && !filters.status.has(b.estat)) return false;
-  if (filters.ambit.size && !filters.ambit.has(b.ambit)) return false;
-  if (filters.q) {
-    const hay = [b.nom, b.lloc, b.territori, b.desc, ...b.discos.map(d => d.t), ...b.cancons].join(" ").toLowerCase()
-      .normalize("NFD").replace(/[̀-ͯ]/g, "");
-    const q = filters.q.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
-    if (!hay.includes(q)) return false;
-  }
-  return true;
-}
-
-function recommend(b, n = 4) {
-  return BANDS.filter(o => o.id !== b.id).map(o => {
-    let s = 0;
-    s += o.generes.filter(g => b.generes.includes(g)).length * 2;
-    if (b.germans.includes(o.id) || o.germans.includes(b.id)) s += 4;
-    if (o.escena === b.escena) s += 2;
-    if (o.territori === b.territori) s += 1;
-    if (o.inici && b.inici) s += Math.max(0, 1.5 - Math.abs(o.inici - b.inici) / 10);
-    return { o, s };
-  }).sort((a, z) => z.s - a.s || a.o.nom.localeCompare(z.o.nom)).slice(0, n).map(x => x.o);
-}
-
-function listenLinks(b) {
-  const q = encodeURIComponent(b.nom);
-  const out = [
-    { l: "Spotify", u: `https://open.spotify.com/search/${q}` },
-    { l: "YouTube", u: `https://www.youtube.com/results?search_query=${q}` },
-  ];
-  out.push(b.bandcamp ? { l: "Bandcamp", u: b.bandcamp } : { l: "Bandcamp", u: `https://bandcamp.com/search?q=${q}` });
-  return out;
-}
-
-/* ======================================================================
-   VISTA: GRUPS
-   ====================================================================== */
-function buildChips() {
-  const gc = $("#genre-chips");
-  for (const [k, g] of Object.entries(GENRES)) {
-    const b = document.createElement("button");
-    b.type = "button"; b.className = "chip"; b.textContent = g.label; b.style.setProperty("--g", g.color);
-    b.setAttribute("aria-pressed", "false");
-    b.onclick = () => { filters.genres.has(k) ? filters.genres.delete(k) : filters.genres.add(k); b.setAttribute("aria-pressed", filters.genres.has(k)); renderGrid(); renderTimeline(); };
-    gc.appendChild(b);
-  }
-  const ac = $("#ambit-chips");
-  for (const [k, a] of Object.entries(AMBITS)) {
-    const b = document.createElement("button");
-    b.type = "button"; b.className = "chip status"; b.textContent = a.label;
-    b.setAttribute("aria-pressed", "false");
-    b.onclick = () => { filters.ambit.has(k) ? filters.ambit.delete(k) : filters.ambit.add(k); b.setAttribute("aria-pressed", filters.ambit.has(k)); renderGrid(); renderTimeline(); };
-    ac.appendChild(b);
-  }
-  const sc = $("#status-chips");
-  for (const [k, s] of Object.entries(STATUS)) {
-    const b = document.createElement("button");
-    b.type = "button"; b.className = "chip status"; b.textContent = s.label;
-    b.setAttribute("aria-pressed", "false");
-    b.onclick = () => { filters.status.has(k) ? filters.status.delete(k) : filters.status.add(k); b.setAttribute("aria-pressed", filters.status.has(k)); renderGrid(); renderTimeline(); };
-    sc.appendChild(b);
-  }
-}
-
-function cardHTML(b) {
-  const fav = state.fav.includes(b.id), seen = state.seen.includes(b.id);
-  return `<article class="card" style="--r:${rot(b.id)}deg;--g:${mainColor(b)}">
-    <div class="band-stripe"></div>
-    <span class="status-stamp st-${b.estat}">${STATUS[b.estat].label}</span>
-    <button class="open" type="button" data-open="${b.id}" aria-label="Obre la fitxa de ${esc(b.nom)}">
-      <h3>${esc(b.nom)}</h3>
-      <div class="meta"><span>${esc(b.lloc)}</span><span>${years(b)}</span></div>
-      <div class="tags">${b.generes.map(g => `<span class="tag" style="--g:${GENRES[g].color}">${GENRES[g].label}</span>`).join("")}</div>
-      <p>${esc(b.desc)}</p>
-    </button>
-    <div class="card-actions">
-      <button type="button" class="icon-btn fav" data-fav="${b.id}" aria-pressed="${fav}">${ICON_HEART}${fav ? "Estimat" : "Estima'l"}</button>
-      <button type="button" class="icon-btn seen" data-seen="${b.id}" aria-pressed="${seen}">${ICON_TICKET}${seen ? "Vist en directe" : "L'he vist"}</button>
-    </div>
-  </article>`;
-}
-
-function renderGrid() {
-  const list = BANDS.filter(matches).sort((a, z) => a.nom.localeCompare(z.nom, "ca"));
-  $("#grid").innerHTML = list.length ? list.map(cardHTML).join("") : `<div class="empty">Cap grup amb aquests filtres. Treu-ne algun i torna-hi.</div>`;
-  $("#count").textContent = `${list.length} de ${BANDS.length} grups`;
-}
-
-/* ======================================================================
-   VISTA: CRONOLOGIA
-   ====================================================================== */
-function renderTimeline() {
-  $("#legend").innerHTML = Object.values(GENRES).map(g => `<span><i style="background:${g.color}"></i>${g.label}</span>`).join("")
-    + `<span><i style="background:transparent;border-style:dashed"></i>dates aproximades</span>`;
-
-  const rows = BANDS.filter(b => b.inici && matches(b)).sort((a, z) => a.inici - z.inici || a.nom.localeCompare(z.nom));
-  if (!rows.length) { $("#timeline").innerHTML = `<div class="empty">Cap grup amb els filtres actuals.</div>`; $("#tl-note").textContent = ""; return; }
-  const Y0 = Math.min(1984, Math.floor((rows[0].inici - 1) / 5) * 5), Y1 = 2027;
-  $("#tl-note").textContent = `${rows.length} grups · segueix els filtres de la pestanya Grups`;
-  const left = 250, right = 24, top = 30, rowH = 26, W = 1060;
-  const H = top + rows.length * rowH + 24;
-  const x = y => left + (y - Y0) / (Y1 - Y0) * (W - left - right);
-  let s = `<svg class="tl-svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Línia del temps dels grups">`;
-  for (let y = Math.ceil(Y0 / 5) * 5; y <= 2025; y += 5) {
-    s += `<line x1="${x(y)}" x2="${x(y)}" y1="${top - 8}" y2="${H - 18}" stroke="var(--ink-soft)" stroke-opacity=".3" stroke-dasharray="2 4"/>`;
-    s += `<text x="${x(y)}" y="${top - 14}" text-anchor="middle" font-size="12" fill="var(--ink-soft)">${y}</text>`;
-  }
-  s += `<line x1="${x(THIS_YEAR)}" x2="${x(THIS_YEAR)}" y1="${top - 8}" y2="${H - 18}" stroke="var(--pink)" stroke-width="2"/>`;
-  s += `<text x="${x(THIS_YEAR)}" y="${H - 4}" text-anchor="middle" font-size="11" fill="var(--pink)" font-weight="700">ARA</text>`;
-  rows.forEach((b, i) => {
-    const yy = top + i * rowH;
-    const end = b.fi || THIS_YEAR;
-    const x1 = x(b.inici), x2 = x(end + (b.fi ? 1 : 0.4));
-    s += `<g class="tl-row" tabindex="0" role="button" data-open="${b.id}" aria-label="${esc(b.nom)}, ${years(b)}">`;
-    s += `<text x="${left - 10}" y="${yy + 15}" text-anchor="end" font-size="12.5" fill="var(--ink)" font-weight="700">${esc(b.nom)}</text>`;
-    s += `<rect class="bar" x="${x1}" y="${yy + 3}" width="${Math.max(6, x2 - x1)}" height="16" fill="${mainColor(b)}" stroke="var(--line)" stroke-width="2" ${b.aprox ? 'stroke-dasharray="4 3"' : ""}/>`;
-    if (!b.fi) s += `<path d="M${x2} ${yy + 1} l10 10 l-10 10 z" fill="${mainColor(b)}" stroke="var(--line)" stroke-width="2"/>`;
-    s += `<text x="${x1 + 5}" y="${yy + 15}" font-size="10.5" fill="#17161a">${b.inici}</text>`;
-    s += `</g>`;
-  });
-  s += `</svg>`;
-  $("#timeline").innerHTML = s;
-
-  $("#milestones").innerHTML = MILESTONES.map(m => {
-    const txt = m.txt.replace(/<x>(\w+)<\/x>/g, (_, id) => byId[id] ? `<button type="button" class="linkish" data-open="${id}">${esc(byId[id].nom)}</button>` : id);
-    return `<li><span class="when">${m.y}</span><span class="what">${txt}</span></li>`;
-  }).join("");
-}
-
-/* ======================================================================
-   VISTA: MAPA
-   ====================================================================== */
-const COAST = [[3.17,42.43],[3.32,42.32],[3.18,42.26],[3.13,42.12],[3.21,41.95],[3.13,41.85],[2.79,41.67],[2.44,41.54],[2.18,41.38],[1.98,41.27],[1.81,41.23],[1.25,41.11],[1.06,41.07],[0.80,40.88],[0.72,40.80],[0.87,40.70],[0.62,40.58],[0.47,40.47],[0.40,40.36],[-0.03,39.98],[-0.27,39.68],[-0.33,39.47],[-0.25,39.17],[-0.17,38.97],[0.10,38.84],[0.20,38.79],[0.23,38.73],[0.05,38.64],[-0.13,38.54],[-0.48,38.35]];
-const MALLORCA = [[2.36,39.58],[2.60,39.95],[3.10,39.95],[3.20,39.86],[3.46,39.72],[3.28,39.37],[2.98,39.33],[2.72,39.50],[2.50,39.47]];
-let selectedTown = null;
-
-function renderMap() {
-  const lon0 = -2.0, lon1 = 3.7, lat0 = 38.2, lat1 = 43.15;
-  const W = 640, H = 600;
-  const kx = Math.cos(40.6 * Math.PI / 180);
-  const sx = W / ((lon1 - lon0) * kx), sy = H / (lat1 - lat0);
-  const k = Math.min(sx, sy);
-  const p = ([lon, lat]) => [((lon - lon0) * kx) * k, (lat1 - lat) * k];
-  const path = pts => pts.map((pt, i) => (i ? "L" : "M") + p(pt).map(v => v.toFixed(1)).join(" ")).join(" ");
-
-  const towns = {};
-  const inMap = b => b.coord[0] >= lon0 && b.coord[0] <= lon1 && b.coord[1] >= lat0 && b.coord[1] <= lat1;
-  for (const b of BANDS.filter(inMap)) {
-    const key = b.lloc;
-    (towns[key] ||= { name: key, coord: b.coord, bands: [] }).bands.push(b);
-  }
-  let s = `<svg class="map-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Mapa esquemàtic amb els pobles d'origen dels grups">`;
-  s += `<text class="sea" x="${p([0.95, 39.15])[0]}" y="${p([0.95, 39.15])[1]}" text-anchor="middle">MEDITERRÀNIA</text>`;
-  s += `<path class="coast" d="${path(COAST)}"/>`;
-  s += `<path class="island" d="${path(MALLORCA)} Z"/>`;
-  // línia de connexió fins a Iruñea
-  const ir = p([-1.64, 42.81]), bcn = p([1.2, 42.2]);
-  s += `<path d="M${bcn[0]} ${bcn[1]} Q ${(ir[0] + bcn[0]) / 2} ${ir[1] - 40} ${ir[0] + 10} ${ir[1]}" fill="none" stroke="var(--ink-soft)" stroke-width="1.5" stroke-dasharray="3 5"/>`;
-  const sorted = Object.values(towns).sort((a, z) => a.bands.length - z.bands.length);
-  for (const t of sorted) {
-    const [cx, cy] = p(t.coord);
-    const r = 7 + t.bands.length * 3.5;
-    const col = mainColor(t.bands[0]);
-    const LABEL_SIDE = { "Terrassa": "left", "Montcada i Reixac": "right", "Barcelona": "right", "Argentona": "right", "Espolla": "right", "La Bisbal d'Empordà": "right", "Iruñea": "right", "La Garriga": "right", "Berriozar": "right", "Lekunberri": "right", "Gandia": "left" };
-    const rightSide = LABEL_SIDE[t.name] ? LABEL_SIDE[t.name] === "left" : (t.coord[0] < 2.6 && t.coord[0] > -1);
-    const lx = rightSide ? cx - r - 6 : cx + r + 6;
-    s += `<g class="town ${selectedTown === t.name ? "on" : ""}" tabindex="0" role="button" data-town="${esc(t.name)}" aria-label="${esc(t.name)}: ${t.bands.length} grups">`;
-    s += `<circle class="pin" cx="${cx}" cy="${cy}" r="${r}" fill="${col}"/>`;
-    if (t.bands.length > 1) s += `<text x="${cx}" y="${cy + 4}" text-anchor="middle" style="stroke:none;fill:#17161a;font-weight:700">${t.bands.length}</text>`;
-    const DY = { "Berriozar": -16, "Lekunberri": -4, "Gandia": 4 };
-    s += `<text x="${lx}" y="${cy + 4 + (DY[t.name] || 0)}" text-anchor="${rightSide ? "end" : "start"}">${esc(t.name)}</text>`;
-    s += `</g>`;
-  }
-  s += `</svg>`;
-  $("#map").innerHTML = s;
-
-  const panel = $("#town-panel");
-  const t = selectedTown && towns[selectedTown];
-  if (t) {
-    panel.innerHTML = `<h3>${esc(t.name)}</h3><div class="meta">${esc(t.bands[0].territori)} · ${t.bands.length} ${t.bands.length > 1 ? "grups" : "grup"}</div>`
-      + t.bands.map(b => `<button type="button" class="town-item" data-open="${b.id}"><span style="font-family:var(--f-display)">${esc(b.nom)}</span><small>${years(b)}</small></button>`).join("")
-      + `<button type="button" class="btn" data-town-clear>Tots els pobles</button>`;
-  } else {
-    const list = Object.values(towns).sort((a, z) => z.bands.length - a.bands.length || a.name.localeCompare(z.name, "ca"));
-    panel.innerHTML = `<h3>Tria un poble</h3><div class="meta">Toca un cercle o un nom</div>`
-      + list.map(t => `<button type="button" class="town-item" data-town="${esc(t.name)}"><span>${esc(t.name)}</span><small>${t.bands.map(b => esc(b.nom)).join(", ")}</small></button>`).join("");
-  }
-
-  const terr = {};
-  for (const b of BANDS) terr[b.territori] = (terr[b.territori] || 0) + 1;
-  const max = Math.max(...Object.values(terr));
-  $("#terr-bars").innerHTML = Object.entries(terr).sort((a, z) => z[1] - a[1]).map(([n, c]) =>
-    `<div class="terr-bar"><span>${esc(n)}</span><div class="track"><div class="fill" style="width:${c / max * 100}%"></div></div><b>${c}</b></div>`).join("");
-}
-
-/* ======================================================================
-   VISTA: CARNET
-   ====================================================================== */
-const BADGES = [
-  { n: "Primer pogo", d: "Has vist un grup en directe.", ok: s => s.seen.length >= 1 },
-  { n: "Rata de festa major", d: "Cinc grups vistos en directe.", ok: s => s.seen.length >= 5 },
-  { n: "Empordà fins al moll", d: "Has vist Fetus i La Ludwig Band.", ok: s => s.seen.includes("fetus") && s.seen.includes("ludwig") },
-  { n: "Ruta de la dolçaina", d: "Tres grups valencians vistos.", ok: s => s.seen.filter(id => byId[id]?.territori === "País Valencià").length >= 3 },
-  { n: "Arqueologia skatalà", d: "Estimes dos grups que ja han plegat.", ok: s => s.fav.filter(id => byId[id]?.estat === "aturat").length >= 2 },
-  { n: "Ska de dues tonalitats", d: "Tres grups d'ska vistos.", ok: s => s.seen.filter(id => byId[id]?.generes.includes("ska")).length >= 3 },
-  { n: "Hi era, al comiat", d: "Has vist un grup que s'ha acomiadat fa poc.", ok: s => s.seen.some(id => byId[id]?.estat === "comiat") },
-  { n: "Fan total", d: "Deu grups al cor.", ok: s => s.fav.length >= 10 },
-  { n: "Rock radical", d: "Dos grups bascos vistos.", ok: s => s.seen.filter(id => byId[id]?.ambit === "eh").length >= 2 },
-  { n: "Internacionalista", d: "Tres grups estrangers vistos.", ok: s => s.seen.filter(id => byId[id]?.ambit === "int").length >= 3 },
-  { n: "Rude boy / rude girl", d: "Estimes un grup jamaicà i un de 2 Tone.", ok: s => s.fav.some(id => byId[id]?.escena === "jamaica") && s.fav.some(id => byId[id]?.escena === "twotone") },
-];
-
-function renderCarnet() {
-  const got = BADGES.filter(b => b.ok(state)).length;
-  const missing = BANDS.filter(b => b.estat === "actiu" && !state.seen.includes(b.id)).sort((a, z) => (a.ambit !== "pc") - (z.ambit !== "pc")).map(b => b.nom);
-  $("#pass").innerHTML = `
-    <div class="kicker" style="color:#17161a">Carnet de soci/sòcia · temporada ${THIS_YEAR}</div>
-    <h3>Pogo i Dolçaina<br>Fan Club</h3>
-    <div class="row">
-      <div class="stat"><b>${state.fav.length}</b><span>Estimats</span></div>
-      <div class="stat"><b>${state.seen.length}</b><span>Vistos</span></div>
-      <div class="stat"><b>${got}/${BADGES.length}</b><span>Insígnies</span></div>
-    </div>
-    <div class="perf"></div>
-    <div class="note">${missing.length ? `Encara pots veure en directe: ${missing.slice(0, 6).map(esc).join(", ")}${missing.length > 6 ? "…" : ""}` : "Els has vist tots. Respecte."}</div>`;
-  $("#badges").innerHTML = BADGES.map(b => `<div class="badge ${b.ok(state) ? "got" : ""}"><b>${b.n}</b><span>${b.d}</span></div>`).join("");
-  const seen = state.seen.map(id => byId[id]).filter(Boolean);
-  $("#stubs").innerHTML = seen.length
-    ? seen.map((b, i) => `<div class="stub"><span class="num">Nº ${String(i + 1).padStart(3, "0")}</span><button type="button" class="linkish n" data-open="${b.id}">${esc(b.nom)}</button><span class="tag" style="--g:${mainColor(b)}">${GENRES[b.generes[0]].label}</span></div>`).join("")
-    : `<div class="empty">Encara no has marcat cap concert. Ves a Grups i toca «L'he vist».</div>`;
-}
-
-/* ======================================================================
-   FITXA DEL GRUP
-   ====================================================================== */
-const dlg = $("#sheet");
-function openBand(id) {
-  const b = byId[id]; if (!b) return;
-  const fav = state.fav.includes(b.id), seen = state.seen.includes(b.id);
-  const discs = b.discos.length
-    ? `<ol class="tracklist">${b.discos.map(d => `<li><span class="y">${d.a || "—"}</span><span>${esc(d.t)}</span></li>`).join("")}</ol>`
-    : `<p class="sub">Encara no tenim la discografia d'aquest grup a la fitxa.</p>`;
-  const songs = b.cancons.length
-    ? `<ol class="tracklist">${b.cancons.map((c, i) => `<li><span class="y">${String(i + 1).padStart(2, "0")}</span><a href="https://www.youtube.com/results?search_query=${encodeURIComponent(b.nom + " " + c)}" target="_blank" rel="noopener">${esc(c)}</a></li>`).join("")}</ol>`
-    : `<p class="sub">Comença pel disc més recent i tira enrere.</p>`;
-  dlg.innerHTML = `<div class="sheet" style="--g:${mainColor(b)}">
-    <div class="sheet-head">
-      <button class="close" type="button" data-close aria-label="Tanca">×</button>
-      <div class="tags">${b.generes.map(g => `<span class="tag" style="--g:var(--card);background:#fbfaf7">${GENRES[g].label}</span>`).join("")}</div>
-      <h2 id="sheet-title">${esc(b.nom)}</h2>
-      <div class="meta"><span>${esc(b.lloc)} · ${esc(b.territori)}</span><span>${years(b)}</span><span>${STATUS[b.estat].label}</span><span>${AMBITS[b.ambit].label}</span></div>
-    </div>
-    <div class="sheet-body">
-      <p>${esc(b.desc)}</p>
-      ${b.nota ? `<div class="notebox">${esc(b.nota)}</div>` : ""}
-      <div class="sheet-actions">
-        <button type="button" class="icon-btn fav" data-fav="${b.id}" aria-pressed="${fav}">${ICON_HEART}${fav ? "Estimat" : "Estima'l"}</button>
-        <button type="button" class="icon-btn seen" data-seen="${b.id}" aria-pressed="${seen}">${ICON_TICKET}${seen ? "Vist en directe" : "L'he vist"}</button>
+    <!-- INTERCANVI -->
+    <section class="view" id="view-market">
+      <div class="view-head">
+        <h2 class="tape">Intercanvi</h2>
+        <p class="hint">Discos que altres col·leccionistes ofereixen. <mark>MATCH</mark> = té una cosa que vols i vol una cosa que tens.</p>
       </div>
-      <div class="two">
-        <div><h3 class="h-mini">Discos</h3>${discs}</div>
-        <div><h3 class="h-mini">Per començar</h3>${songs}</div>
+      <div class="grid" id="market-grid"></div>
+    </section>
+
+    <!-- DESITJOS -->
+    <section class="view" id="view-wish">
+      <div class="view-head">
+        <h2 class="tape">Llista de desitjos</h2>
+        <form id="wish-form" class="inline-form">
+          <input name="artist" placeholder="Banda" required>
+          <input name="title" placeholder="Disc" required>
+          <button class="btn btn-pink">Ho vull!</button>
+        </form>
       </div>
-      <div><h3 class="h-mini">Escolta'ls</h3><div class="listen">${listenLinks(b).map(l => `<a href="${l.u}" target="_blank" rel="noopener">${l.l} ↗</a>`).join("")}</div></div>
-      <div><h3 class="h-mini">Escena</h3><p>${esc(ESCENES[b.escena] || "")}</p></div>
-      <div><h3 class="h-mini">Si t'agraden, prova…</h3><div class="recs">${recommend(b).map(o => `<button type="button" class="rec" data-open="${o.id}"><b>${esc(o.nom)}</b><small>${esc(o.lloc)} · ${o.generes.map(g => GENRES[g].label).join(" / ")}</small></button>`).join("")}</div></div>
-    </div>
-  </div>`;
-  if (!dlg.open) dlg.showModal();
-  dlg.scrollTop = 0;
-  try { history.replaceState(null, "", "#grup-" + b.id); } catch (e) {}
-}
-function closeBand() {
-  if (dlg.open) dlg.close();
-}
-dlg.addEventListener("close", () => {
-  if (location.hash.startsWith("#grup-")) { try { history.replaceState(null, "", "#" + currentView); } catch (e) {} }
-});
-dlg.addEventListener("click", e => { if (e.target === dlg) closeBand(); });
+      <ul class="wishlist" id="wish-list"></ul>
+    </section>
 
-/* ======================================================================
-   NAVEGACIÓ I ESDEVENIMENTS
-   ====================================================================== */
-const VIEWS = ["grups", "cronologia", "mapa", "carnet"];
-let currentView = "grups";
-function route() {
-  const h = location.hash.replace("#", "");
-  if (h.startsWith("grup-")) { openBand(h.slice(5)); return; }
-  currentView = VIEWS.includes(h) ? h : "grups";
-  document.querySelectorAll("section[data-view]").forEach(s => s.hidden = s.dataset.view !== currentView);
-  document.querySelectorAll("nav.tabs a").forEach(a => {
-    if (a.dataset.tab === currentView) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
-  });
-  if (dlg.open) dlg.close();
-}
-window.addEventListener("hashchange", route);
+    <!-- TRACTES -->
+    <section class="view" id="view-deals">
+      <div class="view-head">
+        <h2 class="tape">Tractes</h2>
+        <p class="hint">Propostes d'intercanvi enviades i rebudes.</p>
+      </div>
+      <div id="deals-list" class="deals"></div>
+    </section>
+  </main>
 
-document.addEventListener("click", e => {
-  const t = e.target.closest("[data-open],[data-fav],[data-seen],[data-close],[data-town],[data-town-clear]");
-  if (!t) return;
-  if (t.dataset.close !== undefined) return closeBand();
-  if (t.dataset.fav) return toggle("fav", t.dataset.fav);
-  if (t.dataset.seen) return toggle("seen", t.dataset.seen);
-  if (t.dataset.town) { selectedTown = t.dataset.town; return renderMap(); }
-  if (t.dataset.townClear !== undefined) { selectedTown = null; return renderMap(); }
-  if (t.dataset.open) return openBand(t.dataset.open);
-});
-document.addEventListener("keydown", e => {
-  if ((e.key === "Enter" || e.key === " ") && e.target.matches("g[data-open], g[data-town]")) {
-    e.preventDefault(); e.target.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-  }
-});
-$("#q").addEventListener("input", e => { filters.q = e.target.value.trim(); renderGrid(); renderTimeline(); });
-$("#random").addEventListener("click", () => {
-  const pool = BANDS.filter(matches); const list = pool.length ? pool : BANDS;
-  openBand(list[Math.floor(Math.random() * list.length)].id);
-});
+  <footer class="foot">
+    <p>NO FUTURE · NO STREAMING SENSE SOLC · FET AMB COLA I FOTOCOPIADORA</p>
+  </footer>
 
-function renderAll() {
-  renderGrid(); renderTimeline(); renderMap(); renderCarnet();
-  if (dlg.open) {
-    const id = dlg.querySelector("[data-fav]")?.dataset.fav;
-    if (id) { const st = dlg.scrollTop; openBand(id); dlg.scrollTop = st; }
-  }
-}
+  <!-- MODAL: detall disc -->
+  <dialog id="detail" class="modal">
+    <form method="dialog"><button class="close" aria-label="Tanca">✕</button></form>
+    <div id="detail-body"></div>
+  </dialog>
 
-buildChips();
-renderAll();
-route();
-</script>
+  <!-- MODAL: afegir vinil -->
+  <dialog id="add" class="modal">
+    <form method="dialog"><button class="close" aria-label="Tanca">✕</button></form>
+    <h3 class="tape">Nou vinil a la caixa</h3>
+    <form id="add-form" class="stack">
+      <label>Banda <input name="artist" required></label>
+      <label>Disc <input name="title" required></label>
+      <div class="row">
+        <label>Any <input name="year" type="number" min="1950" max="2026"></label>
+        <label>Gènere
+          <select name="genre">
+            <option>Punk</option><option>Hardcore</option><option>Post-punk</option>
+            <option>Garage</option><option>Rock</option><option>Grunge</option><option>Oi!</option>
+          </select>
+        </label>
+      </div>
+      <label>Estat
+        <select name="condition">
+          <option>Mint</option><option>Near Mint</option><option selected>VG+</option><option>VG</option><option>Destrossat però sona</option>
+        </select>
+      </label>
+      <label class="check"><input type="checkbox" name="forTrade"> El poso per canviar</label>
+      <button class="btn btn-pink">Al calaix!</button>
+    </form>
+  </dialog>
+
+  <!-- MODAL: proposar tracte -->
+  <dialog id="propose" class="modal">
+    <form method="dialog"><button class="close" aria-label="Tanca">✕</button></form>
+    <div id="propose-body"></div>
+  </dialog>
+
+  <!-- MODAL: Spotify -->
+  <dialog id="sp-dialog" class="modal">
+    <form method="dialog"><button class="close" aria-label="Tanca">✕</button></form>
+    <div id="sp-body"></div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="config.js"></script>
+  <script src="data.js"></script>
+  <script src="audio.js"></script>
+  <script src="spotify.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
