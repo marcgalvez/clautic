@@ -44,3 +44,7 @@ El Client ID no és secret (l'inici de sessió fa servir PKCE, sense servidor ni
 - Portades reals dels discos des de Spotify o Discogs.
 - Portades reals i dades des de l'API de Discogs.
 - Backend amb usuaris reals, xat entre col·leccionistes i mapa de botigues/concerts.
+
+## Pogo i Dolçaina
+
+Fanzine digital d'ska, punk, folk i rock (Països Catalans, Euskal Herria, resta de l'Estat i internacional) a la carpeta [`pogo/`](pogo/). Web: https://marcgalvez.github.io/clautic/pogo/
