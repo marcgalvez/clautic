@@ -380,7 +380,11 @@
       toast(r.forTrade ? "Al calaix d'intercanvi" : "Te'l quedes. Bona decisió.");
     } else if (d.remove) {
       const r = state.myCrate.find((x) => x.id === d.remove);
-      if (r && confirm(`Segur que treus «${r.title}» de la caixa?`)) {
+      if (r && !el.dataset.armed) {
+        // primer clic: demana confirmació al mateix botó
+        el.dataset.armed = "1"; el.textContent = "Segur? Clica per treure'l";
+        el.classList.add("btn-pink");
+      } else if (r) {
         state.myCrate = state.myCrate.filter((x) => x.id !== r.id);
         if (playing && playing.id === r.id) stop();
         save(); renderAll(); $("#detail").close(); toast("Fora!");
