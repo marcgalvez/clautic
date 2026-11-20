@@ -1,6 +1,6 @@
 # Pogo i Dolçaina
 
-Fanzine digital de música en català (i amics) per a fans de l'ska, el punk i el folk festiu: de Fetus a La Ludwig Band, passant per Skatalà, Skalariak, Obrint Pas, La Gossa Sorda, Roba Estesa, Ebri Knight i molts més.
+Fanzine digital de música en català i cosins: ska, punk, folk i rock dels Països Catalans, Euskal Herria, la resta de l'Estat i el món anglòfon (de Fetus a The Pogues, de Skatalà a The Specials).
 
 Obre `index.html` al navegador. No cal res més: és un sol fitxer sense dependències (només Google Fonts).
 

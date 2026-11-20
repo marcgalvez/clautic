@@ -20,6 +20,7 @@
   --yellow: #ffcc2e;
   --green: #11966a;
   --orange: #ff7a1a;
+  --purple: #a56cf0;
   --card: #fbfaf7;
   --line: #17161a;
   --dot: rgba(23,22,26,.09);
@@ -31,14 +32,14 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --paper: #141317; --paper-2: #1e1d23; --ink: #f1efe9; --ink-soft: #a7a4ae;
-    --pink: #ff4f8b; --blue: #6f93ff; --yellow: #ffd54f; --green: #2fc28f; --orange: #ff9447;
+    --pink: #ff4f8b; --blue: #6f93ff; --yellow: #ffd54f; --green: #2fc28f; --orange: #ff9447; --purple: #b98cff;
     --card: #1c1b21; --line: #f1efe9; --dot: rgba(241,239,233,.07);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --paper: #141317; --paper-2: #1e1d23; --ink: #f1efe9; --ink-soft: #a7a4ae;
-  --pink: #ff4f8b; --blue: #6f93ff; --yellow: #ffd54f; --green: #2fc28f; --orange: #ff9447;
+  --pink: #ff4f8b; --blue: #6f93ff; --yellow: #ffd54f; --green: #2fc28f; --orange: #ff9447; --purple: #b98cff;
   --card: #1c1b21; --line: #f1efe9; --dot: rgba(241,239,233,.07);
   color-scheme: dark;
 }
@@ -260,9 +261,9 @@ footer code { font-family: var(--f-mono); }
 
 <header class="hero">
   <div class="wrap">
-    <div class="kicker">Fanzine digital · ska · punk · folk · festa major</div>
+    <div class="kicker">Fanzine digital · ska · punk · folk · rock · festa major</div>
     <h1>Pogo <span class="i">i</span> <span class="d">Dolçaina</span></h1>
-    <p class="lede">De <b>Fetus</b> a <b>La Ludwig Band</b>, passant per <b>Skatalà</b>, <b>Skalariak</b> i tota la colla. La música en català (i amics) que es balla amb els peus enfangats: fitxes de grups, cronologia, mapa i el teu carnet de fan.</p>
+    <p class="lede">De <b>Fetus</b> a <b>La Ludwig Band</b>, passant per <b>Skatalà</b>, <b>Skalariak</b> i tota la colla. La música en català que es balla amb els peus enfangats, i els cosins d'Euskal Herria, la resta de l'Estat i l'ska i el punk en anglès: fitxes de grups, cronologia, mapa i el teu carnet de fan.</p>
   </div>
   <div class="checker" aria-hidden="true"></div>
 </header>
@@ -291,6 +292,7 @@ footer code { font-family: var(--f-mono); }
           <button class="btn" id="random" type="button">Sorprèn-me</button>
         </div>
         <div class="chips" id="genre-chips" role="group" aria-label="Estil"><span class="filter-label">Estil</span></div>
+        <div class="chips" id="ambit-chips" role="group" aria-label="D'on són"><span class="filter-label">D'on</span></div>
         <div class="chips" id="status-chips" role="group" aria-label="Estat"><span class="filter-label">Estat</span></div>
         <div class="count" id="count" aria-live="polite"></div>
       </div>
@@ -299,10 +301,11 @@ footer code { font-family: var(--f-mono); }
 
     <section data-view="cronologia" aria-labelledby="h-crono" hidden>
       <div>
-        <h2 id="h-crono">Quaranta anys de bot</h2>
+        <h2 id="h-crono">Seixanta anys de bot</h2>
         <p class="sub">Cada barra és la vida d'un grup sobre l'escenari, pintada pel seu estil principal. Les barres que acaben en fletxa encara toquen. Toca'n una per obrir la fitxa.</p>
       </div>
       <div class="legend" id="legend"></div>
+      <div class="count" id="tl-note"></div>
       <div class="panel scroll-x"><div id="timeline"></div></div>
       <div class="panel">
         <h3 class="h-mini">Fites per recordar</h3>
@@ -313,7 +316,7 @@ footer code { font-family: var(--f-mono); }
     <section data-view="mapa" aria-labelledby="h-mapa" hidden>
       <div>
         <h2 id="h-mapa">D'on surten</h2>
-        <p class="sub">Un mapa esquemàtic de la costa, del Cap de Creus a Alacant, amb una escapada a Iruñea. El cercle creix amb el nombre de grups del poble.</p>
+        <p class="sub">Un mapa esquemàtic de la costa, del Cap de Creus a Alacant, amb una escapada a Iruñea. El cercle creix amb el nombre de grups del poble. Els grups de més lluny surten al recompte per territori.</p>
       </div>
       <div class="map-layout">
         <div class="panel"><div id="map"></div></div>
@@ -351,7 +354,7 @@ footer code { font-family: var(--f-mono); }
 <footer>
   <div class="wrap">
     <div>Dades recollides de premsa musical i fitxes públiques (Ara, VilaWeb, Surt de Casa, Nació Digital, El Temps, Valencia Plaza, Enderrock, Bandcamp, Wikipedia). Quan les fonts no quadren, la fitxa ho diu.</div>
-    <div>Falta el teu grup? Afegeix-lo a la llista <code>BANDS</code> d'aquest fitxer.</div>
+    <div>Falta el teu grup? Afegeix-lo a la llista <code>BANDS</code> d'aquest fitxer (camp <code>ambit</code>: pc, eh, es o int).</div>
   </div>
 </footer>
 
@@ -364,6 +367,9 @@ footer code { font-family: var(--f-mono); }
    aprox: true quan les fonts discrepen sobre les dates
    coord: [longitud, latitud] del poble d'origen
    ====================================================================== */
+const byId = {};
+function byIdInit() { for (const b of BANDS) byId[b.id] = b; }
+
 const GENRES = {
   ska:      { label: "Ska",      color: "var(--blue)" },
   punk:     { label: "Punk",     color: "var(--pink)" },
@@ -371,6 +377,14 @@ const GENRES = {
   reggae:   { label: "Reggae",   color: "var(--yellow)" },
   rumba:    { label: "Rumba",    color: "var(--orange)" },
   hardcore: { label: "Hardcore", color: "#9b9aa3" },
+  rock:     { label: "Rock",     color: "var(--purple)" },
+};
+
+const AMBITS = {
+  pc:  { label: "Països Catalans" },
+  eh:  { label: "Euskal Herria" },
+  es:  { label: "Resta de l'Estat" },
+  int: { label: "Internacional" },
 };
 
 const STATUS = {
@@ -395,6 +409,7 @@ const BANDS = [
     cancons: [],
     nota: "Sota, cavall i rei versiona romanços de Jaume Arnella. Discos amb el segell Bankrobber.",
     bandcamp: "https://somfetus.bandcamp.com",
+    germans: ["pogues", "ludwig"],
   },
   {
     id: "ludwig", nom: "La Ludwig Band", lloc: "Espolla", territori: "Empordà", coord: [3.00, 42.39],
@@ -433,7 +448,7 @@ const BANDS = [
     nota: "Comiat amb la gira dels 30 anys i concerts finals a la sala Apolo el 2018. Barbarossaplatz es va enregistrar a Alemanya.",
   },
   {
-    id: "skalariak", nom: "Skalariak", lloc: "Iruñea", territori: "Euskal Herria", coord: [-1.64, 42.81],
+    id: "skalariak", nom: "Skalariak", lloc: "Iruñea", territori: "Euskal Herria", coord: [-1.64, 42.81], ambit: "eh",
     inici: 1994, fi: 2008, estat: "aturat", generes: ["ska", "punk", "reggae"], escena: "germans",
     desc: "Els germans bascos de la colla. Ska combatiu de Navarra fundat el 1994 pels germans Juantxo i Peio Skalari, amb lletres en basc i castellà. Imprescindibles a qualsevol Diada amb pogo.",
     discos: [
@@ -553,6 +568,7 @@ const BANDS = [
     cancons: ["Tornaria", "Guerrilla", "Foc"],
     nota: "Fundats el 2004 o 2005 segons la font. L'EP La voz dormida recorda els 80 anys de la derrota republicana.",
     bandcamp: "https://ebriknight.bandcamp.com",
+    germans: ["dropkick", "pogues"],
   },
   {
     id: "brams", nom: "Brams", lloc: "Berga", territori: "Berguedà", coord: [1.85, 42.10],
@@ -569,6 +585,7 @@ const BANDS = [
     discos: [],
     cancons: [],
     nota: "Després de la separació, els membres formen Eina.",
+    germans: ["negugorriak"],
   },
   {
     id: "buhos", nom: "Buhos", lloc: "Calafell", territori: "Penedès", coord: [1.57, 41.20],
@@ -641,7 +658,284 @@ const BANDS = [
     cancons: [],
     nota: "Gira de comiat pels 25 anys, que es va tancar el novembre de 2024. Algunes fonts situen el primer disc el 2004.",
   },
+  /* ---------------- RESTA DE L'ESTAT ---------------- */
+  {
+    id: "extremoduro", nom: "Extremoduro", lloc: "Plasencia", territori: "Extremadura", coord: [-6.09, 40.03], ambit: "es",
+    inici: 1987, fi: 2019, estat: "aturat", generes: ["rock"], escena: "estatal",
+    desc: "El rock transgressiu de Robe Iniesta: poesia bruta, guitarres pesades i cançons que ha cantat mig país a cor.",
+    discos: [{ t: "Agila", a: 1996 }, { t: "Yo, minoría absoluta", a: 2002 }, { t: "La ley innata", a: 2008 }],
+    cancons: ["So payaso", "Salir", "Standby"],
+    nota: "Anuncien la separació el 2019; la gira de comiat del 2020 es va cancel·lar per la pandèmia. Robe Iniesta va morir el desembre de 2025.",
+  },
+  {
+    id: "skap", nom: "Ska-P", lloc: "Madrid (Vallecas)", territori: "Madrid", coord: [-3.65, 40.39], ambit: "es",
+    inici: 1994, fi: null, estat: "actiu", generes: ["ska", "punk"], escena: "estatal",
+    desc: "Ska-punk de Vallecas, combatiu i amb el gat Pepe com a mascota. Van portar l'ska de l'Estat per tot Europa i Llatinoamèrica.",
+    discos: [{ t: "El vals del obrero", a: 1996 }, { t: "Eurosis", a: 1998 }, { t: "Planeta Eskoria", a: 2000 }],
+    cancons: ["Cannabis", "El vals del obrero"],
+    nota: "",
+  },
+  {
+    id: "boikot", nom: "Boikot", lloc: "Madrid", territori: "Madrid", coord: [-3.70, 40.42], ambit: "es",
+    inici: 1987, fi: null, estat: "actiu", generes: ["punk", "ska"], escena: "estatal",
+    desc: "Punk-rock amb tocs d'ska i molt de compromís, una de les bandes més rodades del circuit alternatiu.",
+    discos: [{ t: "La ruta del Che (trilogia)", a: null }],
+    cancons: [],
+    nota: "",
+  },
+  {
+    id: "reincidentes", nom: "Reincidentes", lloc: "Sevilla", territori: "Andalusia", coord: [-5.98, 37.39], ambit: "es",
+    inici: 1987, fi: null, estat: "actiu", generes: ["punk", "rock"], escena: "estatal",
+    desc: "Punk-rock sevillà amb lletres socials, clàssic dels festivals de l'Estat durant més de tres dècades.",
+    discos: [], cancons: [], nota: "",
+  },
+  {
+    id: "celtas", nom: "Celtas Cortos", lloc: "Valladolid", territori: "Castella", coord: [-4.72, 41.65], ambit: "es",
+    inici: 1984, fi: null, estat: "actiu", generes: ["folk", "rock"], escena: "estatal",
+    desc: "Folk-rock amb flautes, violí i gaites. La banda que va posar el folk celta a les ràdios dels noranta.",
+    discos: [{ t: "Cuéntame un cuento", a: 1991 }],
+    cancons: ["20 de abril"],
+    nota: "",
+  },
+  {
+    id: "siniestro", nom: "Siniestro Total", lloc: "Vigo", territori: "Galícia", coord: [-8.72, 42.24], ambit: "es",
+    inici: 1981, fi: null, estat: "actiu", generes: ["punk", "rock"], escena: "estatal",
+    desc: "Punk gallec amb humor absurd, nascut a la Movida viguesa.",
+    discos: [{ t: "¿Cuándo se come aquí?", a: 1982 }],
+    cancons: ["Bailaré sobre tu tumba"],
+    nota: "",
+  },
+  {
+    id: "laraiz", nom: "La Raíz", lloc: "Gandia", territori: "País Valencià", coord: [-0.18, 38.97], ambit: "pc",
+    inici: 2005, fi: null, aprox: true, estat: "actiu", generes: ["rock", "ska", "reggae"], escena: "estatal",
+    desc: "Mestissatge combatiu de la Safor (en castellà): rock, ska, reggae i rap amb vent. Van tornar per tot l'alt.",
+    discos: [], cancons: [],
+    nota: "Després del comiat del 2018, la Gira Reencuentro va començar el 22 de novembre de 2024 al WiZink Center amb entrades exhaurides.",
+  },
+
+  /* ---------------- EUSKAL HERRIA ---------------- */
+  {
+    id: "kortatu", nom: "Kortatu", lloc: "Irun", territori: "Euskal Herria", coord: [-1.79, 43.34], ambit: "eh",
+    inici: 1984, fi: 1988, estat: "aturat", generes: ["punk", "ska"], escena: "rrv",
+    desc: "Els germans Muguruza i companyia: punk i ska amb l'ombra de The Clash. Peça clau del rock radical basc.",
+    discos: [{ t: "Kortatu", a: 1985 }, { t: "El estado de las cosas", a: 1986 }, { t: "Kolpez kolpe", a: 1988 }],
+    cancons: ["Sarri, Sarri", "Hotel Monbar"],
+    nota: "Quan plegen, part del grup forma Negu Gorriak.",
+    germans: ["negugorriak", "clash"],
+  },
+  {
+    id: "negugorriak", nom: "Negu Gorriak", lloc: "Irun", territori: "Euskal Herria", coord: [-1.79, 43.34], ambit: "eh",
+    inici: 1990, fi: 2001, estat: "aturat", generes: ["hardcore", "punk", "ska"], escena: "rrv",
+    desc: "Fermin i Iñigo Muguruza amb Kaki Arkarazo: hardcore, rap, ska i dub en basc, autogestió i segell propi.",
+    discos: [{ t: "Negu Gorriak", a: 1990 }, { t: "Borreroak baditu milaka aurpegi", a: 1993 }],
+    cancons: ["Esan ozenki"],
+    nota: "Referent declarat d'Inadaptats.",
+    germans: ["kortatu", "inadaptats"],
+  },
+  {
+    id: "lapolla", nom: "La Polla Records", lloc: "Agurain", territori: "Euskal Herria", coord: [-2.39, 42.85], ambit: "eh",
+    inici: 1979, fi: 2003, estat: "aturat", generes: ["punk"], escena: "rrv",
+    desc: "Evaristo Páramos i el punk més sarcàstic i salvatge de l'Estat. Himnes per cridar amb el puny enlaire.",
+    discos: [{ t: "Salve", a: 1984 }],
+    cancons: [],
+    nota: "Reunió el 2019 amb la gira Ni descanso ni paz. Evaristo continua girant amb el seu nom el 2025 i 2026.",
+  },
+  {
+    id: "eskorbuto", nom: "Eskorbuto", lloc: "Santurtzi", territori: "Euskal Herria", coord: [-3.03, 43.33], ambit: "eh",
+    inici: 1980, fi: 1992, aprox: true, estat: "aturat", generes: ["punk"], escena: "rrv",
+    desc: "Punk fosc i nihilista del marge esquerre de la ria. «Anti todo» com a manera de viure.",
+    discos: [],
+    cancons: ["Mucha policía, poca diversión", "Cerebros destruidos"],
+    nota: "",
+  },
+  {
+    id: "hertzainak", nom: "Hertzainak", lloc: "Vitoria-Gasteiz", territori: "Euskal Herria", coord: [-2.67, 42.85], ambit: "eh",
+    inici: 1981, fi: 1993, estat: "aturat", generes: ["punk", "ska", "rock"], escena: "rrv",
+    desc: "Punk i ska en basc des de Gasteiz, de les primeres bandes que van fer ballar en euskara.",
+    discos: [], cancons: ["Pakean utzi arte"], nota: "",
+  },
+  {
+    id: "soziedad", nom: "Soziedad Alkoholika", lloc: "Vitoria-Gasteiz", territori: "Euskal Herria", coord: [-2.67, 42.85], ambit: "eh",
+    inici: 1988, fi: null, estat: "actiu", generes: ["hardcore", "punk"], escena: "rrv",
+    desc: "Crossover de hardcore i metall des de Gasteiz. Contundència pura en directe.",
+    discos: [], cancons: [], nota: "",
+  },
+  {
+    id: "barricada", nom: "Barricada", lloc: "Iruñea", territori: "Euskal Herria", coord: [-1.64, 42.81], ambit: "eh",
+    inici: 1982, fi: 2013, estat: "aturat", generes: ["rock", "punk"], escena: "rrv",
+    desc: "Rock dur del barri de la Txantrea, de les bandes més estimades de l'escena navarresa.",
+    discos: [{ t: "No hay tregua", a: 1986 }], cancons: [], nota: "",
+  },
+  {
+    id: "lendakaris", nom: "Lendakaris Muertos", lloc: "Iruñea", territori: "Euskal Herria", coord: [-1.64, 42.81], ambit: "eh",
+    inici: 2004, fi: null, estat: "actiu", generes: ["punk"], escena: "rrv",
+    desc: "Punk ràpid, curt i amb un humor corrosiu que no deixa ningú dret.",
+    discos: [], cancons: [], nota: "",
+  },
+  {
+    id: "marea", nom: "Marea", lloc: "Berriozar", territori: "Euskal Herria", coord: [-1.67, 42.83], ambit: "eh",
+    inici: 1997, fi: null, aprox: true, estat: "actiu", generes: ["rock"], escena: "estatal",
+    desc: "Rock urbà navarrès amb la veu esquinçada d'El Kutxi i lletres de poeta de taverna.",
+    discos: [{ t: "28.000 puñaladas", a: 2004 }, { t: "Los potros del tiempo", a: null }],
+    cancons: [],
+    nota: "Gira «Sin riendas» el 2026.",
+  },
+  {
+    id: "platero", nom: "Platero y Tú", lloc: "Bilbao", territori: "Euskal Herria", coord: [-2.93, 43.26], ambit: "eh",
+    inici: 1989, fi: 2001, estat: "aturat", generes: ["rock"], escena: "estatal",
+    desc: "Rock'n'roll de Bilbao amb Fito Cabrales a la guitarra i la veu. Cervesa, riffs i bon rotllo.",
+    discos: [], cancons: ["Hay poco rock & roll", "Si tú te vas"], nota: "",
+  },
+  {
+    id: "berri", nom: "Berri Txarrak", lloc: "Lekunberri", territori: "Euskal Herria", coord: [-1.89, 43.00], ambit: "eh",
+    inici: 1994, fi: 2019, estat: "aturat", generes: ["rock", "hardcore"], escena: "rrv",
+    desc: "El trio basc més internacional, amb Gorka Urbizu al capdavant: rock dur i melòdic, sempre en euskara.",
+    discos: [{ t: "Payola", a: 2009 }, { t: "Infrasoinuak", a: 2017 }],
+    cancons: [],
+    nota: "Aturada indefinida des de la gira de comiat Ikusi Arte del 2019.",
+  },
+
+  /* ---------------- INTERNACIONAL ---------------- */
+  {
+    id: "skatalites", nom: "The Skatalites", lloc: "Kingston", territori: "Jamaica", coord: [-76.8, 18.0], ambit: "int",
+    inici: 1964, fi: null, estat: "actiu", generes: ["ska"], escena: "jamaica",
+    desc: "On comença tot. Els músics de sessió que van inventar el so de l'ska jamaicà.",
+    discos: [], cancons: ["Guns of Navarone", "Freedom Sound"], nota: "",
+  },
+  {
+    id: "toots", nom: "Toots and the Maytals", lloc: "Kingston", territori: "Jamaica", coord: [-76.8, 18.0], ambit: "int",
+    inici: 1962, fi: 2020, aprox: true, estat: "aturat", generes: ["ska", "reggae"], escena: "jamaica",
+    desc: "Del ska al reggae amb la veu de Toots Hibbert. Diuen que una cançó seva va donar nom al reggae.",
+    discos: [], cancons: ["Pressure Drop", "54-46 That's My Number", "Monkey Man"],
+    nota: "Toots Hibbert va morir el 2020.",
+  },
+  {
+    id: "specials", nom: "The Specials", lloc: "Coventry", territori: "Anglaterra", coord: [-1.51, 52.41], ambit: "int",
+    inici: 1977, fi: 2022, aprox: true, estat: "aturat", generes: ["ska", "punk"], escena: "twotone",
+    desc: "El segell 2 Tone, el blanc i negre i l'ska amb ràbia punk de la Gran Bretanya de Thatcher.",
+    discos: [{ t: "The Specials", a: 1979 }, { t: "More Specials", a: 1980 }, { t: "Encore", a: 2019 }],
+    cancons: ["Ghost Town", "A Message to You Rudy", "Too Much Too Young"],
+    nota: "Terry Hall, la veu, va morir el desembre de 2022.",
+    germans: ["skatala", "selecter"],
+  },
+  {
+    id: "selecter", nom: "The Selecter", lloc: "Coventry", territori: "Anglaterra", coord: [-1.51, 52.41], ambit: "int",
+    inici: 1979, fi: null, estat: "actiu", generes: ["ska"], escena: "twotone",
+    desc: "L'altra gran banda de Coventry del 2 Tone, amb Pauline Black al micro.",
+    discos: [{ t: "Too Much Pressure", a: 1980 }], cancons: ["On My Radio"], nota: "",
+  },
+  {
+    id: "madness", nom: "Madness", lloc: "Londres", territori: "Anglaterra", coord: [-0.13, 51.51], ambit: "int",
+    inici: 1976, fi: null, estat: "actiu", generes: ["ska"], escena: "twotone",
+    desc: "El «nutty sound» de Camden: ska, pop i ball de tren a tota pastilla.",
+    discos: [{ t: "One Step Beyond…", a: 1979 }, { t: "Absolutely", a: 1980 }, { t: "The Liberty of Norton Folgate", a: 2009 }],
+    cancons: ["One Step Beyond", "Baggy Trousers", "Our House"], nota: "",
+  },
+  {
+    id: "clash", nom: "The Clash", lloc: "Londres", territori: "Anglaterra", coord: [-0.13, 51.51], ambit: "int",
+    inici: 1976, fi: 1986, estat: "aturat", generes: ["punk", "reggae"], escena: "uk77",
+    desc: "«The only band that matters». Punk obert al reggae, el dub i el rockabilly, i consciència política.",
+    discos: [{ t: "The Clash", a: 1977 }, { t: "London Calling", a: 1979 }, { t: "Sandinista!", a: 1980 }, { t: "Combat Rock", a: 1982 }],
+    cancons: ["London Calling", "Should I Stay or Should I Go", "Rock the Casbah"],
+    nota: "Joe Strummer va morir el 2002.",
+    germans: ["kortatu"],
+  },
+  {
+    id: "pistols", nom: "Sex Pistols", lloc: "Londres", territori: "Anglaterra", coord: [-0.13, 51.51], ambit: "int",
+    inici: 1975, fi: 1978, estat: "aturat", generes: ["punk"], escena: "uk77",
+    desc: "Un sol disc d'estudi i l'explosió del punk britànic.",
+    discos: [{ t: "Never Mind the Bollocks, Here's the Sex Pistols", a: 1977 }],
+    cancons: ["Anarchy in the U.K.", "God Save the Queen"], nota: "",
+  },
+  {
+    id: "ramones", nom: "Ramones", lloc: "Nova York", territori: "Estats Units", coord: [-73.9, 40.7], ambit: "int",
+    inici: 1974, fi: 1996, estat: "aturat", generes: ["punk"], escena: "uk77",
+    desc: "Tres acords, cazadora de cuir i «Hey! Ho! Let's go!». El punk en estat pur.",
+    discos: [{ t: "Ramones", a: 1976 }], cancons: ["Blitzkrieg Bop"], nota: "",
+  },
+  {
+    id: "pogues", nom: "The Pogues", lloc: "Londres", territori: "Anglaterra", coord: [-0.13, 51.51], ambit: "int",
+    inici: 1982, fi: 2014, estat: "aturat", generes: ["folk", "punk"], escena: "celtic",
+    desc: "Shane MacGowan i el folk irlandès tocat amb energia punk. El gran mirall de Fetus i de tot el folk-punk.",
+    discos: [{ t: "Red Roses for Me", a: 1984 }, { t: "Rum Sodomy & the Lash", a: 1985 }, { t: "If I Should Fall from Grace with God", a: 1988 }],
+    cancons: ["Fairytale of New York", "Dirty Old Town", "The Irish Rover"],
+    nota: "Shane MacGowan va morir el novembre de 2023.",
+    germans: ["fetus", "ebri", "dropkick"],
+  },
+  {
+    id: "dropkick", nom: "Dropkick Murphys", lloc: "Quincy (Boston)", territori: "Estats Units", coord: [-71.0, 42.25], ambit: "int",
+    inici: 1996, fi: null, estat: "actiu", generes: ["punk", "folk"], escena: "celtic",
+    desc: "Punk celta de la classe treballadora de Boston: gaites, cors de pub i street punk.",
+    discos: [{ t: "Do or Die", a: 1998 }, { t: "The Warrior's Code", a: 2005 }],
+    cancons: ["I'm Shipping Up to Boston", "Rose Tattoo"], nota: "",
+    germans: ["ebri", "pogues"],
+  },
+  {
+    id: "flogging", nom: "Flogging Molly", lloc: "Los Angeles", territori: "Estats Units", coord: [-118.2, 34.05], ambit: "int",
+    inici: 1997, fi: null, estat: "actiu", generes: ["punk", "folk"], escena: "celtic",
+    desc: "Folk-punk irlandès nascut en un pub de Los Angeles, amb Dave King a la veu.",
+    discos: [{ t: "Swagger", a: 2000 }, { t: "Drunken Lullabies", a: 2002 }], cancons: [], nota: "",
+  },
+  {
+    id: "opivy", nom: "Operation Ivy", lloc: "Berkeley", territori: "Estats Units", coord: [-122.27, 37.87], ambit: "int",
+    inici: 1987, fi: 1989, estat: "aturat", generes: ["ska", "punk"], escena: "thirdwave",
+    desc: "Dos anys de vida i un sol disc que va fundar l'ska-punk californià.",
+    discos: [{ t: "Energy", a: 1989 }], cancons: ["Knowledge", "Sound System"],
+    nota: "Quan plegen, Tim Armstrong i Matt Freeman formen Rancid.",
+    germans: ["rancid"],
+  },
+  {
+    id: "rancid", nom: "Rancid", lloc: "Berkeley", territori: "Estats Units", coord: [-122.27, 37.87], ambit: "int",
+    inici: 1991, fi: null, estat: "actiu", generes: ["punk", "ska"], escena: "thirdwave",
+    desc: "Street punk amb ànima d'ska, hereus directes d'Operation Ivy i de The Clash.",
+    discos: [{ t: "…And Out Come the Wolves", a: 1995 }], cancons: ["Time Bomb", "Ruby Soho"], nota: "",
+    germans: ["opivy", "clash"],
+  },
+  {
+    id: "bosstones", nom: "The Mighty Mighty Bosstones", lloc: "Boston", territori: "Estats Units", coord: [-71.06, 42.36], ambit: "int",
+    inici: 1983, fi: 2022, estat: "aturat", generes: ["ska", "punk"], escena: "thirdwave",
+    desc: "Ska-core amb vent i quadres escocesos. Van portar la tercera onada de l'ska a la MTV.",
+    discos: [{ t: "Let's Face It", a: 1997 }], cancons: ["The Impression That I Get"], nota: "",
+  },
+  {
+    id: "rbf", nom: "Reel Big Fish", lloc: "Huntington Beach", territori: "Estats Units", coord: [-118.0, 33.66], ambit: "int",
+    inici: 1991, fi: null, estat: "actiu", generes: ["ska", "punk"], escena: "thirdwave",
+    desc: "Ska-punk californià amb trompetes i humor, festa garantida.",
+    discos: [{ t: "Turn the Radio Off", a: 1996 }], cancons: ["Sell Out"], nota: "",
+  },
+  {
+    id: "ltj", nom: "Less Than Jake", lloc: "Gainesville", territori: "Estats Units", coord: [-82.32, 29.65], ambit: "int",
+    inici: 1992, fi: null, estat: "actiu", generes: ["ska", "punk"], escena: "thirdwave",
+    desc: "Ska-punk de Florida, ràpid i melòdic, incansables a la carretera.",
+    discos: [], cancons: [], nota: "",
+  },
+  {
+    id: "sublime", nom: "Sublime", lloc: "Long Beach", territori: "Estats Units", coord: [-118.19, 33.77], ambit: "int",
+    inici: 1988, fi: 1996, estat: "aturat", generes: ["ska", "reggae", "punk"], escena: "thirdwave",
+    desc: "Ska, reggae i punk de platja californiana amb Bradley Nowell.",
+    discos: [{ t: "40oz. to Freedom", a: 1992 }, { t: "Sublime", a: 1996 }],
+    cancons: ["Santeria", "What I Got"],
+    nota: "Bradley Nowell va morir el 1996.",
+  },
+  {
+    id: "nofx", nom: "NOFX", lloc: "Los Angeles", territori: "Estats Units", coord: [-118.24, 34.05], ambit: "int",
+    inici: 1983, fi: 2024, estat: "comiat", generes: ["punk"], escena: "thirdwave",
+    desc: "Punk melòdic californià, sarcasme i autogestió amb el segell Fat Wreck Chords.",
+    discos: [{ t: "Punk in Drublic", a: 1994 }], cancons: [],
+    nota: "Concerts finals el 2024 després de 40 anys.",
+  },
+  {
+    id: "mano", nom: "Mano Negra", lloc: "París", territori: "França", coord: [2.35, 48.86], ambit: "int",
+    inici: 1987, fi: 1995, estat: "aturat", generes: ["punk", "rumba", "ska"], escena: "estatal",
+    desc: "Manu Chao i la «patchanka»: punk, rumba, ska i raï en francès, castellà i anglès.",
+    discos: [{ t: "Puta's Fever", a: 1989 }, { t: "King of Bongo", a: 1991 }, { t: "Casa Babylon", a: 1994 }],
+    cancons: ["Mala vida"], nota: "",
+  },
 ];
+
+// àmbit per defecte: Països Catalans
+BANDS.forEach(b => { b.ambit ||= "pc"; b.germans ||= []; });
+byIdInit();
 
 const ESCENES = {
   emporda: "Escena empordanesa",
@@ -651,6 +945,13 @@ const ESCENES = {
   folkpunk: "Folk-punk",
   combatiu: "Rock combatiu dels 90",
   germans: "Germans de fora del Principat",
+  estatal: "Rock i mestissatge de l'Estat",
+  rrv: "Rock radical basc i hereus",
+  jamaica: "Jamaica, on va començar tot",
+  twotone: "2 Tone britànic",
+  uk77: "Punk del 77",
+  celtic: "Punk celta",
+  thirdwave: "Tercera onada (EUA)",
 };
 
 const MILESTONES = [
@@ -691,8 +992,8 @@ function toggle(list, id) {
   saveState(); renderAll();
 }
 
-const filters = { q: "", genres: new Set(), status: new Set() };
-const byId = Object.fromEntries(BANDS.map(b => [b.id, b]));
+const filters = { q: "", genres: new Set(), status: new Set(), ambit: new Set() };
+
 const THIS_YEAR = 2026;
 
 /* ======================================================================
@@ -713,6 +1014,7 @@ const ICON_TICKET = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h1
 function matches(b) {
   if (filters.genres.size && !b.generes.some(g => filters.genres.has(g))) return false;
   if (filters.status.size && !filters.status.has(b.estat)) return false;
+  if (filters.ambit.size && !filters.ambit.has(b.ambit)) return false;
   if (filters.q) {
     const hay = [b.nom, b.lloc, b.territori, b.desc, ...b.discos.map(d => d.t), ...b.cancons].join(" ").toLowerCase()
       .normalize("NFD").replace(/[̀-ͯ]/g, "");
@@ -722,10 +1024,11 @@ function matches(b) {
   return true;
 }
 
-function recommend(b, n = 3) {
+function recommend(b, n = 4) {
   return BANDS.filter(o => o.id !== b.id).map(o => {
     let s = 0;
     s += o.generes.filter(g => b.generes.includes(g)).length * 2;
+    if (b.germans.includes(o.id) || o.germans.includes(b.id)) s += 4;
     if (o.escena === b.escena) s += 2;
     if (o.territori === b.territori) s += 1;
     if (o.inici && b.inici) s += Math.max(0, 1.5 - Math.abs(o.inici - b.inici) / 10);
@@ -752,15 +1055,23 @@ function buildChips() {
     const b = document.createElement("button");
     b.type = "button"; b.className = "chip"; b.textContent = g.label; b.style.setProperty("--g", g.color);
     b.setAttribute("aria-pressed", "false");
-    b.onclick = () => { filters.genres.has(k) ? filters.genres.delete(k) : filters.genres.add(k); b.setAttribute("aria-pressed", filters.genres.has(k)); renderGrid(); };
+    b.onclick = () => { filters.genres.has(k) ? filters.genres.delete(k) : filters.genres.add(k); b.setAttribute("aria-pressed", filters.genres.has(k)); renderGrid(); renderTimeline(); };
     gc.appendChild(b);
+  }
+  const ac = $("#ambit-chips");
+  for (const [k, a] of Object.entries(AMBITS)) {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "chip status"; b.textContent = a.label;
+    b.setAttribute("aria-pressed", "false");
+    b.onclick = () => { filters.ambit.has(k) ? filters.ambit.delete(k) : filters.ambit.add(k); b.setAttribute("aria-pressed", filters.ambit.has(k)); renderGrid(); renderTimeline(); };
+    ac.appendChild(b);
   }
   const sc = $("#status-chips");
   for (const [k, s] of Object.entries(STATUS)) {
     const b = document.createElement("button");
     b.type = "button"; b.className = "chip status"; b.textContent = s.label;
     b.setAttribute("aria-pressed", "false");
-    b.onclick = () => { filters.status.has(k) ? filters.status.delete(k) : filters.status.add(k); b.setAttribute("aria-pressed", filters.status.has(k)); renderGrid(); };
+    b.onclick = () => { filters.status.has(k) ? filters.status.delete(k) : filters.status.add(k); b.setAttribute("aria-pressed", filters.status.has(k)); renderGrid(); renderTimeline(); };
     sc.appendChild(b);
   }
 }
@@ -796,13 +1107,15 @@ function renderTimeline() {
   $("#legend").innerHTML = Object.values(GENRES).map(g => `<span><i style="background:${g.color}"></i>${g.label}</span>`).join("")
     + `<span><i style="background:transparent;border-style:dashed"></i>dates aproximades</span>`;
 
-  const rows = BANDS.filter(b => b.inici).sort((a, z) => a.inici - z.inici || a.nom.localeCompare(z.nom));
-  const Y0 = 1984, Y1 = 2027;
-  const left = 170, right = 24, top = 30, rowH = 26, W = 980;
+  const rows = BANDS.filter(b => b.inici && matches(b)).sort((a, z) => a.inici - z.inici || a.nom.localeCompare(z.nom));
+  if (!rows.length) { $("#timeline").innerHTML = `<div class="empty">Cap grup amb els filtres actuals.</div>`; $("#tl-note").textContent = ""; return; }
+  const Y0 = Math.min(1984, Math.floor((rows[0].inici - 1) / 5) * 5), Y1 = 2027;
+  $("#tl-note").textContent = `${rows.length} grups · segueix els filtres de la pestanya Grups`;
+  const left = 250, right = 24, top = 30, rowH = 26, W = 1060;
   const H = top + rows.length * rowH + 24;
   const x = y => left + (y - Y0) / (Y1 - Y0) * (W - left - right);
   let s = `<svg class="tl-svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Línia del temps dels grups">`;
-  for (let y = 1985; y <= 2025; y += 5) {
+  for (let y = Math.ceil(Y0 / 5) * 5; y <= 2025; y += 5) {
     s += `<line x1="${x(y)}" x2="${x(y)}" y1="${top - 8}" y2="${H - 18}" stroke="var(--ink-soft)" stroke-opacity=".3" stroke-dasharray="2 4"/>`;
     s += `<text x="${x(y)}" y="${top - 14}" text-anchor="middle" font-size="12" fill="var(--ink-soft)">${y}</text>`;
   }
@@ -836,7 +1149,7 @@ const MALLORCA = [[2.36,39.58],[2.60,39.95],[3.10,39.95],[3.20,39.86],[3.46,39.7
 let selectedTown = null;
 
 function renderMap() {
-  const lon0 = -2.0, lon1 = 3.7, lat0 = 38.2, lat1 = 43.0;
+  const lon0 = -2.0, lon1 = 3.7, lat0 = 38.2, lat1 = 43.15;
   const W = 640, H = 600;
   const kx = Math.cos(40.6 * Math.PI / 180);
   const sx = W / ((lon1 - lon0) * kx), sy = H / (lat1 - lat0);
@@ -845,7 +1158,8 @@ function renderMap() {
   const path = pts => pts.map((pt, i) => (i ? "L" : "M") + p(pt).map(v => v.toFixed(1)).join(" ")).join(" ");
 
   const towns = {};
-  for (const b of BANDS) {
+  const inMap = b => b.coord[0] >= lon0 && b.coord[0] <= lon1 && b.coord[1] >= lat0 && b.coord[1] <= lat1;
+  for (const b of BANDS.filter(inMap)) {
     const key = b.lloc;
     (towns[key] ||= { name: key, coord: b.coord, bands: [] }).bands.push(b);
   }
@@ -861,13 +1175,14 @@ function renderMap() {
     const [cx, cy] = p(t.coord);
     const r = 7 + t.bands.length * 3.5;
     const col = mainColor(t.bands[0]);
-    const LABEL_SIDE = { "Terrassa": "left", "Montcada i Reixac": "right", "Barcelona": "right", "Argentona": "right", "Espolla": "right", "La Bisbal d'Empordà": "right", "Iruñea": "right", "La Garriga": "right" };
+    const LABEL_SIDE = { "Terrassa": "left", "Montcada i Reixac": "right", "Barcelona": "right", "Argentona": "right", "Espolla": "right", "La Bisbal d'Empordà": "right", "Iruñea": "right", "La Garriga": "right", "Berriozar": "right", "Lekunberri": "right", "Gandia": "left" };
     const rightSide = LABEL_SIDE[t.name] ? LABEL_SIDE[t.name] === "left" : (t.coord[0] < 2.6 && t.coord[0] > -1);
     const lx = rightSide ? cx - r - 6 : cx + r + 6;
     s += `<g class="town ${selectedTown === t.name ? "on" : ""}" tabindex="0" role="button" data-town="${esc(t.name)}" aria-label="${esc(t.name)}: ${t.bands.length} grups">`;
     s += `<circle class="pin" cx="${cx}" cy="${cy}" r="${r}" fill="${col}"/>`;
     if (t.bands.length > 1) s += `<text x="${cx}" y="${cy + 4}" text-anchor="middle" style="stroke:none;fill:#17161a;font-weight:700">${t.bands.length}</text>`;
-    s += `<text x="${lx}" y="${cy + 4}" text-anchor="${rightSide ? "end" : "start"}">${esc(t.name)}</text>`;
+    const DY = { "Berriozar": -16, "Lekunberri": -4, "Gandia": 4 };
+    s += `<text x="${lx}" y="${cy + 4 + (DY[t.name] || 0)}" text-anchor="${rightSide ? "end" : "start"}">${esc(t.name)}</text>`;
     s += `</g>`;
   }
   s += `</svg>`;
@@ -904,11 +1219,14 @@ const BADGES = [
   { n: "Ska de dues tonalitats", d: "Tres grups d'ska vistos.", ok: s => s.seen.filter(id => byId[id]?.generes.includes("ska")).length >= 3 },
   { n: "Hi era, al comiat", d: "Has vist un grup que s'ha acomiadat fa poc.", ok: s => s.seen.some(id => byId[id]?.estat === "comiat") },
   { n: "Fan total", d: "Deu grups al cor.", ok: s => s.fav.length >= 10 },
+  { n: "Rock radical", d: "Dos grups bascos vistos.", ok: s => s.seen.filter(id => byId[id]?.ambit === "eh").length >= 2 },
+  { n: "Internacionalista", d: "Tres grups estrangers vistos.", ok: s => s.seen.filter(id => byId[id]?.ambit === "int").length >= 3 },
+  { n: "Rude boy / rude girl", d: "Estimes un grup jamaicà i un de 2 Tone.", ok: s => s.fav.some(id => byId[id]?.escena === "jamaica") && s.fav.some(id => byId[id]?.escena === "twotone") },
 ];
 
 function renderCarnet() {
   const got = BADGES.filter(b => b.ok(state)).length;
-  const missing = BANDS.filter(b => b.estat !== "aturat" && !state.seen.includes(b.id)).map(b => b.nom);
+  const missing = BANDS.filter(b => b.estat === "actiu" && !state.seen.includes(b.id)).sort((a, z) => (a.ambit !== "pc") - (z.ambit !== "pc")).map(b => b.nom);
   $("#pass").innerHTML = `
     <div class="kicker" style="color:#17161a">Carnet de soci/sòcia · temporada ${THIS_YEAR}</div>
     <h3>Pogo i Dolçaina<br>Fan Club</h3>
@@ -944,7 +1262,7 @@ function openBand(id) {
       <button class="close" type="button" data-close aria-label="Tanca">×</button>
       <div class="tags">${b.generes.map(g => `<span class="tag" style="--g:var(--card);background:#fbfaf7">${GENRES[g].label}</span>`).join("")}</div>
       <h2 id="sheet-title">${esc(b.nom)}</h2>
-      <div class="meta"><span>${esc(b.lloc)} · ${esc(b.territori)}</span><span>${years(b)}</span><span>${STATUS[b.estat].label}</span></div>
+      <div class="meta"><span>${esc(b.lloc)} · ${esc(b.territori)}</span><span>${years(b)}</span><span>${STATUS[b.estat].label}</span><span>${AMBITS[b.ambit].label}</span></div>
     </div>
     <div class="sheet-body">
       <p>${esc(b.desc)}</p>
@@ -1006,7 +1324,7 @@ document.addEventListener("keydown", e => {
     e.preventDefault(); e.target.dispatchEvent(new MouseEvent("click", { bubbles: true }));
   }
 });
-$("#q").addEventListener("input", e => { filters.q = e.target.value.trim(); renderGrid(); });
+$("#q").addEventListener("input", e => { filters.q = e.target.value.trim(); renderGrid(); renderTimeline(); });
 $("#random").addEventListener("click", () => {
   const pool = BANDS.filter(matches); const list = pool.length ? pool : BANDS;
   openBand(list[Math.floor(Math.random() * list.length)].id);
