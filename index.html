@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SOLC · vinils, punk i intercanvi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Permanent+Marker&family=Special+Elite&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="top">
+    <div class="logo">
+      <span class="logo-s">S</span><span class="logo-o">O</span><span class="logo-l">L</span><span class="logo-c">C</span>
+      <small>vinils · punk · intercanvi</small>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-view="crate">La meva caixa</button>
+      <button class="tab" data-view="market">Intercanvi</button>
+      <button class="tab" data-view="wish">Desitjos</button>
+      <button class="tab" data-view="deals">Tractes <span id="deals-count" class="badge" hidden>0</span></button>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="turntable" id="turntable">
+      <div class="plinth">
+        <div class="platter">
+          <div class="record" id="tt-record">
+            <div class="grooves"></div>
+            <div class="label" id="tt-label"><span>SOLC</span></div>
+          </div>
+          <div class="spindle"></div>
+        </div>
+        <div class="tonearm" id="tonearm"><div class="arm"></div><div class="head"></div></div>
+        <div class="knobs"><span></span><span></span><span class="led" id="led"></span></div>
+      </div>
+    </div>
+    <div class="now">
+      <p class="kicker">ARA SONA</p>
+      <h1 id="now-title">Tria un disc<br>i deixa'l caure.</h1>
+      <p id="now-artist" class="now-artist">El soroll comença quan l'agulla toca el solc.</p>
+      <div class="now-actions">
+        <a id="now-spotify" class="btn btn-spotify" href="#" target="_blank" rel="noopener" hidden>▶ Escolta a Spotify</a>
+        <button id="now-stop" class="btn btn-ghost" hidden>■ Atura</button>
+      </div>
+      <div class="stats" id="stats"></div>
+    </div>
+  </section>
+
+  <main>
+    <!-- LA MEVA CAIXA -->
+    <section class="view active" id="view-crate">
+      <div class="view-head">
+        <h2 class="tape">La meva caixa</h2>
+        <div class="filters">
+          <input id="search" type="search" placeholder="Busca banda o disc…">
+          <select id="genre-filter"><option value="">Tots els gèneres</option></select>
+          <button class="btn btn-pink" id="add-btn">+ Afegeix vinil</button>
+        </div>
+      </div>
+      <div class="grid" id="crate-grid"></div>
+    </section>
+
+    <!-- INTERCANVI -->
+    <section class="view" id="view-market">
+      <div class="view-head">
+        <h2 class="tape">Intercanvi</h2>
+        <p class="hint">Discos que altres col·leccionistes ofereixen. <mark>MATCH</mark> = té una cosa que vols i vol una cosa que tens.</p>
+      </div>
+      <div class="grid" id="market-grid"></div>
+    </section>
+
+    <!-- DESITJOS -->
+    <section class="view" id="view-wish">
+      <div class="view-head">
+        <h2 class="tape">Llista de desitjos</h2>
+        <form id="wish-form" class="inline-form">
+          <input name="artist" placeholder="Banda" required>
+          <input name="title" placeholder="Disc" required>
+          <button class="btn btn-pink">Ho vull!</button>
+        </form>
+      </div>
+      <ul class="wishlist" id="wish-list"></ul>
+    </section>
+
+    <!-- TRACTES -->
+    <section class="view" id="view-deals">
+      <div class="view-head">
+        <h2 class="tape">Tractes</h2>
+        <p class="hint">Propostes d'intercanvi enviades i rebudes.</p>
+      </div>
+      <div id="deals-list" class="deals"></div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>NO FUTURE · NO STREAMING SENSE SOLC · FET AMB COLA I FOTOCOPIADORA</p>
+  </footer>
+
+  <!-- MODAL: detall disc -->
+  <dialog id="detail" class="modal">
+    <form method="dialog"><button class="close" aria-label="Tanca">✕</button></form>
+    <div id="detail-body"></div>
+  </dialog>
+
+  <!-- MODAL: afegir vinil -->
+  <dialog id="add" class="modal">
+    <form method="dialog"><button class="close" aria-label="Tanca">✕</button></form>
+    <h3 class="tape">Nou vinil a la caixa</h3>
+    <form id="add-form" class="stack">
+      <label>Banda <input name="artist" required></label>
+      <label>Disc <input name="title" required></label>
+      <div class="row">
+        <label>Any <input name="year" type="number" min="1950" max="2026"></label>
+        <label>Gènere
+          <select name="genre">
+            <option>Punk</option><option>Hardcore</option><option>Post-punk</option>
+            <option>Garage</option><option>Rock</option><option>Grunge</option><option>Oi!</option>
+          </select>
+        </label>
+      </div>
+      <label>Estat
+        <select name="condition">
+          <option>Mint</option><option>Near Mint</option><option selected>VG+</option><option>VG</option><option>Destrossat però sona</option>
+        </select>
+      </label>
+      <label class="check"><input type="checkbox" name="forTrade"> El poso per canviar</label>
+      <button class="btn btn-pink">Al calaix!</button>
+    </form>
+  </dialog>
+
+  <!-- MODAL: proposar tracte -->
+  <dialog id="propose" class="modal">
+    <form method="dialog"><button class="close" aria-label="Tanca">✕</button></form>
+    <div id="propose-body"></div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
