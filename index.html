@@ -619,6 +619,28 @@ const BANDS = [
     cancons: [],
     nota: "Fitxa incompleta: si en saps les dates, completa-la.",
   },
+  {
+    id: "kop", nom: "KOP", lloc: "Barcelona", territori: "Barcelona i rodalia", coord: [2.17, 41.39],
+    inici: 1998, fi: null, estat: "actiu", generes: ["hardcore", "punk"], escena: "combatiu",
+    desc: "Hardcore punk combatiu de Barcelona, nascut el 1998 a partir de tres membres de Speereth, amb en Juanra a la veu. Cançons en català, castellà i basc, i zero concessions.",
+    discos: [
+      { t: "No et rendeixis / No te rindas / Ez etsi", a: 2001 },
+      { t: "Acció directa", a: null },
+    ],
+    cancons: ["BCN", "Antinazis"],
+    nota: "Després d'uns anys de dispersió, els membres originals es van tornar a reunir als escenaris.",
+  },
+  {
+    id: "gertrudis", nom: "Gertrudis", lloc: "La Garriga", territori: "Vallès", coord: [2.28, 41.68],
+    inici: 2000, fi: 2024, aprox: true, estat: "comiat", generes: ["rumba", "folk"], escena: "festa",
+    desc: "Rumba catalana de La Garriga, fundada per Xavi Freire, Xavi Ciurans i Eduard Acedo. Diuen que van començar a fer rumba sense saber-ho, fins que un locutor els ho va dir.",
+    discos: [
+      { t: "Quinze15XV", a: 2015 },
+      { t: "No em dona la gana", a: 2019 },
+    ],
+    cancons: [],
+    nota: "Gira de comiat pels 25 anys, que es va tancar el novembre de 2024. Algunes fonts situen el primer disc el 2004.",
+  },
 ];
 
 const ESCENES = {
@@ -637,6 +659,7 @@ const MILESTONES = [
   { y: "1990", txt: "Juny: neixen <x>brams</x> al Berguedà." },
   { y: "1993", txt: "<x>obrintpas</x> neix a l'Institut Benlliure de València." },
   { y: "1994", txt: "Els germans Skalari funden <x>skalariak</x> a Navarra. Obrint Pas guanya el Tirant de Rock." },
+  { y: "1998", txt: "Neixen <x>kop</x> a Barcelona, hardcore en tres llengües." },
   { y: "2003", txt: "Surten Vigília de <x>gossa</x> i el primer Pepet i Marieta a Ulldecona." },
   { y: "2007", txt: "<x>obrintpas</x> publica La flama." },
   { y: "2013", txt: "<x>obrintpas</x> anuncia l'aturada «indefinida»." },
@@ -644,6 +667,7 @@ const MILESTONES = [
   { y: "2017", txt: "<x>fetus</x> publica L'epicentre del fangar. <x>ludwig</x> comença a assajar a Espolla." },
   { y: "2018", txt: "<x>calypso</x> s'acomiada a la sala Apolo després de 30 anys." },
   { y: "2021", txt: "<x>txarango</x> tanca amb el recopilatori El gran ball." },
+  { y: "nov 2024", txt: "<x>gertrudis</x> tanca la gira de comiat després de 25 anys de rumba." },
   { y: "jun 2025", txt: "<x>smoking</x> fa el darrer concert a Pego." },
   { y: "des 2025", txt: "<x>roba</x> diu adeu amb L'última estesa al Paral·lel 62." },
   { y: "2026", txt: "<x>fetus</x> treu Romancer tartera i <x>ludwig</x>, Pel barri es comenta. <x>pepet</x> anuncia la gira de comiat." },
@@ -837,7 +861,7 @@ function renderMap() {
     const [cx, cy] = p(t.coord);
     const r = 7 + t.bands.length * 3.5;
     const col = mainColor(t.bands[0]);
-    const LABEL_SIDE = { "Terrassa": "left", "Montcada i Reixac": "right", "Barcelona": "right", "Argentona": "right", "Espolla": "right", "La Bisbal d'Empordà": "right", "Iruñea": "right" };
+    const LABEL_SIDE = { "Terrassa": "left", "Montcada i Reixac": "right", "Barcelona": "right", "Argentona": "right", "Espolla": "right", "La Bisbal d'Empordà": "right", "Iruñea": "right", "La Garriga": "right" };
     const rightSide = LABEL_SIDE[t.name] ? LABEL_SIDE[t.name] === "left" : (t.coord[0] < 2.6 && t.coord[0] > -1);
     const lx = rightSide ? cx - r - 6 : cx + r + 6;
     s += `<g class="town ${selectedTown === t.name ? "on" : ""}" tabindex="0" role="button" data-town="${esc(t.name)}" aria-label="${esc(t.name)}: ${t.bands.length} grups">`;
