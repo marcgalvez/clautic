@@ -1,0 +1,545 @@
+[
+  {
+    "id": "tac-hanging-001",
+    "category": "tactics",
+    "theme": "hanging-piece",
+    "title": "Un alfil sense protecció",
+    "fen": "rn1qkbnr/ppp2ppp/8/3pp3/6b1/4P3/PPPP1PPP/RNBQKBNR w KQkq - 0 1",
+    "objective": "Guanya material.",
+    "difficulty": 1,
+    "solution": [
+      "d1g4"
+    ],
+    "hints": [
+      "Abans de res: hi ha alguna peça rival que ningú defensi?",
+      "Mira l'alfil de g4. Qui l'ataca i qui el defensa?",
+      "La dama pot arribar a g4 per la diagonal d1–g4."
+    ],
+    "explanation": "L'alfil negre de g4 no té cap defensor. La dama de d1 el veu per la diagonal d1–e2–f3–g4, així que Dxg4 guanya una peça neta. Abans de cada jugada, pregunta't: quines peces rivals estan indefenses?",
+    "concepts": [
+      "peces-indefenses",
+      "revisio-captures"
+    ],
+    "tags": [
+      "captura",
+      "principiant"
+    ]
+  },
+  {
+    "id": "tac-mate-001",
+    "category": "tactics",
+    "theme": "back-rank",
+    "title": "La fila del darrere",
+    "fen": "6k1/5ppp/8/8/8/8/5PPP/4R1K1 w - - 0 1",
+    "objective": "Fes mat en 1.",
+    "difficulty": 1,
+    "solution": [
+      "e1e8"
+    ],
+    "hints": [
+      "On pot anar el rei negre si li fas escac?",
+      "Els peons de f7, g7 i h7 tanquen el rei. Quina fila queda sense defensa?",
+      "La torre pot arribar a la vuitena fila per la columna e."
+    ],
+    "explanation": "El rei negre està tancat pels seus propis peons i ningú controla la vuitena fila. Te8 és escac i mat: el rei no té cap casella de fugida i cap peça pot interposar-se.",
+    "concepts": [
+      "mat-fila-darrere",
+      "revisio-escacs"
+    ],
+    "tags": [
+      "mat-en-1",
+      "principiant"
+    ]
+  },
+  {
+    "id": "tac-mate-002",
+    "category": "tactics",
+    "theme": "mate",
+    "title": "El punt feble h7",
+    "fen": "r1bq1rk1/pppp1pp1/2n5/2b1p2Q/8/3BP3/PPPP1PPP/RNB1K1NR w KQ - 0 1",
+    "objective": "Fes mat en 1.",
+    "difficulty": 1,
+    "solution": [
+      "h5h7"
+    ],
+    "hints": [
+      "Quins escacs pots donar?",
+      "Quina casella prop del rei negre ataquen alhora dues peces blanques?",
+      "La dama i l'alfil de d3 apunten a h7."
+    ],
+    "explanation": "La dama de h5 i l'alfil de d3 ataquen h7. Dh7 és mat: el rei no pot capturar la dama perquè l'alfil la defensa, i f8 està ocupada per la seva pròpia torre.",
+    "concepts": [
+      "mat-dama-alfil",
+      "revisio-escacs"
+    ],
+    "tags": [
+      "mat-en-1",
+      "principiant"
+    ]
+  },
+  {
+    "id": "tac-mate-003",
+    "category": "tactics",
+    "theme": "mate",
+    "title": "El mat del pastor",
+    "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4",
+    "objective": "Fes mat en 1.",
+    "difficulty": 1,
+    "solution": [
+      "h5f7"
+    ],
+    "hints": [
+      "Quina és la casella més feble de les negres a l'inici de la partida?",
+      "f7 només la defensa el rei. Quantes peces blanques hi apunten?",
+      "La dama captura a f7 amb el suport de l'alfil de c4."
+    ],
+    "explanation": "f7 és el punt feble clàssic de l'obertura: només el defensa el rei. Amb la dama i l'alfil apuntant-hi, Dxf7 és mat. Les negres havien de defensar amb ...g6 o ...De7 en lloc de ...Cf6.",
+    "concepts": [
+      "mat-dama-alfil",
+      "punt-feble-f7",
+      "seguretat-del-rei"
+    ],
+    "tags": [
+      "mat-en-1",
+      "obertura",
+      "principiant"
+    ]
+  },
+  {
+    "id": "tac-fork-001",
+    "category": "tactics",
+    "theme": "fork",
+    "title": "Forquilla al rei i a la dama",
+    "fen": "2q3k1/pp3ppp/8/3N4/8/8/PP3PPP/6K1 w - - 0 1",
+    "objective": "Guanya material.",
+    "difficulty": 1,
+    "solution": [
+      "d5e7",
+      "g8f8",
+      "e7c8"
+    ],
+    "hints": [
+      "Quins escacs pots donar?",
+      "Un escac de cavall pot atacar dues peces alhora. On és la dama negra?",
+      "Busca una casella des d'on el cavall ataqui g8 i c8 alhora."
+    ],
+    "explanation": "Ce7+ és una forquilla: el cavall fa escac al rei de g8 i alhora ataca la dama de c8. Les negres han de moure el rei i el cavall captura la dama. Els escacs de cavall són especialment perillosos perquè no es poden bloquejar.",
+    "concepts": [
+      "forquilla-cavall",
+      "revisio-escacs"
+    ],
+    "tags": [
+      "forquilla",
+      "cavall",
+      "guany-de-material"
+    ]
+  },
+  {
+    "id": "tac-fork-002",
+    "category": "tactics",
+    "theme": "fork",
+    "title": "El cavall que entra a c7",
+    "fen": "r3k2r/ppp2ppp/6b1/3N4/8/8/PPP2PPP/R3K2R w KQkq - 0 1",
+    "objective": "Guanya material.",
+    "difficulty": 2,
+    "solution": [
+      "d5c7",
+      "e8d7",
+      "c7a8"
+    ],
+    "hints": [
+      "Quines captures tens? Quines d'elles són també escac?",
+      "Hi ha un peó a c7. Què atacaria el cavall des d'aquesta casella?",
+      "Cxc7+ fa escac al rei i ataca la torre d'a8."
+    ],
+    "explanation": "Cxc7+ captura un peó amb escac i, des de c7, el cavall també ataca la torre d'a8. Després que el rei es mogui, Cxa8 guanya la qualitat. Combinar captura + escac + atac doble és un patró que convé reconèixer de seguida.",
+    "concepts": [
+      "forquilla-cavall",
+      "revisio-captures"
+    ],
+    "tags": [
+      "forquilla",
+      "cavall",
+      "guany-de-material"
+    ]
+  },
+  {
+    "id": "tac-fork-003",
+    "category": "tactics",
+    "theme": "fork",
+    "title": "La forquilla de peó",
+    "fen": "r1bqk2r/pp3ppp/2pb1n2/8/3PP3/2N5/1PP2PP1/R1BQKB1R w KQkq - 0 1",
+    "objective": "Guanya material.",
+    "difficulty": 2,
+    "solution": [
+      "e4e5"
+    ],
+    "hints": [
+      "Les peces negres de d6 i f6 estan una al costat de l'altra. Quina peça teva pot atacar-les alhora?",
+      "Els peons també fan forquilles. Quin peó pot avançar?",
+      "e5 ataca l'alfil de d6 i el cavall de f6. El peó està defensat per d4."
+    ],
+    "explanation": "e5 és una forquilla de peó: ataca alhora l'alfil de d6 i el cavall de f6. El peó està protegit per d4, de manera que capturar-lo no resol res. Les negres només poden salvar una de les dues peces. Un peó (1 punt) que guanya una peça menor (3 punts) és un negoci excel·lent.",
+    "concepts": [
+      "forquilla-peo"
+    ],
+    "tags": [
+      "forquilla",
+      "peó",
+      "guany-de-material"
+    ]
+  },
+  {
+    "id": "tac-fork-004",
+    "category": "tactics",
+    "theme": "fork",
+    "title": "Escac de dama i peça solta",
+    "fen": "rnbqkb1r/pp2pppp/8/2p5/7n/2P1P3/PP3PPP/RNBQKBNR w KQkq - 0 1",
+    "objective": "Guanya material.",
+    "difficulty": 2,
+    "solution": [
+      "d1a4",
+      "b8c6",
+      "a4h4"
+    ],
+    "hints": [
+      "Hi ha alguna peça negra indefensa?",
+      "El cavall de h4 no té defensors. Pots atacar-lo amb escac?",
+      "Des d'a4 la dama fa escac per la diagonal i veu h4 per la quarta fila."
+    ],
+    "explanation": "Da4+ fa escac pel camí a4–e8 i, alhora, ataca el cavall indefens de h4 per la quarta fila. Les negres han de tapar l'escac i la dama captura el cavall. Les peces sense defensa són l'objectiu preferit dels atacs dobles.",
+    "concepts": [
+      "atac-doble-dama",
+      "peces-indefenses"
+    ],
+    "tags": [
+      "forquilla",
+      "dama",
+      "guany-de-material"
+    ]
+  },
+  {
+    "id": "tac-double-001",
+    "category": "tactics",
+    "theme": "double-attack",
+    "title": "Doble atac al centre",
+    "fen": "r5k1/p1q3pp/8/8/8/8/PP3PPP/3Q2K1 w - - 0 1",
+    "objective": "Guanya material.",
+    "difficulty": 2,
+    "solution": [
+      "d1d5",
+      "g8f8",
+      "d5a8"
+    ],
+    "hints": [
+      "Quins escacs pots donar amb la dama?",
+      "La torre d'a8 i el rei de g8 comparteixen una casella des d'on la dama els veu tots dos.",
+      "Dd5+ fa escac i ataca a8 per la diagonal."
+    ],
+    "explanation": "Dd5+ fa escac per la diagonal d5–g8 i alhora ataca la torre d'a8 per la diagonal d5–a8. Les negres han de respondre a l'escac i perden la torre. Una dama centralitzada pot controlar moltes línies a la vegada.",
+    "concepts": [
+      "atac-doble-dama",
+      "revisio-escacs"
+    ],
+    "tags": [
+      "atac-doble",
+      "dama",
+      "guany-de-material"
+    ]
+  },
+  {
+    "id": "tac-pin-001",
+    "category": "tactics",
+    "theme": "pin",
+    "title": "La dama clavada",
+    "fen": "r4rk1/pp4pp/2p1q3/8/8/1P3N2/P4PPP/R2R1BK1 w - - 0 1",
+    "objective": "Guanya material.",
+    "difficulty": 2,
+    "solution": [
+      "f1c4",
+      "e6c4",
+      "b3c4"
+    ],
+    "hints": [
+      "Fixa't en la diagonal que va de la dama negra fins al rei.",
+      "La dama de e6 i el rei de g8 estan en la mateixa diagonal i f7 està buida.",
+      "Un alfil defensat a c4 clava la dama contra el rei."
+    ],
+    "explanation": "Ac4 clava la dama de e6 contra el rei de g8: la dama no pot sortir de la diagonal. L'alfil està defensat pel peó de b3, de manera que si la dama el captura, bxc4 guanya la dama per un alfil. Clavada absoluta: la peça clavada no pot deixar el rei en escac.",
+    "concepts": [
+      "clavada-absoluta"
+    ],
+    "tags": [
+      "clavada",
+      "alfil",
+      "guany-de-material"
+    ]
+  },
+  {
+    "id": "tac-pin-002",
+    "category": "tactics",
+    "theme": "pin",
+    "title": "Ataca la peça clavada",
+    "fen": "4k2r/ppp2ppp/4b3/8/5P2/8/PPPB2PP/4R1K1 w - - 0 1",
+    "objective": "Guanya material.",
+    "difficulty": 2,
+    "solution": [
+      "f4f5"
+    ],
+    "hints": [
+      "Hi ha alguna peça negra que no es pugui moure?",
+      "L'alfil de e6 està clavat per la torre de e1 contra el rei. Com pots atacar-lo?",
+      "Un peó que ataca una peça clavada sol guanyar-la: f5."
+    ],
+    "explanation": "L'alfil de e6 està clavat a la columna e: si es mogués, el rei quedaria en escac. f5 l'ataca amb un peó i les negres no tenen temps de salvar-lo. Regla pràctica: ataca les peces clavades, preferiblement amb una peça de menys valor.",
+    "concepts": [
+      "clavada-absoluta",
+      "atacar-peca-clavada"
+    ],
+    "tags": [
+      "clavada",
+      "peó",
+      "guany-de-material"
+    ]
+  },
+  {
+    "id": "tac-skewer-001",
+    "category": "tactics",
+    "theme": "skewer",
+    "title": "L'enfilada",
+    "fen": "3q4/pp6/8/3k4/8/8/PP4PP/R5K1 w - - 0 1",
+    "objective": "Guanya material.",
+    "difficulty": 2,
+    "solution": [
+      "a1d1",
+      "d5e6",
+      "d1d8"
+    ],
+    "hints": [
+      "Quins escacs pots donar amb la torre?",
+      "El rei i la dama negres estan a la mateixa columna.",
+      "Td1+ obliga el rei a apartar-se i deixa la dama al descobert."
+    ],
+    "explanation": "Td1+ és una enfilada: la torre fa escac al rei per la columna d i, quan el rei s'aparta, la dama de d8 queda exposada. Txd8 guanya la dama. És el contrari d'una clavada: la peça més valuosa és la del davant.",
+    "concepts": [
+      "enfilada",
+      "revisio-escacs"
+    ],
+    "tags": [
+      "enfilada",
+      "torre",
+      "guany-de-material"
+    ]
+  },
+  {
+    "id": "tac-disc-001",
+    "category": "tactics",
+    "theme": "discovered-attack",
+    "title": "Escac doble",
+    "fen": "2q1k3/pp3ppp/8/8/4N3/8/PP3PPP/4R1K1 w - - 0 1",
+    "objective": "Guanya material.",
+    "difficulty": 2,
+    "solution": [
+      "e4d6",
+      "e8d7",
+      "d6c8"
+    ],
+    "hints": [
+      "Què passaria si el cavall de e4 deixés lliure la columna e?",
+      "Qualsevol moviment del cavall fa escac amb la torre. Quin, a més, ataca la dama?",
+      "Cd6+ és un escac doble que també ataca c8."
+    ],
+    "explanation": "El cavall de e4 tapa la torre de e1. En moure'l, la torre fa escac (atac descobert). Cd6+ és, a més, escac del cavall: un escac doble, que només es pot respondre movent el rei. Després, Cxc8 guanya la dama.",
+    "concepts": [
+      "atac-descobert",
+      "escac-doble"
+    ],
+    "tags": [
+      "atac-descobert",
+      "cavall",
+      "guany-de-material"
+    ]
+  },
+  {
+    "id": "tac-disc-002",
+    "category": "tactics",
+    "theme": "discovered-attack",
+    "title": "Descobreix la torre",
+    "fen": "r1bq2k1/ppp2ppp/8/8/8/3B1N2/PPP2PPP/3R2K1 w - - 0 1",
+    "objective": "Guanya material.",
+    "difficulty": 3,
+    "solution": [
+      "d3h7",
+      "g8h7",
+      "d1d8"
+    ],
+    "hints": [
+      "La torre de d1 i la dama negra estan a la mateixa columna. Què hi ha entremig?",
+      "Si l'alfil es mou, la dama negra queda atacada... però també podria capturar la torre. Necessites un moviment amb escac.",
+      "Axh7+ descobreix l'atac de la torre sobre la dama."
+    ],
+    "explanation": "L'alfil de d3 tapa la torre de d1. Si es mou sense escac, la dama negra captura la torre. Per això ha de moure's amb escac: Axh7+! Les negres han de respondre a l'escac i Txd8+ guanya la dama. L'alfil de c8 bloqueja la torre d'a8, que no pot recapturar.",
+    "concepts": [
+      "atac-descobert",
+      "revisio-escacs"
+    ],
+    "tags": [
+      "atac-descobert",
+      "alfil",
+      "sacrifici",
+      "guany-de-material"
+    ]
+  },
+  {
+    "id": "tac-mate-004",
+    "category": "tactics",
+    "theme": "back-rank",
+    "title": "Sacrifici a la vuitena",
+    "fen": "2r3k1/5ppp/8/8/8/8/3Q1PPP/3R2K1 w - - 0 1",
+    "objective": "Fes mat en 2.",
+    "difficulty": 2,
+    "solution": [
+      "d2d8",
+      "c8d8",
+      "d1d8"
+    ],
+    "hints": [
+      "El rei negre no té cap casella de fugida. Quina fila defensa només una peça?",
+      "La torre de c8 és l'única defensora de la vuitena fila. Pots obligar-la a moure's?",
+      "Dd8+! La torre ha de capturar i la columna d continua oberta."
+    ],
+    "explanation": "La torre de c8 és l'única peça que defensa la fila del darrere. Dd8+ l'obliga a capturar (Txd8) i, com que la torre de d1 continua dominant la columna, Txd8 és mat. Sacrificar la dama té sentit quan el que guanyes és el rei.",
+    "concepts": [
+      "mat-fila-darrere",
+      "sacrifici",
+      "revisio-escacs"
+    ],
+    "tags": [
+      "mat-en-2",
+      "sacrifici"
+    ]
+  },
+  {
+    "id": "tac-defl-001",
+    "category": "tactics",
+    "theme": "deflection",
+    "title": "Desviar el defensor",
+    "fen": "3r2k1/2q2ppp/8/8/8/8/4RPPP/4Q1K1 w - - 0 1",
+    "objective": "Fes mat en 2.",
+    "difficulty": 3,
+    "solution": [
+      "e2e8",
+      "d8e8",
+      "e1e8"
+    ],
+    "hints": [
+      "La vuitena fila negra està defensada per una sola peça. Quina?",
+      "La torre i la dama blanques estan a la columna e, una darrere de l'altra.",
+      "Te8+ obliga la torre de d8 a capturar i deixa la casella lliure per a la dama."
+    ],
+    "explanation": "La torre de d8 defensa la vuitena fila. Te8+ la desvia: si Txe8, la dama recaptura Dxe8 i és mat perquè el rei està tancat pels seus peons. La dama de c7 no pot ajudar perquè no arriba a f8 ni a e8.",
+    "concepts": [
+      "desviacio",
+      "mat-fila-darrere",
+      "sacrifici"
+    ],
+    "tags": [
+      "desviació",
+      "mat-en-2",
+      "sacrifici"
+    ]
+  },
+  {
+    "id": "tac-mate-005",
+    "category": "tactics",
+    "theme": "smothered-mate",
+    "title": "El mat de la coça",
+    "fen": "r6k/6pp/7N/8/8/1Q6/6PP/6K1 w - - 0 1",
+    "objective": "Fes mat en 2.",
+    "difficulty": 3,
+    "solution": [
+      "b3g8",
+      "a8g8",
+      "h6f7"
+    ],
+    "hints": [
+      "El rei negre està envoltat de les seves pròpies peces. Quina peça blanca pot fer escac 'saltant'?",
+      "Si g8 estigués ocupada per una peça negra, el rei no tindria cap casella.",
+      "Dg8+!! La torre ha de capturar i Cf7 és mat."
+    ],
+    "explanation": "Dg8+ és un sacrifici: el rei no pot capturar perquè el cavall de h6 defensa g8, així que la torre ha de fer Txg8. Ara el rei queda ofegat per les seves pròpies peces i Cf7 és mat de la coça (mat ofegat). El cavall és l'única peça que pot fer escac per sobre d'altres peces.",
+    "concepts": [
+      "mat-ofegat",
+      "sacrifici",
+      "atraccio"
+    ],
+    "tags": [
+      "mat-en-2",
+      "sacrifici",
+      "cavall"
+    ]
+  },
+  {
+    "id": "tac-attr-001",
+    "category": "tactics",
+    "theme": "attraction",
+    "title": "Atreure el rei a la forquilla",
+    "fen": "6k1/pp4p1/3q4/6N1/8/8/PP3PP1/5K1R w - - 0 1",
+    "objective": "Guanya material.",
+    "difficulty": 4,
+    "solution": [
+      "h1h8",
+      "g8h8",
+      "g5f7",
+      "h8h7",
+      "f7d6"
+    ],
+    "hints": [
+      "Ara mateix el cavall no pot fer cap forquilla. Hi ha alguna casella on el rei negre seria vulnerable a un escac de cavall?",
+      "Si el rei fos a h8, un cavall a f7 atacaria el rei i la dama de d6 alhora.",
+      "Th8+! sacrifica la torre per atreure el rei a h8."
+    ],
+    "explanation": "Th8+! és una atracció: el rei està obligat a capturar (Rxh8) perquè f7 està controlada pel cavall i el peó de g7 li tapa la fugida. Amb el rei a h8, Cf7+ fa forquilla al rei i a la dama de d6. Després de Cxd6 has canviat una torre per una dama.",
+    "concepts": [
+      "atraccio",
+      "forquilla-cavall",
+      "sacrifici"
+    ],
+    "tags": [
+      "atracció",
+      "forquilla",
+      "sacrifici",
+      "guany-de-material"
+    ]
+  },
+  {
+    "id": "tac-mate-006",
+    "category": "tactics",
+    "theme": "combination",
+    "title": "Sacrifici a h7",
+    "fen": "5r1k/ppq1Nppp/8/7Q/8/3R4/PPP2PPP/6K1 w - - 0 1",
+    "objective": "Fes mat en 2.",
+    "difficulty": 4,
+    "solution": [
+      "h5h7",
+      "h8h7",
+      "d3h3"
+    ],
+    "hints": [
+      "El cavall de e7 controla g8 i g6. Què passaria si el rei negre anés a h7?",
+      "Una torre a la columna h faria escac al rei a h7 i el cavall li taparia la fugida.",
+      "Dxh7+! El rei ha de capturar i Th3 és mat."
+    ],
+    "explanation": "El cavall de e7 controla g6 i g8. Dxh7+! obliga el rei a capturar (Rxh7) perquè g8 també està controlada. Llavors Th3 és mat: la torre domina la columna h i el cavall tanca les sortides. És un patró de mat conegut com a mat d'Anastàsia.",
+    "concepts": [
+      "mat-anastasia",
+      "sacrifici",
+      "atraccio"
+    ],
+    "tags": [
+      "mat-en-2",
+      "sacrifici",
+      "combinació"
+    ]
+  }
+]

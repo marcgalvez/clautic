@@ -1,0 +1,879 @@
+{
+  "engine": "stockfish-19-lite-single",
+  "depth": 20,
+  "minGap": 15,
+  "generatedAt": "2026-11-20T17:42:05.106Z",
+  "entries": {
+    "tac-hanging-001": {
+      "fingerprint": "9c06166b",
+      "status": "passed",
+      "problems": [],
+      "plies": [
+        {
+          "ply": 0,
+          "move": "d1g4",
+          "engineBest": "d1g4",
+          "score": {
+            "type": "cp",
+            "value": 570
+          },
+          "secondBest": {
+            "move": "f1e2",
+            "score": {
+              "type": "cp",
+              "value": -49
+            }
+          }
+        },
+        {
+          "final": true,
+          "scoreForSolver": {
+            "type": "cp",
+            "value": 575
+          }
+        }
+      ]
+    },
+    "tac-mate-001": {
+      "fingerprint": "d35b16ec",
+      "status": "passed",
+      "problems": [],
+      "plies": [
+        {
+          "ply": 0,
+          "move": "e1e8",
+          "engineBest": "e1e8",
+          "score": {
+            "type": "mate",
+            "value": 1
+          },
+          "secondBest": {
+            "move": "g1f1",
+            "score": {
+              "type": "cp",
+              "value": 745
+            }
+          }
+        }
+      ]
+    },
+    "tac-mate-002": {
+      "fingerprint": "1ba3043f",
+      "status": "passed",
+      "problems": [],
+      "plies": [
+        {
+          "ply": 0,
+          "move": "h5h7",
+          "engineBest": "h5h7",
+          "score": {
+            "type": "mate",
+            "value": 1
+          },
+          "secondBest": {
+            "move": "d3h7",
+            "score": {
+              "type": "mate",
+              "value": 3
+            }
+          }
+        }
+      ]
+    },
+    "tac-mate-003": {
+      "fingerprint": "98e53ec2",
+      "status": "passed",
+      "problems": [],
+      "plies": [
+        {
+          "ply": 0,
+          "move": "h5f7",
+          "engineBest": "h5f7",
+          "score": {
+            "type": "mate",
+            "value": 1
+          },
+          "secondBest": {
+            "move": "h5g5",
+            "score": {
+              "type": "cp",
+              "value": -216
+            }
+          }
+        }
+      ]
+    },
+    "tac-fork-001": {
+      "fingerprint": "085379fe",
+      "status": "passed",
+      "problems": [],
+      "plies": [
+        {
+          "ply": 0,
+          "move": "d5e7",
+          "engineBest": "d5e7",
+          "score": {
+            "type": "cp",
+            "value": 558
+          },
+          "secondBest": {
+            "move": "d5c3",
+            "score": {
+              "type": "cp",
+              "value": -864
+            }
+          }
+        },
+        {
+          "ply": 1,
+          "move": "g8f8",
+          "engineBest": "g8f8",
+          "score": {
+            "type": "cp",
+            "value": -561
+          }
+        },
+        {
+          "ply": 2,
+          "move": "e7c8",
+          "engineBest": "e7c8",
+          "score": {
+            "type": "cp",
+            "value": 545
+          },
+          "secondBest": {
+            "move": "e7g6",
+            "score": {
+              "type": "cp",
+              "value": -1069
+            }
+          }
+        },
+        {
+          "final": true,
+          "scoreForSolver": {
+            "type": "cp",
+            "value": 546
+          }
+        }
+      ]
+    },
+    "tac-fork-002": {
+      "fingerprint": "8e843149",
+      "status": "passed",
+      "problems": [],
+      "plies": [
+        {
+          "ply": 0,
+          "move": "d5c7",
+          "engineBest": "d5c7",
+          "score": {
+            "type": "cp",
+            "value": 517
+          },
+          "secondBest": {
+            "move": "e1c1",
+            "score": {
+              "type": "cp",
+              "value": 74
+            }
+          }
+        },
+        {
+          "ply": 1,
+          "move": "e8d7",
+          "engineBest": "e8d7",
+          "score": {
+            "type": "cp",
+            "value": -505
+          }
+        },
+        {
+          "ply": 2,
+          "move": "c7a8",
+          "engineBest": "c7a8",
+          "score": {
+            "type": "cp",
+            "value": 511
+          },
+          "secondBest": {
+            "move": "c7d5",
+            "score": {
+              "type": "cp",
+              "value": 5
+            }
+          }
+        },
+        {
+          "final": true,
+          "scoreForSolver": {
+            "type": "cp",
+            "value": 514
+          }
+        }
+      ]
+    },
+    "tac-fork-003": {
+      "fingerprint": "6eea495e",
+      "status": "passed",
+      "problems": [],
+      "plies": [
+        {
+          "ply": 0,
+          "move": "e4e5",
+          "engineBest": "e4e5",
+          "score": {
+            "type": "cp",
+            "value": 522
+          },
+          "secondBest": {
+            "move": "f1e2",
+            "score": {
+              "type": "cp",
+              "value": 207
+            }
+          }
+        },
+        {
+          "final": true,
+          "scoreForSolver": {
+            "type": "cp",
+            "value": 546
+          }
+        }
+      ]
+    },
+    "tac-fork-004": {
+      "fingerprint": "f941e253",
+      "status": "passed",
+      "problems": [],
+      "plies": [
+        {
+          "ply": 0,
+          "move": "d1a4",
+          "engineBest": "d1a4",
+          "score": {
+            "type": "cp",
+            "value": 533
+          },
+          "secondBest": {
+            "move": "d1d8",
+            "score": {
+              "type": "cp",
+              "value": 83
+            }
+          }
+        },
+        {
+          "ply": 1,
+          "move": "b8c6",
+          "engineBest": "b8c6",
+          "score": {
+            "type": "cp",
+            "value": -546
+          }
+        },
+        {
+          "ply": 2,
+          "move": "a4h4",
+          "engineBest": "a4h4",
+          "score": {
+            "type": "cp",
+            "value": 534
+          },
+          "secondBest": {
+            "move": "g2g3",
+            "score": {
+              "type": "cp",
+              "value": 24
+            }
+          }
+        },
+        {
+          "final": true,
+          "scoreForSolver": {
+            "type": "cp",
+            "value": 533
+          }
+        }
+      ]
+    },
+    "tac-double-001": {
+      "fingerprint": "7444e5e8",
+      "status": "passed",
+      "problems": [],
+      "plies": [
+        {
+          "ply": 0,
+          "move": "d1d5",
+          "engineBest": "d1d5",
+          "score": {
+            "type": "cp",
+            "value": 500
+          },
+          "secondBest": {
+            "move": "g2g3",
+            "score": {
+              "type": "cp",
+              "value": -624
+            }
+          }
+        },
+        {
+          "ply": 1,
+          "move": "g8f8",
+          "engineBest": "g8f8",
+          "score": {
+            "type": "cp",
+            "value": -526
+          }
+        },
+        {
+          "ply": 2,
+          "move": "d5a8",
+          "engineBest": "d5a8",
+          "score": {
+            "type": "cp",
+            "value": 494
+          },
+          "secondBest": {
+            "move": "d5f3",
+            "score": {
+              "type": "cp",
+              "value": -230
+            }
+          }
+        },
+        {
+          "final": true,
+          "scoreForSolver": {
+            "type": "cp",
+            "value": 524
+          }
+        }
+      ]
+    },
+    "tac-pin-001": {
+      "fingerprint": "3973507a",
+      "status": "passed",
+      "problems": [],
+      "plies": [
+        {
+          "ply": 0,
+          "move": "f1c4",
+          "engineBest": "f1c4",
+          "score": {
+            "type": "cp",
+            "value": 545
+          },
+          "secondBest": {
+            "move": "a1c1",
+            "score": {
+              "type": "cp",
+              "value": -385
+            }
+          }
+        },
+        {
+          "ply": 1,
+          "move": "e6c4",
+          "engineBest": "e6c4",
+          "score": {
+            "type": "cp",
+            "value": -522
+          }
+        },
+        {
+          "ply": 2,
+          "move": "b3c4",
+          "engineBest": "b3c4",
+          "score": {
+            "type": "cp",
+            "value": 535
+          },
+          "secondBest": {
+            "move": "h2h3",
+            "score": {
+              "type": "cp",
+              "value": -610
+            }
+          }
+        },
+        {
+          "final": true,
+          "scoreForSolver": {
+            "type": "cp",
+            "value": 561
+          }
+        }
+      ]
+    },
+    "tac-pin-002": {
+      "fingerprint": "559aa789",
+      "status": "passed",
+      "problems": [],
+      "plies": [
+        {
+          "ply": 0,
+          "move": "f4f5",
+          "engineBest": "f4f5",
+          "score": {
+            "type": "cp",
+            "value": 529
+          },
+          "secondBest": {
+            "move": "d2c3",
+            "score": {
+              "type": "cp",
+              "value": 50
+            }
+          }
+        },
+        {
+          "final": true,
+          "scoreForSolver": {
+            "type": "cp",
+            "value": 510
+          }
+        }
+      ]
+    },
+    "tac-skewer-001": {
+      "fingerprint": "0ba0d5d5",
+      "status": "passed",
+      "problems": [],
+      "plies": [
+        {
+          "ply": 0,
+          "move": "a1d1",
+          "engineBest": "a1d1",
+          "score": {
+            "type": "cp",
+            "value": 867
+          },
+          "secondBest": {
+            "move": "a1f1",
+            "score": {
+              "type": "cp",
+              "value": -433
+            }
+          }
+        },
+        {
+          "ply": 1,
+          "move": "d5e6",
+          "engineBest": "d5e6",
+          "score": {
+            "type": "cp",
+            "value": -909
+          }
+        },
+        {
+          "ply": 2,
+          "move": "d1d8",
+          "engineBest": "d1d8",
+          "score": {
+            "type": "cp",
+            "value": 871
+          },
+          "secondBest": {
+            "move": "d1e1",
+            "score": {
+              "type": "cp",
+              "value": -476
+            }
+          }
+        },
+        {
+          "final": true,
+          "scoreForSolver": {
+            "type": "cp",
+            "value": 869
+          }
+        }
+      ]
+    },
+    "tac-disc-001": {
+      "fingerprint": "235ba542",
+      "status": "passed",
+      "problems": [],
+      "plies": [
+        {
+          "ply": 0,
+          "move": "e4d6",
+          "engineBest": "e4d6",
+          "score": {
+            "type": "cp",
+            "value": 851
+          },
+          "secondBest": {
+            "move": "e4f6",
+            "score": {
+              "type": "cp",
+              "value": -12
+            }
+          }
+        },
+        {
+          "ply": 1,
+          "move": "e8d7",
+          "engineBest": "e8d8",
+          "score": {
+            "type": "cp",
+            "value": -892
+          }
+        },
+        {
+          "ply": 2,
+          "move": "d6c8",
+          "engineBest": "d6c8",
+          "score": {
+            "type": "cp",
+            "value": 864
+          },
+          "secondBest": {
+            "move": "d6f7",
+            "score": {
+              "type": "cp",
+              "value": -420
+            }
+          }
+        },
+        {
+          "final": true,
+          "scoreForSolver": {
+            "type": "cp",
+            "value": 854
+          }
+        }
+      ]
+    },
+    "tac-disc-002": {
+      "fingerprint": "0c69891e",
+      "status": "passed",
+      "problems": [],
+      "plies": [
+        {
+          "ply": 0,
+          "move": "d3h7",
+          "engineBest": "d3h7",
+          "score": {
+            "type": "cp",
+            "value": 361
+          },
+          "secondBest": {
+            "move": "d1e1",
+            "score": {
+              "type": "cp",
+              "value": -601
+            }
+          }
+        },
+        {
+          "ply": 1,
+          "move": "g8h7",
+          "engineBest": "g8h7",
+          "score": {
+            "type": "cp",
+            "value": -370
+          }
+        },
+        {
+          "ply": 2,
+          "move": "d1d8",
+          "engineBest": "d1d8",
+          "score": {
+            "type": "cp",
+            "value": 355
+          },
+          "secondBest": {
+            "move": "d1d4",
+            "score": {
+              "type": "cp",
+              "value": -751
+            }
+          }
+        },
+        {
+          "final": true,
+          "scoreForSolver": {
+            "type": "cp",
+            "value": 339
+          }
+        }
+      ]
+    },
+    "tac-mate-004": {
+      "fingerprint": "85987a0e",
+      "status": "passed",
+      "problems": [],
+      "plies": [
+        {
+          "ply": 0,
+          "move": "d2d8",
+          "engineBest": "d2d8",
+          "score": {
+            "type": "mate",
+            "value": 2
+          },
+          "secondBest": {
+            "move": "d2d7",
+            "score": {
+              "type": "cp",
+              "value": 1156
+            }
+          }
+        },
+        {
+          "ply": 1,
+          "move": "c8d8",
+          "engineBest": "c8d8",
+          "score": {
+            "type": "mate",
+            "value": -1
+          }
+        },
+        {
+          "ply": 2,
+          "move": "d1d8",
+          "engineBest": "d1d8",
+          "score": {
+            "type": "mate",
+            "value": 1
+          },
+          "secondBest": {
+            "move": "d1b1",
+            "score": {
+              "type": "cp",
+              "value": 1
+            }
+          }
+        }
+      ]
+    },
+    "tac-defl-001": {
+      "fingerprint": "b05b8a7c",
+      "status": "passed",
+      "problems": [],
+      "plies": [
+        {
+          "ply": 0,
+          "move": "e2e8",
+          "engineBest": "e2e8",
+          "score": {
+            "type": "mate",
+            "value": 2
+          },
+          "secondBest": {
+            "move": "h2h3",
+            "score": {
+              "type": "cp",
+              "value": 3
+            }
+          }
+        },
+        {
+          "ply": 1,
+          "move": "d8e8",
+          "engineBest": "d8e8",
+          "score": {
+            "type": "mate",
+            "value": -1
+          }
+        },
+        {
+          "ply": 2,
+          "move": "e1e8",
+          "engineBest": "e1e8",
+          "score": {
+            "type": "mate",
+            "value": 1
+          },
+          "secondBest": {
+            "move": "e1a1",
+            "score": {
+              "type": "cp",
+              "value": -710
+            }
+          }
+        }
+      ]
+    },
+    "tac-mate-005": {
+      "fingerprint": "9857f90d",
+      "status": "passed",
+      "problems": [],
+      "plies": [
+        {
+          "ply": 0,
+          "move": "b3g8",
+          "engineBest": "b3g8",
+          "score": {
+            "type": "mate",
+            "value": 2
+          },
+          "secondBest": {
+            "move": "h6f7",
+            "score": {
+              "type": "mate",
+              "value": 4
+            }
+          }
+        },
+        {
+          "ply": 1,
+          "move": "a8g8",
+          "engineBest": "a8g8",
+          "score": {
+            "type": "mate",
+            "value": -1
+          }
+        },
+        {
+          "ply": 2,
+          "move": "h6f7",
+          "engineBest": "h6f7",
+          "score": {
+            "type": "mate",
+            "value": 1
+          },
+          "secondBest": {
+            "move": "h6g8",
+            "score": {
+              "type": "cp",
+              "value": 0
+            }
+          }
+        }
+      ]
+    },
+    "tac-attr-001": {
+      "fingerprint": "3a2b08c8",
+      "status": "passed",
+      "problems": [],
+      "plies": [
+        {
+          "ply": 0,
+          "move": "h1h8",
+          "engineBest": "h1h8",
+          "score": {
+            "type": "cp",
+            "value": 658
+          },
+          "secondBest": {
+            "move": "g5f3",
+            "score": {
+              "type": "cp",
+              "value": -470
+            }
+          }
+        },
+        {
+          "ply": 1,
+          "move": "g8h8",
+          "engineBest": "g8h8",
+          "score": {
+            "type": "cp",
+            "value": -618
+          }
+        },
+        {
+          "ply": 2,
+          "move": "g5f7",
+          "engineBest": "g5f7",
+          "score": {
+            "type": "cp",
+            "value": 588
+          },
+          "secondBest": {
+            "move": "g5f3",
+            "score": {
+              "type": "cp",
+              "value": -761
+            }
+          }
+        },
+        {
+          "ply": 3,
+          "move": "h8h7",
+          "engineBest": "h8g8",
+          "score": {
+            "type": "cp",
+            "value": -577
+          }
+        },
+        {
+          "ply": 4,
+          "move": "f7d6",
+          "engineBest": "f7d6",
+          "score": {
+            "type": "cp",
+            "value": 690
+          },
+          "secondBest": {
+            "move": "f7g5",
+            "score": {
+              "type": "cp",
+              "value": -742
+            }
+          }
+        },
+        {
+          "final": true,
+          "scoreForSolver": {
+            "type": "cp",
+            "value": 695
+          }
+        }
+      ]
+    },
+    "tac-mate-006": {
+      "fingerprint": "7aa4ff1f",
+      "status": "passed",
+      "problems": [],
+      "plies": [
+        {
+          "ply": 0,
+          "move": "h5h7",
+          "engineBest": "h5h7",
+          "score": {
+            "type": "mate",
+            "value": 2
+          },
+          "secondBest": {
+            "move": "h5e2",
+            "score": {
+              "type": "cp",
+              "value": 607
+            }
+          }
+        },
+        {
+          "ply": 1,
+          "move": "h8h7",
+          "engineBest": "h8h7",
+          "score": {
+            "type": "mate",
+            "value": -1
+          }
+        },
+        {
+          "ply": 2,
+          "move": "d3h3",
+          "engineBest": "d3h3",
+          "score": {
+            "type": "mate",
+            "value": 1
+          },
+          "secondBest": {
+            "move": "d3e3",
+            "score": {
+              "type": "cp",
+              "value": -558
+            }
+          }
+        }
+      ]
+    }
+  }
+}

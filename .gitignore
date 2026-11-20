@@ -1,0 +1,10 @@
+node_modules
+dist
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+coverage
+# Generated from node_modules/stockfish on install (GPL-3.0 binary)
+public/engine/
