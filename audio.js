@@ -269,5 +269,7 @@
     return out;
   }
 
-  window.SolcAudio = { play, stop, spectrum, get playing() { return !!timer; } };
+  function unlock() { init(); if (ctx.state === "suspended") ctx.resume(); }
+
+  window.SolcAudio = { play, stop, spectrum, unlock, get playing() { return !!timer; } };
 })();

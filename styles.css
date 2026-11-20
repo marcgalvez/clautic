@@ -54,6 +54,21 @@ body {
 }
 .tab:hover { transform: rotate(-2deg) scale(1.04); }
 .tab.active { background: var(--yellow); color: var(--ink); border-color: var(--yellow); transform: rotate(-2deg); }
+.sp-btn {
+  display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+  font-family: var(--mono); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+  background: transparent; color: var(--paper); border: 2px dashed var(--green); padding: 6px 12px;
+}
+.sp-btn:hover { background: var(--green); color: var(--ink); }
+.sp-dot { width: 10px; height: 10px; border-radius: 50%; background: #555; border: 1px solid var(--paper); }
+.sp-btn.on { border-style: solid; }
+.sp-btn.on .sp-dot { background: var(--green); box-shadow: 0 0 8px var(--green); }
+.sp-btn.err .sp-dot { background: var(--red); }
+.sp-steps { margin: 16px 0; padding-left: 22px; display: grid; gap: 10px; }
+.sp-steps code, .sp-uri { font-family: var(--mono); font-size: 13px; background: #fffdf6; border: 2px solid var(--ink); padding: 1px 6px; overflow-wrap: anywhere; user-select: all; }
+.sp-uri { display: inline-block; margin-top: 4px; }
+.sp-note { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.sp-err { background: var(--red); color: var(--paper); padding: 8px 12px; font-family: var(--mono); font-size: 13px; }
 .badge { background: var(--pink); color: var(--ink); font-family: var(--mono); font-size: 12px; padding: 0 6px; border-radius: 10px; margin-left: 4px; }
 
 /* ---------- hero / giradiscs ---------- */
@@ -294,3 +309,5 @@ input:focus, select:focus { outline: 3px solid var(--pink); outline-offset: 2px;
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+.modal a, .hint a, .empty a, .found a { color: var(--ink); text-decoration-color: var(--pink); text-decoration-thickness: 3px; text-underline-offset: 3px; }

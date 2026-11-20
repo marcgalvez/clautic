@@ -231,20 +231,29 @@
   function renderAll() { renderGenres(); renderCrate(); renderMarket(); renderWish(); renderDeals(); renderStats(); }
 
   /* ---------------- giradiscs ---------------- */
-  let playing = null, lastPlayed = null, vuRaf = 0;
+  let playing = null, lastPlayed = null, vuRaf = 0, source = null, playToken = 0, startedAt = 0;
   const VU_BANDS = 14;
   $("#vu").innerHTML = "<span></span>".repeat(VU_BANDS);
   function startVu() {
     cancelAnimationFrame(vuRaf);
     const bars = $$("#vu span");
     const frame = () => {
-      const lv = window.SolcAudio.spectrum(VU_BANDS);
+      let lv = window.SolcAudio.spectrum(VU_BANDS);
+      // l'àudio de Spotify és protegit i no es pot analitzar: el vúmetre balla sol
+      if (!lv && source === "spotify" && playing) {
+        const t = performance.now() / 1000;
+        lv = bars.map((_, i) => .35 + .3 * Math.abs(Math.sin(t * (3 + i * .7) + i)) * (1 - i / VU_BANDS * .5) + Math.random() * .15);
+      }
       bars.forEach((b, i) => { b.style.transform = `scaleY(${lv ? Math.max(.06, Math.min(1, lv[i] * 1.12)) : .06})`; });
       if (lv) vuRaf = requestAnimationFrame(frame);
     };
     vuRaf = requestAnimationFrame(frame);
   }
-  function play(rec) {
+  async function play(rec) {
+    const sp = window.SolcSpotify;
+    const token = ++playToken;
+    window.SolcAudio.unlock();
+    if (sp && sp.ready) sp.prime();
     const tt = $("#turntable"), disc = $("#tt-record"), cv = cover(rec);
     playing = rec;
     tt.classList.remove("playing");
@@ -260,6 +269,27 @@
     $("#now-artist").textContent = `${rec.artist}${rec.year ? " · " + rec.year : ""}`;
     $("#now-stop").hidden = false;
     $("#now-replay").hidden = true;
+    startedAt = Date.now();
+
+    if (sp && sp.ready) {
+      window.SolcAudio.stop(.05);
+      source = "spotify";
+      $("#now-meta").textContent = "Buscant el disc a Spotify…";
+      startVu();
+      try {
+        const found = await sp.play(rec);
+        if (token !== playToken) return;
+        if (found) {
+          $("#now-meta").textContent = `Spotify · ${found.name} · ${found.artist}${found.year ? " · " + found.year : ""}`;
+          return;
+        }
+        toast("No el trobo a Spotify. Sona la versió SOLC.");
+      } catch (e) {
+        if (token !== playToken) return;
+        toast("Spotify: " + e.message);
+      }
+    }
+    source = "synth";
     const info = window.SolcAudio.play(rec, .9);
     $("#now-meta").textContent = `${info.bpm} BPM · to de ${info.key} · ${rec.genre} · versió tocada en directe per SOLC`;
     startVu();
@@ -267,7 +297,10 @@
     lastPlayed = rec;
   }
   function stop() {
+    playToken++;
+    if (source === "spotify") window.SolcSpotify.pause();
     window.SolcAudio.stop();
+    source = null;
     if (playing) $("#now-replay").hidden = false;
     playing = null;
     $("#turntable").classList.remove("playing");
@@ -440,6 +473,68 @@
     state.wishlist.push({ id: uid(), artist: f.get("artist").trim(), title: f.get("title").trim() });
     save(); renderAll(); e.target.reset(); toast("Desig apuntat. Que l'univers et senti.");
   });
+
+  /* ---------------- Spotify ---------------- */
+  const sp = window.SolcSpotify;
+  function renderSpotify(st) {
+    const btn = $("#sp-btn");
+    btn.hidden = st.disabled;
+    btn.classList.toggle("on", st.ready);
+    btn.classList.toggle("err", !!st.error && st.connected && !st.ready);
+    $("#sp-label").textContent = st.ready ? `Spotify · ${st.name || "connectat"}` : st.connected ? "Spotify · connectant…" : "Connecta Spotify";
+    if ($("#sp-dialog").open) renderSpotifyDialog();
+  }
+  function renderSpotifyDialog() {
+    const st = sp.status;
+    const err = st.error ? `<p class="sp-err">${esc(st.error)}</p>` : "";
+    if (st.connected) {
+      $("#sp-body").innerHTML = `
+        <h3 class="tape">Spotify</h3>
+        ${err}
+        <p style="margin-top:18px">${st.ready
+          ? `Connectat com a <b>${esc(st.name || "tu")}</b>. Quan posis un disc al plat, SOLC el buscarà a Spotify i el farà sonar aquí mateix, sencer.`
+          : "Connectant el giradiscs amb Spotify…"}</p>
+        <p class="sp-note">Si un disc no hi és, sona la versió generada per SOLC.</p>
+        <div class="actions"><button class="btn btn-ghost" id="sp-logout">Desconnecta</button></div>`;
+      $("#sp-logout").addEventListener("click", () => { if (source === "spotify") stop(); sp.logout(); $("#sp-dialog").close(); toast("Spotify desconnectat"); });
+      return;
+    }
+    $("#sp-body").innerHTML = `
+      <h3 class="tape">Connecta Spotify</h3>
+      ${err}
+      <p style="margin-top:18px">Amb Spotify connectat, els discos sonen sencers dins de SOLC. Cal un compte <b>Premium</b>.</p>
+      ${sp.hasClientId ? "" : `
+      <ol class="sp-steps">
+        <li>Entra a <a href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener">developer.spotify.com/dashboard</a> i crea una app (nom: SOLC).</li>
+        <li>A <b>Redirect URIs</b> afegeix exactament:<br><span class="sp-uri">${esc(sp.redirectUri())}</span></li>
+        <li>Marca <b>Web API</b> i <b>Web Playback SDK</b> i desa.</li>
+        <li>A <b>User Management</b> afegeix el correu del teu compte de Spotify (i el dels amics, fins a 5).</li>
+        <li>Copia el <b>Client ID</b> i enganxa'l aquí:</li>
+      </ol>
+      <form id="sp-form" class="inline-form">
+        <input id="sp-client" name="client" placeholder="Client ID" required pattern="[0-9a-fA-F]{32}" title="32 caràcters hexadecimals">
+        <button class="btn btn-pink">Desa</button>
+      </form>`}
+      ${sp.hasClientId ? `<div class="actions"><button class="btn btn-spotify" id="sp-login">● Connecta amb Spotify</button>
+        <button class="btn btn-ghost btn-sm" id="sp-reset">Canvia el Client ID</button></div>
+        <p class="sp-note">Redirect URI d'aquesta app: <span class="sp-uri">${esc(sp.redirectUri())}</span></p>` : ""}`;
+    const form = $("#sp-form");
+    if (form) form.addEventListener("submit", (e) => { e.preventDefault(); sp.setClientId($("#sp-client").value); renderSpotifyDialog(); });
+    const login = $("#sp-login");
+    if (login) login.addEventListener("click", () => sp.login().catch((e) => toast(e.message)));
+    const reset = $("#sp-reset");
+    if (reset) reset.addEventListener("click", () => { sp.setClientId(""); renderSpotifyDialog(); });
+  }
+  $("#sp-btn").addEventListener("click", () => { renderSpotifyDialog(); $("#sp-dialog").showModal(); });
+  sp.onChange(renderSpotify);
+  sp.onState((s) => {
+    if (!s || source !== "spotify" || !playing) return;
+    const tr = s.track_window && s.track_window.current_track;
+    if (tr && !s.paused) $("#now-meta").textContent = `Spotify · ${tr.name} · ${tr.album.name}`;
+    // pausat des d'un altre lloc (mòbil, ordinador): el plat també s'atura
+    if (s.paused && Date.now() - startedAt > 4000) stop();
+  });
+  sp.init();
 
   // tancar modal clicant fora
   $$("dialog").forEach((dlg) => dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); }));

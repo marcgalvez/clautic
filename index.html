@@ -22,6 +22,7 @@
       <button class="tab" data-view="market">Intercanvi</button>
       <button class="tab" data-view="wish">Desitjos</button>
       <button class="tab" data-view="deals">Tractes <span id="deals-count" class="badge" hidden>0</span></button>
+      <button class="sp-btn" id="sp-btn" hidden><span class="sp-dot"></span><span id="sp-label">Connecta Spotify</span></button>
     </nav>
   </header>
 
@@ -141,10 +142,18 @@
     <div id="propose-body"></div>
   </dialog>
 
+  <!-- MODAL: Spotify -->
+  <dialog id="sp-dialog" class="modal">
+    <form method="dialog"><button class="close" aria-label="Tanca">✕</button></form>
+    <div id="sp-body"></div>
+  </dialog>
+
   <div id="toast" class="toast" role="status"></div>
 
+  <script src="config.js"></script>
   <script src="data.js"></script>
   <script src="audio.js"></script>
+  <script src="spotify.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
