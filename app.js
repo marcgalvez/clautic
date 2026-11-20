@@ -153,7 +153,7 @@
     const list = state.myCrate.filter((r) => (!g || r.genre === g) && (!q || norm(r.artist + " " + r.title).includes(q)));
     $("#crate-grid").innerHTML = list.length ? list.map((r) => `
       <article class="card" data-open="mine:${r.id}" tabindex="0">
-        ${sleeveHTML(r, r.forTrade ? '<span class="sticker trade">ES CANVIA</span>' : "")}
+        ${sleeveHTML(r, (r.forTrade ? '<span class="sticker trade">ES CANVIA</span>' : "") + `<button class="quick-play" data-play="mine:${r.id}" aria-label="Fes sonar ${esc(r.title)}">▶</button>`)}
         <div class="card-info">
           <div class="t">${esc(r.title)}</div>
           <div class="a">${esc(r.artist)}</div>
@@ -178,7 +178,7 @@
       const stick = match ? '<span class="sticker">MATCH!</span>' : wish ? '<span class="sticker wish">EL VOLS</span>' : "";
       return `
       <article class="card" data-open="offer:${o.id}" tabindex="0">
-        ${sleeveHTML(o, stick)}
+        ${sleeveHTML(o, stick + `<button class="quick-play" data-play="offer:${o.id}" aria-label="Fes sonar ${esc(o.title)}">▶</button>`)}
         <div class="card-info">
           <div class="t">${esc(o.title)}</div>
           <div class="a">${esc(o.artist)}</div>
@@ -291,6 +291,10 @@
     }
     source = "synth";
     const info = window.SolcAudio.play(rec, .9);
+    setTimeout(() => {
+      if (token === playToken && window.SolcAudio.state !== "running")
+        toast("El navegador no deixa sonar. Puja el volum i treu el mode silenci.");
+    }, 1500);
     $("#now-meta").textContent = `${info.bpm} BPM · to de ${info.key} · ${rec.genre} · versió tocada en directe per SOLC`;
     startVu();
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -414,7 +418,7 @@
   $$(".tab").forEach((t) => t.addEventListener("click", () => goto(t.dataset.view)));
 
   document.addEventListener("click", (e) => {
-    const el = e.target.closest("[data-open],[data-play],[data-propose],[data-toggle-trade],[data-remove],[data-wish-add],[data-unwish],[data-goto]");
+    const el = e.target.closest("[data-play]") || e.target.closest("[data-open],[data-propose],[data-toggle-trade],[data-remove],[data-wish-add],[data-unwish],[data-goto]");
     if (!el) return;
     const d = el.dataset;
     if (d.open) { e.preventDefault(); openDetail(d.open); }
@@ -422,7 +426,8 @@
     else if (d.play) {
       const [k, id] = d.play.split(":");
       const rec = k === "mine" ? state.myCrate.find((r) => r.id === id) : findOffer(id)?.o;
-      $("#detail").close(); if (rec) play(rec);
+      if ($("#detail").open) $("#detail").close();
+      if (rec) play(rec);
     } else if (d.propose) openPropose(d.propose);
     else if (d.toggleTrade) {
       const r = state.myCrate.find((x) => x.id === d.toggleTrade);
@@ -478,7 +483,7 @@
   const sp = window.SolcSpotify;
   function renderSpotify(st) {
     const btn = $("#sp-btn");
-    btn.hidden = st.disabled;
+    btn.hidden = false;
     btn.classList.toggle("on", st.ready);
     btn.classList.toggle("err", !!st.error && st.connected && !st.ready);
     $("#sp-label").textContent = st.ready ? `Spotify · ${st.name || "connectat"}` : st.connected ? "Spotify · connectant…" : "Connecta Spotify";
@@ -486,6 +491,14 @@
   }
   function renderSpotifyDialog() {
     const st = sp.status;
+    if (st.disabled) {
+      $("#sp-body").innerHTML = `
+        <h3 class="tape">Connecta Spotify</h3>
+        <p style="margin-top:18px">Aquesta còpia de SOLC és dins de Claude, i Claude no deixa que les pàgines es connectin a Spotify. Per això aquí sona la versió que genera l'app.</p>
+        <p>Per sentir els discos sencers des de Spotify, obre SOLC des de la teva adreça de <b>GitHub Pages</b> (per exemple <span class="sp-uri">https://marcgalvez.github.io/clautic/</span>) i clica aquest mateix botó. T'hi guiarà pas a pas.</p>
+        <p class="sp-note">Si encara no l'has activat: al repositori de GitHub, Settings → Pages → Deploy from a branch → tria la branca i la carpeta / (root) → Save.</p>`;
+      return;
+    }
     const err = st.error ? `<p class="sp-err">${esc(st.error)}</p>` : "";
     if (st.connected) {
       $("#sp-body").innerHTML = `

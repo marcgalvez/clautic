@@ -225,6 +225,7 @@
   /* ---------------- API pública ---------------- */
   function stop(fade = .25) {
     clearInterval(timer); timer = null;
+    try { keepAlive && keepAlive.pause(); } catch (_) {}
     if (!ctx) return;
     const t = ctx.currentTime;
     master.gain.cancelScheduledValues(t);
@@ -240,7 +241,7 @@
 
   // Cal cridar-la des d'un clic (els navegadors només deixen sonar després d'una interacció).
   function play(rec, delay = 1) {
-    init();
+    unlock();
     if (ctx.state === "suspended") ctx.resume();
     if (timer || crackleSrc) stop(.08);
     song = compose(rec);
@@ -269,7 +270,30 @@
     return out;
   }
 
-  function unlock() { init(); if (ctx.state === "suspended") ctx.resume(); }
+  // Un <audio> silenciós en bucle fa que l'iPhone tracti la pàgina com a reproductor de música
+  // i no la silenciï amb l'interruptor de mode silenci.
+  let keepAlive = null;
+  function silentWav() {
+    const n = 4000, b = new Uint8Array(44 + n), v = new DataView(b.buffer);
+    const w = (o, s) => [...s].forEach((c, i) => (b[o + i] = c.charCodeAt(0)));
+    w(0, "RIFF"); v.setUint32(4, 36 + n, true); w(8, "WAVEfmt "); v.setUint32(16, 16, true);
+    v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, 8000, true); v.setUint32(28, 8000, true);
+    v.setUint16(32, 1, true); v.setUint16(34, 8, true); w(36, "data"); v.setUint32(40, n, true);
+    b.fill(128, 44);
+    let s = ""; b.forEach((x) => (s += String.fromCharCode(x)));
+    return "data:audio/wav;base64," + btoa(s);
+  }
+  function unlock() {
+    try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (_) {}
+    try {
+      if (!keepAlive) { keepAlive = new Audio(silentWav()); keepAlive.loop = true; keepAlive.setAttribute("playsinline", ""); }
+      const p = keepAlive.play(); if (p && p.catch) p.catch(() => {});
+    } catch (_) {}
+    init();
+    if (ctx.state !== "running") ctx.resume();
+    // so buit immediat dins del clic: alguns navegadors mòbils ho necessiten per arrencar
+    const src = ctx.createBufferSource(); src.buffer = ctx.createBuffer(1, 1, 22050); src.connect(ctx.destination); src.start(0);
+  }
 
-  window.SolcAudio = { play, stop, spectrum, unlock, get playing() { return !!timer; } };
+  window.SolcAudio = { play, stop, spectrum, unlock, get playing() { return !!timer; }, get state() { return ctx ? ctx.state : "none"; } };
 })();
