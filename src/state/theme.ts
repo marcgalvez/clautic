@@ -5,7 +5,8 @@ export function useApplyTheme(theme: AppSettings['theme']) {
   useEffect(() => {
     const mq = window.matchMedia?.('(prefers-color-scheme: dark)');
     const apply = () => {
-      const dark = theme === 'dark' || (theme === 'system' && !!mq?.matches);
+      const host = document.documentElement.dataset.theme;
+      const dark = theme === 'dark' || (theme === 'system' && (host ? host === 'dark' : !!mq?.matches));
       document.documentElement.classList.toggle('dark', dark);
       try {
         if (theme === 'system') localStorage.removeItem('chesslab:theme');

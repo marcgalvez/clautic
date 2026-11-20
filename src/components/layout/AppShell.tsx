@@ -109,7 +109,7 @@ export function AppShell() {
 function Brand() {
   return (
     <NavLink to="/" className="flex items-center gap-2">
-      <img src="/favicon.svg" alt="" className="size-8" />
+      <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" className="size-8" />
       <span className="text-lg font-bold tracking-tight">
         Chess<span className="text-primary">Lab</span>
       </span>

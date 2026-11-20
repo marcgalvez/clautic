@@ -13,6 +13,7 @@ export function SettingsPage() {
   const profile = data.profile!;
   const [name, setName] = useState(profile.displayName);
   const [msg, setMsg] = useState<string | null>(null);
+  const [confirmReset, setConfirmReset] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const download = () => {
@@ -92,14 +93,15 @@ export function SettingsPage() {
             <Button variant="outline" onClick={download}><Download /> Exporta (JSON)</Button>
             <Button variant="outline" onClick={() => fileRef.current?.click()}><Upload /> Importa</Button>
             <input ref={fileRef} type="file" accept="application/json" className="sr-only" onChange={(e) => e.target.files?.[0] && onImport(e.target.files[0])} />
-            <Button
-              variant="danger"
-              onClick={async () => {
-                if (window.confirm('Segur que vols esborrar tot el teu historial? No es pot desfer.')) await resetAll();
-              }}
-            >
-              Esborra totes les dades
-            </Button>
+            {!confirmReset ? (
+              <Button variant="danger" onClick={() => setConfirmReset(true)}>Esborra totes les dades</Button>
+            ) : (
+              <span className="flex flex-wrap items-center gap-2 text-sm">
+                Segur? No es pot desfer.
+                <Button variant="danger" size="sm" onClick={async () => { await resetAll(); setConfirmReset(false); setMsg('Dades esborrades.'); }}>Sí, esborra-ho</Button>
+                <Button variant="ghost" size="sm" onClick={() => setConfirmReset(false)}>Cancel·la</Button>
+              </span>
+            )}
           </div>
         </CardContent>
       </Card>

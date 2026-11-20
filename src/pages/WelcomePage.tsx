@@ -23,7 +23,7 @@ export function WelcomePage() {
       <Card className="w-full max-w-lg animate-fade-in">
         <CardContent className="p-6 sm:p-8">
           <div className="mb-6 flex items-center gap-3">
-            <img src="/favicon.svg" alt="" className="size-11" />
+            <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" className="size-11" />
             <div>
               <h1 className="text-2xl font-bold tracking-tight">
                 Benvingut/da a Chess<span className="text-primary">Lab</span>
