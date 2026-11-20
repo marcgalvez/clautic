@@ -43,8 +43,10 @@
       <p class="kicker">ARA SONA</p>
       <h1 id="now-title">Tria un disc<br>i deixa'l caure.</h1>
       <p id="now-artist" class="now-artist">El soroll comença quan l'agulla toca el solc.</p>
+      <div class="vu" id="vu" aria-hidden="true"></div>
+      <p id="now-meta" class="now-meta">Clica un disc i després «Posa'l al plat». Puja el volum.</p>
       <div class="now-actions">
-        <a id="now-spotify" class="btn btn-spotify" href="#" target="_blank" rel="noopener" hidden>▶ Escolta a Spotify</a>
+        <button id="now-replay" class="btn btn-yellow" hidden>▶ Torna a sonar</button>
         <button id="now-stop" class="btn btn-ghost" hidden>■ Atura</button>
       </div>
       <div class="stats" id="stats"></div>
@@ -142,6 +144,7 @@
   <div id="toast" class="toast" role="status"></div>
 
   <script src="data.js"></script>
+  <script src="audio.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

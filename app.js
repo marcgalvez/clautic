@@ -126,7 +126,6 @@
   }
 
   /* ---------------- utilitats ---------------- */
-  const spotifyUrl = (rec) => "https://open.spotify.com/search/" + encodeURIComponent(`${rec.artist} ${rec.title}`);
   const ownsTitle = (title) => state.myCrate.some((m) => norm(m.title) === norm(title));
   const inWishlist = (rec) => state.wishlist.some((w) => norm(w.title) === norm(rec.title) && norm(w.artist) === norm(rec.artist));
   const collectorWantsMine = (c) => c.wants.some(ownsTitle);
@@ -232,7 +231,19 @@
   function renderAll() { renderGenres(); renderCrate(); renderMarket(); renderWish(); renderDeals(); renderStats(); }
 
   /* ---------------- giradiscs ---------------- */
-  let playing = null;
+  let playing = null, lastPlayed = null, vuRaf = 0;
+  const VU_BANDS = 14;
+  $("#vu").innerHTML = "<span></span>".repeat(VU_BANDS);
+  function startVu() {
+    cancelAnimationFrame(vuRaf);
+    const bars = $$("#vu span");
+    const frame = () => {
+      const lv = window.SolcAudio.spectrum(VU_BANDS);
+      bars.forEach((b, i) => { b.style.transform = `scaleY(${lv ? Math.max(.06, Math.min(1, lv[i] * 1.12)) : .06})`; });
+      if (lv) vuRaf = requestAnimationFrame(frame);
+    };
+    vuRaf = requestAnimationFrame(frame);
+  }
   function play(rec) {
     const tt = $("#turntable"), disc = $("#tt-record"), cv = cover(rec);
     playing = rec;
@@ -247,17 +258,24 @@
     }, 380);
     $("#now-title").textContent = rec.title;
     $("#now-artist").textContent = `${rec.artist}${rec.year ? " · " + rec.year : ""}`;
-    const sp = $("#now-spotify"); sp.href = spotifyUrl(rec); sp.hidden = false;
     $("#now-stop").hidden = false;
+    $("#now-replay").hidden = true;
+    const info = window.SolcAudio.play(rec, .9);
+    $("#now-meta").textContent = `${info.bpm} BPM · to de ${info.key} · ${rec.genre} · versió tocada en directe per SOLC`;
+    startVu();
     window.scrollTo({ top: 0, behavior: "smooth" });
+    lastPlayed = rec;
   }
   function stop() {
+    window.SolcAudio.stop();
+    if (playing) $("#now-replay").hidden = false;
     playing = null;
     $("#turntable").classList.remove("playing");
     $("#tt-record").classList.remove("spinning");
     $("#now-title").innerHTML = "Silenci.<br>Massa silenci.";
     $("#now-artist").textContent = "Posa un altre disc, va.";
     $("#now-stop").hidden = true;
+    $("#now-meta").textContent = "Agulla aixecada.";
   }
 
   /* ---------------- detall ---------------- */
@@ -284,7 +302,6 @@
           </dl>
           <div class="actions">
             <button class="btn btn-yellow" data-play="${ref}">◉ Posa'l al plat</button>
-            <a class="btn btn-spotify" href="${spotifyUrl(rec)}" target="_blank" rel="noopener">▶ Spotify</a>
             ${kind === "mine"
               ? `<button class="btn btn-pink" data-toggle-trade="${rec.id}">${rec.forTrade ? "Ja no el canvio" : "Posa'l per canviar"}</button>
                  <button class="btn btn-ghost btn-sm" data-remove="${rec.id}">Treu de la caixa</button>`
@@ -401,6 +418,7 @@
   });
 
   $("#now-stop").addEventListener("click", stop);
+  $("#now-replay").addEventListener("click", () => { if (lastPlayed) play(lastPlayed); });
   $("#search").addEventListener("input", renderCrate);
   $("#genre-filter").addEventListener("change", renderCrate);
   $("#add-btn").addEventListener("click", () => $("#add").showModal());

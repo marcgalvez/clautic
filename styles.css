@@ -121,6 +121,10 @@ body {
   overflow-wrap: anywhere;
 }
 .now-artist { font-family: var(--marker); font-size: clamp(18px, 2.2vw, 26px); margin: 0 0 18px; transform: rotate(-1deg); }
+.vu { display: flex; gap: 4px; align-items: flex-end; height: 44px; margin: 0 0 10px; }
+.vu span { flex: 0 0 9px; height: 100%; background: var(--ink); border-top: 4px solid var(--pink); transform-origin: bottom; transform: scaleY(.06); transition: transform .06s linear; }
+.vu span:nth-child(n+11) { border-top-color: var(--red); }
+.now-meta { font-family: var(--mono); font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 18px; }
 .now-actions { display: flex; gap: 12px; flex-wrap: wrap; }
 .stats { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
 .stat { background: var(--ink); color: var(--paper); padding: 8px 14px; font-family: var(--mono); font-size: 13px; transform: rotate(var(--r, 0deg)); }
