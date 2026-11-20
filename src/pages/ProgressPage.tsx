@@ -4,7 +4,12 @@ import { Info } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useData } from '@/state/DataProvider';
-import { byKey, dailyQuality, summarize } from '@/lib/training/stats';
+import { byKey, dailyQuality, recurringTrainingErrors, summarize, weekly } from '@/lib/training/stats';
+import { getExercise as findExercise } from '@/lib/exercises/bank';
+import { CATEGORY_LABELS } from '@/lib/exercises/themes';
+import { LineChart } from '@/components/charts/LineChart';
+import { summarizePatterns, ERROR_TYPE_LABELS } from '@/lib/games/patterns';
+import { getLesson } from '@/data/lessons';
 import { getExercise } from '@/lib/exercises/bank';
 import { themeLabel } from '@/lib/exercises/themes';
 import { conceptLabel } from '@/data/concepts';
@@ -27,6 +32,14 @@ export function ProgressPage() {
   const recent = [...attempts].sort((a, b) => b.startedAt.localeCompare(a.startedAt)).slice(0, 25);
   const reviews = [...data.reviews].sort((a, b) => a.dueAt.localeCompare(b.dueAt));
   const completedSessions = data.sessions.filter((s) => s.completedAt).length;
+  const categoryOf = (id: string) => findExercise(id)?.category ?? 'tactics';
+  const byCategory = useMemo(() => byKey(attempts, (a) => categoryOf(a.exerciseId)), [attempts]);
+  const weeklyTactics = useMemo(() => weekly(attempts.filter((a) => categoryOf(a.exerciseId) === 'tactics'), (a) => a.quality * 100), [attempts]);
+  const weeklyEndgame = useMemo(() => weekly(attempts.filter((a) => categoryOf(a.exerciseId) === 'endgame'), (a) => a.quality * 100), [attempts]);
+  const weeklyTime = useMemo(() => weekly(attempts, (a) => a.durationMs / 1000), [attempts]);
+  const recurring = useMemo(() => recurringTrainingErrors(attempts), [attempts]);
+  const patterns = useMemo(() => summarizePatterns(data.games), [data.games]);
+  const sessionsDone = [...data.sessions].filter((s) => s.completedAt).sort((a, b) => b.startedAt.localeCompare(a.startedAt));
 
   return (
     <div className="space-y-5 animate-fade-in">
@@ -34,8 +47,8 @@ export function ProgressPage() {
         <h1 className="text-2xl font-bold tracking-tight">Progrés</h1>
         <p className="flex items-start gap-1.5 text-sm text-muted-foreground">
           <Info className="mt-0.5 size-4 shrink-0" />
-          Mètriques internes d'entrenament de ChessLab. No són cap classificació oficial ni un ELO. La importació de l'ELO de Lichess arribarà en una fase
-          posterior i es mostrarà per separat.
+          Mètriques internes d'entrenament de ChessLab. No són cap classificació oficial ni un ELO. Les classificacions externes (Lichess, Chess.com,
+          FIDE) es mostren al perfil, separades per plataforma i ritme.
         </p>
       </div>
 
@@ -55,6 +68,100 @@ export function ProgressPage() {
             <Kpi label="Temps mitjà" value={formatDuration(summary.avgTimeMs)} />
             <Kpi label="Sessions completades" value={completedSessions} />
           </div>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Precisió per categoria</CardTitle>
+              <CardDescription>Percentatge d'exercicis resolts a la primera, sense pistes.</CardDescription>
+            </CardHeader>
+            <CardContent className="grid grid-cols-2 gap-3 md:grid-cols-4">
+              {(['tactics', 'strategy', 'endgame', 'opening'] as const).map((c) => {
+                const s = byCategory[c];
+                return (
+                  <div key={c} className="rounded-lg border border-border p-3">
+                    <p className="text-xs text-muted-foreground">{CATEGORY_LABELS[c]}</p>
+                    <p className="text-xl font-semibold tabular-nums">{s ? `${Math.round(s.cleanRate * 100)}%` : '–'}</p>
+                    <p className="text-xs text-muted-foreground">{s ? `${s.total} intents` : 'Sense dades'}</p>
+                  </div>
+                );
+              })}
+            </CardContent>
+          </Card>
+
+          <div className="grid gap-4 lg:grid-cols-3">
+            <Card>
+              <CardHeader className="pb-1"><CardTitle>Progrés en tàctica</CardTitle><CardDescription>Qualitat setmanal (0–100)</CardDescription></CardHeader>
+              <CardContent><LineChart ariaLabel="Qualitat setmanal en tàctica" domain={[0, 100]} height={120} points={weeklyTactics.map((w) => ({ label: `setm. ${w.week}`, value: w.value }))} /></CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-1"><CardTitle>Progrés en finals</CardTitle><CardDescription>Qualitat setmanal (0–100)</CardDescription></CardHeader>
+              <CardContent><LineChart ariaLabel="Qualitat setmanal en finals" domain={[0, 100]} height={120} points={weeklyEndgame.map((w) => ({ label: `setm. ${w.week}`, value: w.value }))} /></CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-1"><CardTitle>Temps de resolució</CardTitle><CardDescription>Mitjana setmanal (segons)</CardDescription></CardHeader>
+              <CardContent><LineChart ariaLabel="Temps mitjà setmanal" height={120} format={(v) => `${Math.round(v)} s`} points={weeklyTime.map((w) => ({ label: `setm. ${w.week}`, value: w.value }))} /></CardContent>
+            </Card>
+          </div>
+
+          <div className="grid gap-4 lg:grid-cols-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>Errors recurrents</CardTitle>
+                <CardDescription>Només compten si es repeteixen en almenys dues posicions o partides diferents.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3 text-sm">
+                <div>
+                  <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">En els exercicis</p>
+                  {recurring.length ? (
+                    <ul className="divide-y divide-border">
+                      {recurring.slice(0, 5).map((r) => (
+                        <li key={r.conceptId} className="flex justify-between py-1.5"><span>{conceptLabel(r.conceptId)}</span><span className="text-muted-foreground">{r.errors} errors · {r.exercises} posicions</span></li>
+                      ))}
+                    </ul>
+                  ) : <p className="text-muted-foreground">Cap patró clar encara.</p>}
+                </div>
+                <div>
+                  <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">En les partides ({patterns.gamesAnalysed} analitzades)</p>
+                  {patterns.recurring.filter((r) => r.games >= 2).length ? (
+                    <ul className="divide-y divide-border">
+                      {patterns.recurring.filter((r) => r.games >= 2).map((r) => (
+                        <li key={r.type} className="flex justify-between py-1.5"><span>{ERROR_TYPE_LABELS[r.type]}</span><span className="text-muted-foreground">{r.count} en {r.games} partides</span></li>
+                      ))}
+                    </ul>
+                  ) : patterns.gamesAnalysed > 0 ? (
+                    <p className="text-muted-foreground">Cap tipus d'error es repeteix encara en dues partides. <Link to="/partides" className="text-primary underline">Analitza'n més</Link>.</p>
+                  ) : (
+                    <p className="text-muted-foreground"><Link to="/partides" className="text-primary underline">Analitza partides</Link> per detectar patrons.</p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader><CardTitle>Sessions completades</CardTitle></CardHeader>
+              <CardContent>
+                {sessionsDone.length ? (
+                  <ul className="divide-y divide-border text-sm">
+                    {sessionsDone.slice(0, 8).map((s) => {
+                      const ok = s.recall.filter((r) => r.correct).length;
+                      return (
+                        <li key={s.id} className="py-2">
+                          <div className="flex justify-between gap-2"><span className="font-medium">{getLesson(s.lessonId)?.title ?? s.lessonId}</span><span className="text-xs text-muted-foreground">{new Date(s.startedAt).toLocaleDateString('ca')}</span></div>
+                          <p className="text-xs text-muted-foreground">{s.plannedMinutes}′ · {s.attemptIds.length} exercicis · record {ok}/{s.recall.length}{s.reflection?.learned ? ` · «${s.reflection.learned.slice(0, 80)}»` : ''}</p>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : <p className="text-sm text-muted-foreground">Cap sessió completada.</p>}
+              </CardContent>
+            </Card>
+          </div>
+
+          <Card>
+            <CardContent className="flex flex-wrap items-center justify-between gap-2 p-4 text-sm">
+              <span className="text-muted-foreground">Les classificacions de Lichess, Chess.com o FIDE es mostren al perfil, separades per plataforma i ritme.</span>
+              <Link to="/perfil" className="text-primary underline">Veure classificacions externes</Link>
+            </CardContent>
+          </Card>
 
           <Card>
             <CardHeader>

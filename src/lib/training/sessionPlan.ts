@@ -135,12 +135,16 @@ export function planSession(args: {
   reviews: ReviewItem[];
   now?: Date;
   lessonId?: string;
+  /** Start level from the initial diagnostic (used until there are enough attempts). */
+  baseDifficulty?: number;
+  /** Concepts flagged as weak outside training (diagnostic, analysed games). */
+  externalWeakConcepts?: { conceptId: string; source: 'diagnostic' | 'games' }[];
 }): SessionPlan {
   const { minutes, lessons, exercises, attempts, sessions, reviews } = args;
   const now = args.now ?? new Date();
   const lesson = (args.lessonId && lessons.find((l) => l.id === args.lessonId)) || chooseLesson(lessons, sessions, attempts);
   const rationale: string[] = [];
-  const difficulty = targetDifficulty(attempts);
+  const difficulty = targetDifficulty(attempts, args.baseDifficulty ?? 1);
 
   const due = dueReviews(reviews, now).filter((r) => !lesson.conceptIds.includes(r.conceptId));
   const warmupConcepts = due.slice(0, 3).map((r) => r.conceptId);
@@ -151,6 +155,12 @@ export function planSession(args: {
     .sort((a, b) => a[1].avg - b[1].avg)
     .map(([c]) => c)
     .slice(0, 2);
+  // Concepts flagged by the diagnostic or by game analysis, while practice has not confirmed them yet.
+  const external = (args.externalWeakConcepts ?? []).filter(
+    (w) => !lesson.conceptIds.includes(w.conceptId) && !weakConcepts.includes(w.conceptId) && (cq[w.conceptId]?.avg ?? 0) < 0.8,
+  );
+  for (const w of external) if (weakConcepts.length < 2) weakConcepts.push(w.conceptId);
+  const externalSources = new Set(external.filter((w) => weakConcepts.includes(w.conceptId)).map((w) => w.source));
 
   const b = budget(minutes, warmupConcepts.length > 0, weakConcepts.length > 0);
   const used = new Set<string>();
@@ -187,7 +197,13 @@ export function planSession(args: {
   blocks.push({ kind: 'apply', minutes: b.apply, exerciseIds: applyIds });
   if (weaknessIds.length) {
     blocks.push({ kind: 'weakness', minutes: b.weakness, exerciseIds: weaknessIds, conceptIds: weakConcepts });
-    rationale.push('Hi ha conceptes amb un rendiment baix: els treballarem amb posicions noves.');
+    rationale.push(
+      externalSources.has('games')
+        ? 'Les teves partides mostren errors recurrents: els treballarem amb posicions noves.'
+        : externalSources.has('diagnostic')
+          ? 'El diagnòstic va detectar un punt feble: el treballarem amb posicions noves.'
+          : 'Hi ha conceptes amb un rendiment baix: els treballarem amb posicions noves.',
+    );
   }
   blocks.push({ kind: 'consolidate', minutes: b.consolidate });
 

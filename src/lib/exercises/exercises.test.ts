@@ -1,13 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import tactics from '@/data/exercises/tactics.json';
 import verification from '@/data/exercises/verification.json';
 import { exerciseFingerprint } from '@/lib/hash';
-import { EXERCISES, UNVERIFIED_COUNT, isVerified } from './bank';
+import { CATALOGUE, EXERCISES, UNVERIFIED_COUNT, isVerified } from './bank';
 import { positionLegalityProblems, validateExerciseRules } from './validate';
 import type { Exercise } from './types';
 
-const all = tactics as Exercise[];
+const all = CATALOGUE;
 
 describe('exercise bank', () => {
   it('has unique ids', () => {
@@ -27,7 +26,7 @@ describe('exercise bank', () => {
   });
 
   it('mate objectives end in checkmate', () => {
-    for (const ex of all.filter((e) => /\bmat en \d/i.test(e.objective))) {
+    for (const ex of all.filter((e) => (e.kind ?? 'move') === 'move' && /\bmat en \d/i.test(e.objective))) {
       const g = new Chess(ex.fen);
       for (const u of ex.solution) g.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
       expect(g.isCheckmate(), ex.id).toBe(true);
@@ -39,6 +38,11 @@ describe('exercise bank', () => {
   it('only exposes verified exercises to the UI', () => {
     expect(UNVERIFIED_COUNT).toBe(0);
     expect(EXERCISES).toHaveLength(all.length);
+  });
+
+  it('covers every category of the curriculum', () => {
+    const cats = new Set(all.map((e) => e.category));
+    for (const c of ['tactics', 'strategy', 'endgame', 'opening']) expect(cats).toContain(c);
   });
 
   it('covers the planned tactical themes', () => {

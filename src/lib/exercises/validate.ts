@@ -14,8 +14,15 @@ export function validateExerciseRules(ex: Exercise): string[] {
   if (problems.length) return problems;
   if (!Array.isArray(ex.hints) || ex.hints.length !== 3) problems.push('exactly 3 progressive hints are required');
   if (!(ex.difficulty >= 1 && ex.difficulty <= 5)) problems.push('difficulty must be 1-5');
-  if (!Array.isArray(ex.solution) || ex.solution.length === 0 || ex.solution.length % 2 === 0) {
+  const kind = ex.kind ?? 'move';
+  if (kind === 'move' && (!Array.isArray(ex.solution) || ex.solution.length === 0 || ex.solution.length % 2 === 0)) {
     problems.push('solution must have an odd number of plies (it ends with a solver move)');
+  }
+  if (kind !== 'move') {
+    if (ex.solution?.length !== 1) problems.push(`${kind} exercises have exactly one solution move`);
+    if (!ex.options || ex.options.length < 3) problems.push(`${kind} exercises need at least 3 options`);
+    else if (!ex.options.includes(ex.solution[0])) problems.push('the solution must be one of the options');
+    if (!ex.question) problems.push(`${kind} exercises need a question`);
   }
 
   const fenCheck = validateFen(ex.fen);
@@ -25,6 +32,19 @@ export function validateExerciseRules(ex: Exercise): string[] {
   }
   problems.push(...positionLegalityProblems(ex.fen));
   if (problems.length) return problems;
+
+  if (kind !== 'move') {
+    const fen = kind === 'threat' ? flipTurn(ex.fen) : ex.fen;
+    if (kind === 'threat' && positionLegalityProblems(fen).length) problems.push('threat position is illegal when the opponent is to move');
+    for (const opt of ex.options ?? []) {
+      try {
+        new Chess(fen).move({ from: opt.slice(0, 2), to: opt.slice(2, 4), promotion: opt[4] });
+      } catch {
+        problems.push(`option ${opt} is illegal`);
+      }
+    }
+    return problems;
+  }
 
   const game = new Chess(ex.fen);
   for (let i = 0; i < ex.solution.length; i++) {
@@ -69,4 +89,18 @@ export function positionLegalityProblems(fen: string): string[] {
   const g = new Chess(fen);
   if (g.isGameOver()) problems.push('position is already game over');
   return problems;
+}
+
+/** Same position with the other side to move (en passant cleared). */
+export function flipTurn(fen: string): string {
+  const p = fen.split(' ');
+  return [p[0], p[1] === 'w' ? 'b' : 'w', p[2], '-', p[4] ?? '0', p[5] ?? '1'].join(' ');
+}
+
+/** Goal of an exercise: explicit, or inferred from its objective text. */
+export function exerciseGoal(ex: Pick<Exercise, 'goal' | 'objective'>): 'win' | 'draw' | 'mate' {
+  if (ex.goal) return ex.goal;
+  if (/\bmat en \d/i.test(ex.objective)) return 'mate';
+  if (/taules/i.test(ex.objective)) return 'draw';
+  return 'win';
 }

@@ -1,0 +1,66 @@
+[
+  {
+    "id": "thr-001",
+    "kind": "threat",
+    "category": "tactics",
+    "theme": "threat-detection",
+    "title": "Què amenaça el rival?",
+    "fen": "rnb1k1nr/pppp1ppp/8/2b1p3/4P2q/P1N5/1PPP1PPP/R1BQKBNR w KQkq - 0 4",
+    "objective": "Detecta l'amenaça.",
+    "difficulty": 1,
+    "question": "Juguen les blanques, però primer: quina és l'amenaça de les negres?",
+    "hints": [
+      "Mira les peces negres que apunten cap al teu rei.",
+      "La dama de h4 i l'alfil de c5 coincideixen en una casella.",
+      "f2 només la defensa el rei."
+    ],
+    "explanation": "La dama de h4 i l'alfil de c5 apunten a f2. Les negres amenacen Dxf2#. ...Dxe4+ perdria la dama per Cxe4 i ...Axf2+ guanya un peó però no és mat. Les blanques han de defensar f2 (per exemple amb Df3 o De2).",
+    "concepts": [
+      "deteccio-amenaces",
+      "punt-feble-f7"
+    ],
+    "tags": [
+      "amenaces"
+    ],
+    "options": [
+      "h4f2",
+      "h4e4",
+      "c5f2"
+    ],
+    "solution": [
+      "h4f2"
+    ]
+  },
+  {
+    "id": "thr-002",
+    "kind": "threat",
+    "category": "tactics",
+    "theme": "threat-detection",
+    "title": "Perill a la primera fila",
+    "fen": "2r3k1/5ppp/8/3B4/8/1P6/P4PPP/2R3K1 w - - 0 1",
+    "objective": "Detecta l'amenaça.",
+    "difficulty": 2,
+    "question": "Juguen les blanques. Què amenacen les negres?",
+    "hints": [
+      "Quantes caselles de fugida té el teu rei?",
+      "Qui defensa la torre de c1?",
+      "Si la torre negra captura a c1, el rei blanc no té on anar."
+    ],
+    "explanation": "Les negres amenacen Txc1#: la torre de c1 no està defensada i el rei blanc no té caselles de fugida. Les blanques han de reaccionar (per exemple Txc8+) abans de pensar en res més.",
+    "concepts": [
+      "deteccio-amenaces",
+      "mat-fila-darrere"
+    ],
+    "tags": [
+      "amenaces"
+    ],
+    "options": [
+      "c8c1",
+      "c8c5",
+      "g8f8"
+    ],
+    "solution": [
+      "c8c1"
+    ]
+  }
+]

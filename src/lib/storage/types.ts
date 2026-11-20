@@ -9,6 +9,9 @@ export interface UserProfile {
   createdAt: string;
   sessionMinutes: SessionMinutes;
   locale: Locale;
+  /** Lichess username for imports (public data only). */
+  lichessUsername?: string;
+  chesscomUsername?: string;
 }
 
 export type AttemptOutcome = 'solved' | 'solved-with-help' | 'revealed' | 'abandoned';
@@ -31,7 +34,7 @@ export interface Attempt {
   reasoning?: string;
   /** 0..1 learning-quality score derived from the attempt (see scoring.ts). */
   quality: number;
-  context: 'session' | 'free';
+  context: 'session' | 'free' | 'diagnostic';
   sessionId?: string;
 }
 
@@ -65,6 +68,54 @@ export interface ReviewItem {
   reviews: number;
 }
 
+/** Competences assessed by the diagnostic and tracked over time. */
+export type Competence = 'tactics' | 'calculation' | 'opening' | 'positional' | 'endgame' | 'threats' | 'justification';
+
+export type RatingPlatform = 'lichess' | 'chesscom' | 'fide';
+export type TimeControl = 'bullet' | 'blitz' | 'rapid' | 'classical' | 'correspondence' | 'standard';
+
+/** A rating from an external platform. Never converted or mixed across platforms/time controls. */
+export interface ExternalRating {
+  id: string;
+  platform: RatingPlatform;
+  timeControl: TimeControl;
+  rating: number;
+  /** Lichess/Chess.com provisional flag when known. */
+  provisional?: boolean;
+  source: 'self-reported' | 'api';
+  username?: string;
+  recordedAt: string;
+}
+
+export interface DiagnosticItemResult {
+  exerciseId: string;
+  competences: Competence[];
+  difficulty: number;
+  correct: boolean;
+  timeMs: number;
+  /** Justification multiple choice result, when the item asked for it. */
+  reasonCorrect?: boolean;
+  reasoning?: string;
+}
+
+export interface DiagnosticResult {
+  id: string;
+  completedAt: string;
+  questionnaire: {
+    knowsRules: boolean;
+    playsRegularly: 'no' | 'occasionally' | 'weekly' | 'daily';
+    goals: string[];
+  };
+  items: DiagnosticItemResult[];
+  /** 0..1 per competence; `n` = items that measured it. */
+  competences: Partial<Record<Competence, { score: number; n: number }>>;
+  /** Initial training difficulty (1-5) suggested by the results. */
+  startDifficulty: number;
+  /** True when too few items were answered for a reliable estimate. */
+  provisional: boolean;
+  stoppedEarly: boolean;
+}
+
 export interface AppSettings {
   theme: 'light' | 'dark' | 'system';
   engineDepth: number;
@@ -87,6 +138,11 @@ export interface AppData {
   sessions: TrainingSession[];
   reviews: ReviewItem[];
   settings: AppSettings;
+  diagnostics: DiagnosticResult[];
+  externalRatings: ExternalRating[];
+  games: import('@/lib/games/types').StoredGame[];
+  customExercises: import('@/lib/exercises/types').Exercise[];
+  coachConversations: import('@/lib/coach/types').CoachConversation[];
 }
 
 export const EMPTY_DATA: AppData = {
@@ -96,4 +152,9 @@ export const EMPTY_DATA: AppData = {
   sessions: [],
   reviews: [],
   settings: DEFAULT_SETTINGS,
+  diagnostics: [],
+  externalRatings: [],
+  games: [],
+  customExercises: [],
+  coachConversations: [],
 };

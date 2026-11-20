@@ -1,0 +1,102 @@
+[
+  {
+    "id": "op-f7-001",
+    "kind": "choice",
+    "category": "opening",
+    "theme": "king-safety",
+    "title": "Defensa f7",
+    "fen": "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 3",
+    "objective": "Tria la millor jugada.",
+    "difficulty": 1,
+    "question": "Juguen les negres. Quina jugada és la millor?",
+    "hints": [
+      "Què amenacen les blanques?",
+      "La dama i l'alfil apunten a f7.",
+      "Cal tapar o expulsar la dama abans de desenvolupar."
+    ],
+    "explanation": "Les blanques amenacen Dxf7#. ...g6 expulsa la dama i defensa. ...Cf6?? i ...Cd4?? desenvolupen o ataquen, però permeten Dxf7 mat. Els principis d'obertura (desenvolupar) van després de respondre a les amenaces.",
+    "concepts": [
+      "punt-feble-f7",
+      "deteccio-amenaces",
+      "seguretat-del-rei"
+    ],
+    "tags": [
+      "obertura",
+      "trampa"
+    ],
+    "options": [
+      "g7g6",
+      "g8f6",
+      "c6d4"
+    ],
+    "solution": [
+      "g7g6"
+    ]
+  },
+  {
+    "id": "op-legal-001",
+    "kind": "choice",
+    "category": "opening",
+    "theme": "king-safety",
+    "title": "La dama enverinada",
+    "fen": "rn1qkbnr/ppp2p1p/3p2p1/4N3/2B1P1b1/2N5/PPPP1PPP/R1BQK2R b KQkq - 0 5",
+    "objective": "Tria la millor jugada.",
+    "difficulty": 3,
+    "question": "Juguen les negres. El cavall blanc ha deixat la dama penjada. Què jugues?",
+    "hints": [
+      "Abans de capturar la dama, mira què passa amb el teu rei.",
+      "Després de ...Axd1, quins escacs tenen les blanques?",
+      "Axf7+ i Cd5 formen una xarxa de mat."
+    ],
+    "explanation": "...Axd1?? perd per Axf7+ Re7 Cd5#: és el mat de Légal. ...dxe5 recupera el cavall i, tot i perdre un peó, la posició es pot jugar. ...Cf6? deixa penjat l'alfil de g4 (Cxg4). Una captura molt valuosa sovint és una trampa: comprova els escacs del rival abans d'agafar-la.",
+    "concepts": [
+      "trampes-obertura",
+      "revisio-escacs",
+      "seguretat-del-rei"
+    ],
+    "tags": [
+      "obertura",
+      "trampa"
+    ],
+    "options": [
+      "g4d1",
+      "d6e5",
+      "g8f6"
+    ],
+    "solution": [
+      "d6e5"
+    ]
+  },
+  {
+    "id": "op-fried-001",
+    "kind": "choice",
+    "category": "opening",
+    "theme": "development",
+    "title": "El fegat fregit",
+    "fen": "r1bqkb1r/ppp2ppp/2n2n2/3Pp1N1/2B5/8/PPPP1PPP/RNBQK2R b KQkq - 0 5",
+    "objective": "Tria la millor jugada.",
+    "difficulty": 3,
+    "question": "Juguen les negres (defensa dels dos cavalls). Quina jugada és la millor?",
+    "hints": [
+      "Quina peça blanca fa més mal ara mateix?",
+      "L'alfil de c4 i el cavall de g5 apunten a f7.",
+      "Ataca l'alfil de c4 amb tempo."
+    ],
+    "explanation": "...Ca5 ataca l'alfil de c4 i treu la pressió sobre f7: és la línia principal i equilibrada. ...Cxd5?! permet Cxf7! (el fegat fregit) i el rei negre queda exposat. ...Ac5? deixa perdre el cavall de c6 després de dxc6.",
+    "concepts": [
+      "punt-feble-f7",
+      "desenvolupament"
+    ],
+    "tags": [
+      "obertura"
+    ],
+    "options": [
+      "c6a5",
+      "f6d5",
+      "f8c5"
+    ],
+    "solution": [
+      "c6a5"
+    ]
+  }
+]

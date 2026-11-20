@@ -18,6 +18,8 @@ import { gameStatus } from '@/lib/chess/game';
 import { useEngineState, useLiveAnalysis } from '@/lib/engine/useEngine';
 import { toWhitePov } from '@/lib/engine/uci';
 import { useData } from '@/state/DataProvider';
+import { CoachBox } from '@/components/coach/CoachBox';
+import { buildFacts, quickLines } from '@/lib/coach/facts';
 import type { MessageKey } from '@/i18n';
 
 function statusText(t: (k: MessageKey) => string, tree: MoveTree, id: string): string {
@@ -148,7 +150,7 @@ export function AnalysisPage() {
     setOrientation('white');
     setMessage({
       tone: errors.length ? 'bad' : 'ok',
-      text: `${parsed.length} partida${parsed.length > 1 ? 'es' : ''} carregada${parsed.length > 1 ? 'es' : ''}.` +
+      text: `${parsed.length} ${parsed.length > 1 ? 'partides carregades' : 'partida carregada'}.` +
         (errors.length ? ` ${errors.length} amb errors: ${errors.map((e) => `#${e.gameIndex} ${e.message}`).join('; ')}` : ''),
     });
   };
@@ -307,6 +309,19 @@ export function AnalysisPage() {
               </div>
             )}
           </Card>
+
+          <CoachBox
+            key={`analysis-coach`}
+            context={{ kind: 'position', fen }}
+            title="Pregunta a l'entrenador"
+            placeholder="Ex.: quin pla tinc aquí? Què amenaça el rival?"
+            actions={[{ label: 'Què he de mirar aquí?', mode: 'chat', text: 'Què hauria de mirar en aquesta posició? Guia\'m amb preguntes.', display: 'Què he de mirar aquí?' }]}
+            getFacts={async () => {
+              const lines = freshLines.length ? freshLines : await quickLines(fen, 16, 3);
+              const studentColor = orientation === 'white' ? 'w' : 'b';
+              return buildFacts({ fen, studentColor, level: 3, engineLines: lines, solutionRevealed: true });
+            }}
+          />
 
           <Card>
             <CardHeader className="pb-2"><CardTitle>Importa i exporta</CardTitle></CardHeader>

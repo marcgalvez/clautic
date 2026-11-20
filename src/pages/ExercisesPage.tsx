@@ -4,7 +4,7 @@ import { CheckCircle2, CircleDashed, ShieldCheck, XCircle } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { EXERCISES, UNVERIFIED_COUNT, VERIFICATION_META } from '@/lib/exercises/bank';
-import { CATEGORY_LABELS, difficultyLabel, themeLabel } from '@/lib/exercises/themes';
+import { difficultyLabel, themeLabel } from '@/lib/exercises/themes';
 import { useData } from '@/state/DataProvider';
 import { cn } from '@/lib/utils';
 import type { Attempt } from '@/lib/storage/types';
@@ -43,7 +43,7 @@ export function ExercisesPage() {
         <h1 className="text-2xl font-bold tracking-tight">Banc d'exercicis</h1>
         <p className="flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground">
           <ShieldCheck className="size-4 text-primary" />
-          {EXERCISES.length} exercicis de {CATEGORY_LABELS.tactics.toLowerCase()} validats amb chess.js i {VERIFICATION_META.engine} (profunditat {VERIFICATION_META.depth}).
+          {EXERCISES.length} exercicis validats amb chess.js i {VERIFICATION_META.engine} (profunditat {VERIFICATION_META.depth}).
           {UNVERIFIED_COUNT > 0 && <span className="text-warning"> {UNVERIFIED_COUNT} ocults per no estar verificats.</span>}
         </p>
       </div>
@@ -101,6 +101,28 @@ export function ExercisesPage() {
         })}
       </div>
       {list.length === 0 && <p className="text-sm text-muted-foreground">Cap exercici amb aquests filtres.</p>}
+
+      {data.customExercises.length > 0 && (
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold">De les teves partides</h2>
+          <p className="text-sm text-muted-foreground">Posicions on vas errar, convertides en exercicis quan Stockfish confirma que la solució és única.</p>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {data.customExercises.map((e) => {
+              const st = STATUS[statusOf(byExercise[e.id] ?? [])];
+              return (
+                <Link key={e.id} to={`/exercicis/${e.id}`} className="group">
+                  <Card className="h-full p-4 transition-all group-hover:-translate-y-0.5 group-hover:border-primary/50">
+                    <Badge variant="accent">{themeLabel(e.theme)}</Badge>
+                    <h3 className="mt-2 font-semibold">{e.title}</h3>
+                    <p className="text-sm text-muted-foreground">{e.objective}</p>
+                    <p className={cn('mt-3 flex items-center gap-1 text-xs', st.cls)}><st.icon className="size-3.5" /> {st.label}</p>
+                  </Card>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

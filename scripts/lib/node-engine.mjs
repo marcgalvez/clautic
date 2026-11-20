@@ -37,7 +37,7 @@ export function createEngine(flavor = 'lite-single') {
   }
 
   /** Returns the final line for each multipv at the requested depth. */
-  async function analyse(fen, { depth = 18, multipv = 3 } = {}) {
+  async function analyse(fen, { depth = 18, multipv = 3, searchmoves = null } = {}) {
     const lines = new Map();
     const collect = (l) => {
       const info = parseInfoLine(l);
@@ -49,7 +49,7 @@ export function createEngine(flavor = 'lite-single') {
     send(`position fen ${fen}`);
     send('isready');
     await waitFor((l) => l === 'readyok');
-    send(`go depth ${depth}`);
+    send(`go depth ${depth}${searchmoves ? ' searchmoves ' + searchmoves.join(' ') : ''}`);
     const bm = parseBestMove(await waitFor((l) => l.startsWith('bestmove')));
     listeners = listeners.filter((x) => x !== collect);
     return { bestmove: bm?.best ?? null, lines: [...lines.values()].sort((a, b) => a.multipv - b.multipv) };

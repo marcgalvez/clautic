@@ -12,6 +12,12 @@ export const THEME_LABELS: Record<string, string> = {
   'back-rank': 'Mat a la fila del darrere',
   'smothered-mate': 'Mat de la coça',
   combination: 'Combinacions',
+  'threat-detection': "Detecció d'amenaces",
+  opposition: 'Oposició',
+  'pawn-race': 'Curses de peons',
+  simplification: 'Simplificació',
+  'king-safety': 'Seguretat del rei',
+  development: 'Desenvolupament',
 };
 
 export const CATEGORY_LABELS: Record<string, string> = {

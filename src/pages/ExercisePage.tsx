@@ -1,7 +1,7 @@
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import { ExerciseSolver } from '@/components/exercise/ExerciseSolver';
-import { EXERCISES, getExercise } from '@/lib/exercises/bank';
+import { allExercises, getExercise } from '@/lib/exercises/bank';
 
 export function ExercisePage() {
   const { id } = useParams();
@@ -15,8 +15,9 @@ export function ExercisePage() {
       </div>
     );
   }
-  const idx = EXERCISES.findIndex((e) => e.id === exercise.id);
-  const nextEx = EXERCISES[(idx + 1) % EXERCISES.length];
+  const pool = allExercises();
+  const idx = pool.findIndex((e) => e.id === exercise.id);
+  const nextEx = pool[(idx + 1) % pool.length];
   return (
     <div className="space-y-4 animate-fade-in">
       <Link to="/exercicis" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">

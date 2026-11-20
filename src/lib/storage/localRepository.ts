@@ -13,6 +13,11 @@ export function migrate(raw: unknown): AppData {
     sessions: Array.isArray(d.sessions) ? d.sessions : [],
     reviews: Array.isArray(d.reviews) ? d.reviews : [],
     settings: { ...DEFAULT_SETTINGS, ...(d.settings ?? {}) },
+    diagnostics: Array.isArray(d.diagnostics) ? d.diagnostics : [],
+    externalRatings: Array.isArray(d.externalRatings) ? d.externalRatings : [],
+    games: Array.isArray(d.games) ? d.games : [],
+    customExercises: Array.isArray(d.customExercises) ? d.customExercises : [],
+    coachConversations: Array.isArray(d.coachConversations) ? d.coachConversations : [],
   };
 }
 

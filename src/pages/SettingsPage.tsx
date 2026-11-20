@@ -9,7 +9,7 @@ import { LOCALES } from '@/i18n';
 import { SESSION_MINUTES, type AppSettings, type Locale, type SessionMinutes } from '@/lib/storage/types';
 
 export function SettingsPage() {
-  const { data, setProfile, updateSettings, exportData, importData, resetAll, repositoryKind, t } = useData();
+  const { data, setProfile, updateSettings, exportData, importData, resetAll, repositoryKind, signOut, t } = useData();
   const profile = data.profile!;
   const [name, setName] = useState(profile.displayName);
   const [msg, setMsg] = useState<string | null>(null);
@@ -92,6 +92,9 @@ export function SettingsPage() {
           <div className="flex flex-wrap gap-2">
             <Button variant="outline" onClick={download}><Download /> Exporta (JSON)</Button>
             <Button variant="outline" onClick={() => fileRef.current?.click()}><Upload /> Importa</Button>
+            {signOut && (
+              <Button variant="outline" onClick={signOut}>{repositoryKind === 'supabase' ? 'Tanca la sessió' : 'Inicia sessió'}</Button>
+            )}
             <input ref={fileRef} type="file" accept="application/json" className="sr-only" onChange={(e) => e.target.files?.[0] && onImport(e.target.files[0])} />
             {!confirmReset ? (
               <Button variant="danger" onClick={() => setConfirmReset(true)}>Esborra totes les dades</Button>

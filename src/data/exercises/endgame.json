@@ -1,0 +1,105 @@
+[
+  {
+    "id": "end-kp-001",
+    "goal": "win",
+    "kind": "choice",
+    "category": "endgame",
+    "theme": "opposition",
+    "title": "El rei davant del peó",
+    "fen": "4k3/8/4K3/4P3/8/8/8/8 w - - 0 1",
+    "objective": "Guanya la partida.",
+    "difficulty": 2,
+    "question": "Quina jugada guanya?",
+    "hints": [
+      "El rei blanc ja és davant del peó. On ha de seguir per escortar-lo?",
+      "Si el rei blanc abandona la sisena fila, el rei negre li pren l'oposició.",
+      "El rei s'ha de quedar a la sisena fila, al costat del peó."
+    ],
+    "explanation": "Rd6 (o Rf6) manté el rei a la sisena fila i obliga el rei negre a cedir terreny: després de ...Rf7, e6+ i el peó corona. Si el rei blanc es retira (Rf5, Rd5), les negres prenen l'oposició i la partida és taules. Regla pràctica: amb el rei a la sisena fila davant del peó, el final està guanyat.",
+    "concepts": [
+      "oposicio",
+      "rei-actiu"
+    ],
+    "tags": [
+      "finals",
+      "rei-i-peo"
+    ],
+    "options": [
+      "e6d6",
+      "e6f5",
+      "e6d5"
+    ],
+    "solution": [
+      "e6d6"
+    ]
+  },
+  {
+    "id": "end-kp-002",
+    "goal": "win",
+    "kind": "choice",
+    "category": "endgame",
+    "theme": "opposition",
+    "title": "Les caselles clau",
+    "fen": "8/8/8/3k4/8/8/2KP4/8 w - - 0 1",
+    "objective": "Guanya la partida.",
+    "difficulty": 3,
+    "question": "Quina jugada guanya?",
+    "hints": [
+      "En els finals de rei i peó, qui ha d'avançar primer: el rei o el peó?",
+      "El rei blanc ha d'arribar a les caselles clau davant del peó (c4, d4, e4).",
+      "Rd3 pren l'oposició i prepara l'entrada del rei."
+    ],
+    "explanation": "Rd3 pren l'oposició: el rei negre ha de cedir i el blanc arriba a una casella clau (c4 o e4) per davant del peó. Avançar el peó massa d'hora (d4?) permet ...Rxd4, i Rc3? deixa l'oposició a les negres: tots dos són taules. Primer el rei, després el peó.",
+    "concepts": [
+      "oposicio",
+      "caselles-clau",
+      "rei-actiu"
+    ],
+    "tags": [
+      "finals",
+      "rei-i-peo"
+    ],
+    "options": [
+      "c2d3",
+      "d2d4",
+      "c2c3"
+    ],
+    "solution": [
+      "c2d3"
+    ]
+  },
+  {
+    "id": "end-square-001",
+    "kind": "choice",
+    "category": "endgame",
+    "theme": "pawn-race",
+    "title": "La regla del quadrat",
+    "fen": "k7/8/8/p7/8/8/8/5K2 w - - 0 1",
+    "objective": "Fes taules.",
+    "goal": "draw",
+    "difficulty": 2,
+    "question": "Quina jugada atura el peó?",
+    "hints": [
+      "Pots aturar el peó amb el rei? Imagina un quadrat entre el peó i la casella de coronació.",
+      "El quadrat del peó d'a5 va d'a5 a e1. El rei ha d'entrar-hi.",
+      "Només una casella del quadrat és a l'abast del rei: e2."
+    ],
+    "explanation": "El quadrat del peó d'a5 té els vèrtexs a5, e5, e1 i a1. Si el rei hi pot entrar, atrapa el peó. Re2 hi entra i arriba a temps (Rd3, Rc3, Rb2). Rf2 o Rg2 queden fora del quadrat i el peó corona. Aquesta regla estalvia calcular jugada a jugada.",
+    "concepts": [
+      "regla-quadrat",
+      "calcul-curses"
+    ],
+    "tags": [
+      "finals",
+      "rei-i-peo"
+    ],
+    "options": [
+      "f1e2",
+      "f1f2",
+      "f1g2"
+    ],
+    "solution": [
+      "f1e2"
+    ]
+  }
+]

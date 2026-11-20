@@ -13,7 +13,7 @@ import { Chess } from 'chess.js';
 import { createEngine } from './lib/node-engine.mjs';
 import { winPercent, negate } from '../src/lib/engine/uci.ts';
 import { exerciseFingerprint } from '../src/lib/hash.ts';
-import { validateExerciseRules } from '../src/lib/exercises/validate.ts';
+import { validateExerciseRules, flipTurn, exerciseGoal } from '../src/lib/exercises/validate.ts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dir = join(root, 'src/data/exercises');
@@ -21,6 +21,29 @@ const depthArg = process.argv.indexOf('--depth');
 const DEPTH = depthArg > 0 ? Number(process.argv[depthArg + 1]) : 20;
 /** Minimum expected-score gap (0-100) between the solution and any non-accepted move. */
 const MIN_GAP = 15;
+/** Choice/threat options are hand-picked candidates: a smaller but clear gap is required. */
+const MIN_GAP_CHOICE = 8;
+
+async function verifyChoice(ex, problems, plies) {
+  const fen = ex.kind === 'threat' ? flipTurn(ex.fen) : ex.fen;
+  const scored = [];
+  for (const opt of ex.options) {
+    const { lines } = await engine.analyse(fen, { depth: DEPTH, multipv: 1, searchmoves: [opt] });
+    if (!lines[0]) { problems.push(`option ${opt}: no engine line`); return; }
+    scored.push({ move: opt, score: lines[0].score, win: winPercent(lines[0].score) });
+  }
+  plies.push({ options: scored.map(({ move, score }) => ({ move, score })) });
+  const sol = scored.find((o) => o.move === ex.solution[0]);
+  for (const o of scored) {
+    if (o === sol) continue;
+    const gap = sol.win - o.win;
+    const mateTie = sol.score.type === 'mate' && o.score.type === 'mate' && o.score.value > 0 && o.score.value <= sol.score.value;
+    if (gap < MIN_GAP_CHOICE || mateTie) problems.push(`option ${o.move} is not clearly worse than ${sol.move} (${JSON.stringify(o.score)} vs ${JSON.stringify(sol.score)})`);
+  }
+  const goal = exerciseGoal(ex);
+  if (ex.kind === 'choice' && ex.goal === 'win' && sol.win < 75) problems.push(`solution is not clearly winning (${JSON.stringify(sol.score)})`);
+  if (ex.kind === 'choice' && goal === 'draw' && Math.abs(sol.win - 50) > 15) problems.push(`solution does not hold the draw (${JSON.stringify(sol.score)})`);
+}
 
 const files = readdirSync(dir).filter((f) => f.endsWith('.json') && f !== 'verification.json');
 const exercises = files.flatMap((f) => JSON.parse(readFileSync(join(dir, f), 'utf8')));
@@ -34,9 +57,11 @@ let failures = 0;
 for (const ex of exercises) {
   const problems = validateExerciseRules(ex);
   const plies = [];
-  if (problems.length === 0) {
+  if (problems.length === 0 && (ex.kind === 'choice' || ex.kind === 'threat')) {
+    await verifyChoice(ex, problems, plies);
+  } else if (problems.length === 0) {
     const game = new Chess(ex.fen);
-    const isMateObjective = /\bmat en \d/i.test(ex.objective);
+    const isMateObjective = exerciseGoal(ex) === 'mate';
     for (let i = 0; i < ex.solution.length; i++) {
       const uci = ex.solution[i];
       const fen = game.fen();
@@ -79,7 +104,9 @@ for (const ex of exercises) {
       } else {
         const { lines } = await engine.analyse(game.fen(), { depth: DEPTH, multipv: 1 });
         const s = solverToMove ? lines[0].score : negate(lines[0].score);
-        if (winPercent(s) < 75) problems.push(`final position not clearly winning for solver (${JSON.stringify(s)})`);
+        const goal = exerciseGoal(ex);
+        if (goal === 'win' && winPercent(s) < 75) problems.push(`final position not clearly winning for solver (${JSON.stringify(s)})`);
+        if (goal === 'draw' && Math.abs(winPercent(s) - 50) > 15) problems.push(`final position does not hold the draw (${JSON.stringify(s)})`);
         plies.push({ final: true, scoreForSolver: s });
       }
     }

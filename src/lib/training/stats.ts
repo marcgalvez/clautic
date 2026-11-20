@@ -81,3 +81,46 @@ export function dailyQuality(attempts: Attempt[]): { day: string; avgQuality: nu
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([day, v]) => ({ day, avgQuality: v.sum / v.n, n: v.n }));
 }
+
+/** ISO week start (Monday) as YYYY-MM-DD. */
+export function weekKey(iso: string): string {
+  const d = new Date(iso);
+  const day = (d.getUTCDay() + 6) % 7;
+  d.setUTCDate(d.getUTCDate() - day);
+  return d.toISOString().slice(0, 10);
+}
+
+/** Weekly average of a metric, oldest first. */
+export function weekly(attempts: Attempt[], metric: (a: Attempt) => number): { week: string; value: number; n: number }[] {
+  const acc: Record<string, { sum: number; n: number }> = {};
+  for (const a of attempts) {
+    const k = weekKey(a.startedAt);
+    acc[k] ??= { sum: 0, n: 0 };
+    acc[k].sum += metric(a);
+    acc[k].n++;
+  }
+  return Object.entries(acc)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([week, v]) => ({ week, value: v.sum / v.n, n: v.n }));
+}
+
+/**
+ * Recurring errors in training: concepts with at least two attempts that were
+ * not solved cleanly, in at least two different exercises.
+ */
+export function recurringTrainingErrors(attempts: Attempt[]): { conceptId: string; errors: number; exercises: number }[] {
+  const acc = new Map<string, { errors: number; ex: Set<string> }>();
+  for (const a of attempts) {
+    if (a.outcome === 'solved') continue;
+    for (const c of a.concepts) {
+      const v = acc.get(c) ?? { errors: 0, ex: new Set<string>() };
+      v.errors++;
+      v.ex.add(a.exerciseId);
+      acc.set(c, v);
+    }
+  }
+  return [...acc.entries()]
+    .filter(([, v]) => v.errors >= 2 && v.ex.size >= 2)
+    .map(([conceptId, v]) => ({ conceptId, errors: v.errors, exercises: v.ex.size }))
+    .sort((a, b) => b.errors - a.errors);
+}

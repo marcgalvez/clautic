@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import { DataProvider } from '@/state/DataProvider';
+import { AuthGate } from '@/state/AuthGate';
 import { App } from './App';
 import './index.css';
 
@@ -11,9 +12,13 @@ const Router = import.meta.env.VITE_ROUTER === 'memory' ? MemoryRouter : Browser
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Router>
-      <DataProvider>
-        <App />
-      </DataProvider>
+      <AuthGate>
+        {(repo, key, signOut) => (
+          <DataProvider key={key} repository={repo} signOut={signOut}>
+            <App />
+          </DataProvider>
+        )}
+      </AuthGate>
     </Router>
   </StrictMode>,
 );

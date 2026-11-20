@@ -9,6 +9,14 @@ export function fnv1a(input: string): string {
 }
 
 /** Fingerprint of the chess content of an exercise (position + solution line). */
-export function exerciseFingerprint(ex: { fen: string; solution: string[]; alternatives?: Record<string, string[]> }): string {
-  return fnv1a(`${ex.fen}|${ex.solution.join(' ')}|${JSON.stringify(ex.alternatives ?? {})}`);
+export function exerciseFingerprint(ex: {
+  fen: string;
+  solution: string[];
+  alternatives?: Record<string, string[]>;
+  kind?: string;
+  options?: string[];
+  goal?: string;
+}): string {
+  const extra = ex.kind && ex.kind !== 'move' ? `|${ex.kind}|${(ex.options ?? []).join(' ')}` : '';
+  return fnv1a(`${ex.fen}|${ex.solution.join(' ')}|${JSON.stringify(ex.alternatives ?? {})}${extra}${ex.goal ? `|${ex.goal}` : ''}`);
 }

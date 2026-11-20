@@ -1,5 +1,5 @@
 /** Pedagogical concepts (competencies) with Catalan labels. */
-export const CONCEPTS: Record<string, { label: string; area: 'tactics' | 'calculation' | 'threats' | 'opening' }> = {
+export const CONCEPTS: Record<string, { label: string; area: 'tactics' | 'calculation' | 'threats' | 'opening' | 'endgame' | 'positional' }> = {
   'peces-indefenses': { label: 'Detectar peces indefenses', area: 'threats' },
   'revisio-captures': { label: 'Revisar totes les captures', area: 'calculation' },
   'revisio-escacs': { label: 'Revisar tots els escacs', area: 'calculation' },
@@ -20,6 +20,16 @@ export const CONCEPTS: Record<string, { label: string; area: 'tactics' | 'calcul
   sacrifici: { label: 'Sacrificis', area: 'calculation' },
   desviacio: { label: 'Desviació', area: 'tactics' },
   atraccio: { label: 'Atracció', area: 'tactics' },
+  oposicio: { label: 'Oposició', area: 'endgame' },
+  'caselles-clau': { label: 'Caselles clau', area: 'endgame' },
+  'rei-actiu': { label: 'Rei actiu al final', area: 'endgame' },
+  'regla-quadrat': { label: 'Regla del quadrat', area: 'endgame' },
+  'calcul-curses': { label: 'Curses de peons', area: 'calculation' },
+  simplificar: { label: 'Simplificar quan es guanya', area: 'positional' },
+  'aire-al-rei': { label: 'Fer aire al rei', area: 'positional' },
+  'trampes-obertura': { label: "Trampes d'obertura", area: 'opening' },
+  desenvolupament: { label: 'Desenvolupament', area: 'opening' },
+  'deteccio-amenaces': { label: 'Detectar amenaces', area: 'threats' },
 };
 
 export function conceptLabel(id: string): string {

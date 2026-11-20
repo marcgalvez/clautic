@@ -10,6 +10,10 @@ const ExercisesPage = lazy(() => import('@/pages/ExercisesPage').then((m) => ({ 
 const ExercisePage = lazy(() => import('@/pages/ExercisePage').then((m) => ({ default: m.ExercisePage })));
 const AnalysisPage = lazy(() => import('@/pages/AnalysisPage').then((m) => ({ default: m.AnalysisPage })));
 const ProgressPage = lazy(() => import('@/pages/ProgressPage').then((m) => ({ default: m.ProgressPage })));
+const DiagnosticPage = lazy(() => import('@/pages/DiagnosticPage').then((m) => ({ default: m.DiagnosticPage })));
+const ProfilePage = lazy(() => import('@/pages/ProfilePage').then((m) => ({ default: m.ProfilePage })));
+const GamesPage = lazy(() => import('@/pages/GamesPage').then((m) => ({ default: m.GamesPage })));
+const GamePage = lazy(() => import('@/pages/GamePage').then((m) => ({ default: m.GamePage })));
 const SettingsPage = lazy(() => import('@/pages/SettingsPage').then((m) => ({ default: m.SettingsPage })));
 
 export function App() {
@@ -37,6 +41,10 @@ export function App() {
         <Route path="analisi" element={<AnalysisPage />} />
         <Route path="progres" element={<ProgressPage />} />
         <Route path="configuracio" element={<SettingsPage />} />
+        <Route path="diagnostic" element={<DiagnosticPage />} />
+        <Route path="perfil" element={<ProfilePage />} />
+        <Route path="partides" element={<GamesPage />} />
+        <Route path="partides/:id" element={<GamePage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

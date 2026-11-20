@@ -10,9 +10,10 @@ import { Textarea } from '@/components/ui/input';
 import { ExerciseSolver } from '@/components/exercise/ExerciseSolver';
 import { PrincipleRecall, RecallQuiz, UnderstandStep } from '@/components/training/LessonSteps';
 import { useData } from '@/state/DataProvider';
+import { usePlanInputs } from '@/state/usePlanInputs';
 import { planSession, type SessionBlock, type SessionPlan } from '@/lib/training/sessionPlan';
 import { applySessionToReviews } from '@/lib/training/spacedRepetition';
-import { EXERCISES, getExercise } from '@/lib/exercises/bank';
+import { allExercises, getExercise } from '@/lib/exercises/bank';
 import { LESSONS, getLesson } from '@/data/lessons';
 import { conceptLabel } from '@/data/concepts';
 import { SESSION_MINUTES, type Attempt, type RecallAnswer, type SessionMinutes, type TrainingSession } from '@/lib/storage/types';
@@ -67,6 +68,7 @@ function stepsFor(plan: SessionPlan): Step[] {
 
 export function TrainPage() {
   const { data, upsertSession } = useData();
+  const planInputs = usePlanInputs();
   const [minutes, setMinutes] = useState<SessionMinutes>(data.profile!.sessionMinutes);
   const [session, setSession] = useState<TrainingSession | null>(null);
   const [plan, setPlan] = useState<SessionPlan | null>(null);
@@ -75,8 +77,8 @@ export function TrainPage() {
   const sessionRef = useRef<TrainingSession | null>(null);
 
   const preview = useMemo(
-    () => planSession({ minutes, lessons: LESSONS, exercises: EXERCISES, attempts: data.attempts, sessions: data.sessions, reviews: data.reviews }),
-    [minutes, data.attempts, data.sessions, data.reviews],
+    () => planSession({ minutes, lessons: LESSONS, exercises: allExercises(), attempts: data.attempts, sessions: data.sessions, reviews: data.reviews, baseDifficulty: planInputs.baseDifficulty, externalWeakConcepts: planInputs.externalWeakConcepts }),
+    [minutes, data.attempts, data.sessions, data.reviews, planInputs],
   );
 
   const steps = useMemo(() => (plan ? stepsFor(plan) : []), [plan]);

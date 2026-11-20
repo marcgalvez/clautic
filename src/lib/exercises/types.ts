@@ -12,12 +12,27 @@ export type TacticalTheme =
   | 'mate'
   | 'back-rank'
   | 'smothered-mate'
-  | 'combination';
+  | 'combination'
+  | 'threat-detection';
 
 export type Difficulty = 1 | 2 | 3 | 4 | 5;
 
+/**
+ * - move: play the solution on the board (default).
+ * - choice: pick the best of several candidate moves (engine-verified gap).
+ * - threat: identify what the OPPONENT threatens (verified by passing the move to them).
+ */
+export type ExerciseKind = 'move' | 'choice' | 'threat';
+
 export interface Exercise {
   id: string;
+  kind?: ExerciseKind;
+  /** Candidate moves (UCI) for choice/threat exercises. For threat, they are opponent moves. */
+  options?: string[];
+  /** Question shown for choice/threat exercises. */
+  question?: string;
+  /** Overrides the goal inferred from the objective text. */
+  goal?: 'win' | 'draw' | 'mate';
   category: ExerciseCategory;
   theme: TacticalTheme | string;
   title: string;
@@ -38,6 +53,10 @@ export interface Exercise {
   /** Pedagogical concept ids trained by the exercise. */
   concepts: string[];
   tags: string[];
+  /** Exercises generated from the user's games. */
+  origin?: { kind: 'game'; gameId: string; ply: number };
+  /** In-app verification record for generated exercises (built-in ones use verification.json). */
+  inlineVerification?: { engine: string; depth: number; bestScore: string; secondScore: string | null; verifiedAt: string };
 }
 
 export interface VerificationEntry {

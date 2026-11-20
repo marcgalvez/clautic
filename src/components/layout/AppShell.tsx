@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import { BarChart3, BookOpenCheck, Dumbbell, House, Moon, Puzzle, Settings, Sun } from 'lucide-react';
+import { BarChart3, BookOpenCheck, Dumbbell, House, Moon, Puzzle, Settings, Sun, Swords, UserRound } from 'lucide-react';
 import { useData } from '@/state/DataProvider';
 import { cn } from '@/lib/utils';
 import type { MessageKey } from '@/i18n';
@@ -9,6 +9,7 @@ const NAV: { to: string; key: MessageKey; icon: typeof House }[] = [
   { to: '/', key: 'nav.home', icon: House },
   { to: '/entrenar', key: 'nav.train', icon: Dumbbell },
   { to: '/exercicis', key: 'nav.exercises', icon: Puzzle },
+  { to: '/partides', key: 'nav.games', icon: Swords },
   { to: '/analisi', key: 'nav.analysis', icon: BookOpenCheck },
   { to: '/progres', key: 'nav.progress', icon: BarChart3 },
 ];
@@ -57,6 +58,12 @@ export function AppShell() {
             </NavLink>
           ))}
         </nav>
+        <NavLink
+          to="/perfil"
+          className={({ isActive }) => cn('mt-4 flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium', isActive ? 'bg-secondary text-secondary-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground')}
+        >
+          <UserRound className="size-4" /> {t('nav.profile')}
+        </NavLink>
         <div className="mt-auto flex items-center justify-between">
           <NavLink to="/configuracio" className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground">
             <Settings className="size-4" /> {t('nav.settings')}
@@ -70,6 +77,9 @@ export function AppShell() {
         <Brand />
         <div className="flex items-center gap-1">
           <ThemeToggle />
+          <NavLink to="/perfil" aria-label={t('nav.profile')} className="flex size-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted">
+            <UserRound className="size-4" />
+          </NavLink>
           <NavLink to="/configuracio" aria-label={t('nav.settings')} className="flex size-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted">
             <Settings className="size-4" />
           </NavLink>
@@ -85,7 +95,7 @@ export function AppShell() {
 
       {/* Bottom nav (mobile/tablet) */}
       <nav
-        className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-border bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-6 border-t border-border bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden"
         aria-label="Navegació principal"
       >
         {NAV.map(({ to, key, icon: Icon }) => (
@@ -94,7 +104,7 @@ export function AppShell() {
             to={to}
             end={to === '/'}
             className={({ isActive }) =>
-              cn('flex flex-col items-center gap-0.5 py-2 text-[11px] font-medium', isActive ? 'text-primary' : 'text-muted-foreground')
+              cn('flex flex-col items-center gap-0.5 py-2 text-[10px] font-medium sm:text-[11px]', isActive ? 'text-primary' : 'text-muted-foreground')
             }
           >
             <Icon className="size-5" />

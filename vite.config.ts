@@ -10,6 +10,10 @@ export default defineConfig({
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },
   worker: { format: 'es' },
+  server: {
+    // Local coach server (npm run coach). In production the client calls the Supabase Edge Function.
+    proxy: { '/api/coach': 'http://localhost:8787' },
+  },
   test: {
     globals: true,
     environment: 'jsdom',

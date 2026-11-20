@@ -6,6 +6,8 @@ export const ca = {
   'nav.exercises': 'Exercicis',
   'nav.analysis': 'Tauler i anàlisi',
   'nav.progress': 'Progrés',
+  'nav.games': 'Partides',
+  'nav.profile': 'Perfil',
   'nav.settings': 'Configuració',
   'theme.light': 'Clar',
   'theme.dark': 'Fosc',

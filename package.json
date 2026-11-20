@@ -11,9 +11,11 @@
     "test:watch": "vitest",
     "typecheck": "tsc -b --noEmit",
     "verify:exercises": "node scripts/verify-exercises.mjs",
-    "postinstall": "node scripts/copy-stockfish.mjs"
+    "postinstall": "node scripts/copy-stockfish.mjs",
+    "coach": "node --env-file-if-exists=.env server/coach-dev.ts"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.119.2",
     "chess.js": "^1.4.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -22,10 +24,11 @@
     "react-chessboard": "^5.12.1",
     "react-dom": "^19.3.1",
     "react-router-dom": "^7.18.6",
-    "tailwind-merge": "^3.7.1",
-    "stockfish": "^19.0.1"
+    "stockfish": "^19.0.1",
+    "tailwind-merge": "^3.7.1"
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "^1.12.0",
     "@tailwindcss/vite": "^4.3.5",
     "@testing-library/jest-dom": "^8.0.0",
     "@testing-library/react": "^16.3.3",

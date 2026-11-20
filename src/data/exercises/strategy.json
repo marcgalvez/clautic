@@ -1,0 +1,67 @@
+[
+  {
+    "id": "str-simplify-001",
+    "kind": "choice",
+    "category": "strategy",
+    "theme": "simplification",
+    "title": "Canvia i guanya",
+    "fen": "3r4/5k2/8/2P5/2K5/8/8/3R4 w - - 0 1",
+    "objective": "Tria el millor pla.",
+    "difficulty": 3,
+    "question": "Quina jugada és la més clara?",
+    "hints": [
+      "Quan tens avantatge, quin tipus de final és més fàcil de guanyar?",
+      "Compara el final de torres amb el final de rei i peó que quedaria després del canvi.",
+      "El rei negre és massa lluny del peó de c5."
+    ],
+    "explanation": "Txd8 canvia les torres i deixa un final de rei i peó on el rei negre no arriba a temps per aturar el peó de c5: guanyat. Mantenir les torres (Tf1+) conserva avantatge però dona contrajoc al rival. Kb5?? penja la torre. Quan guanyes, simplifica cap a finals que saps guanyar.",
+    "concepts": [
+      "simplificar"
+    ],
+    "tags": [
+      "estratègia",
+      "finals"
+    ],
+    "options": [
+      "d1d8",
+      "d1f1",
+      "c4b5"
+    ],
+    "solution": [
+      "d1d8"
+    ]
+  },
+  {
+    "id": "str-luft-001",
+    "kind": "choice",
+    "category": "strategy",
+    "theme": "king-safety",
+    "title": "Abans d'atacar, protegeix-te",
+    "fen": "1r4k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1",
+    "objective": "Tria el millor pla.",
+    "difficulty": 2,
+    "question": "Quina jugada és la millor?",
+    "hints": [
+      "Abans de buscar activitat, què pot fer el rival a la teva primera fila?",
+      "Si la torre blanca surt de la primera fila, qui defensa el rei?",
+      "Una jugada de peó dona aire al rei."
+    ],
+    "explanation": "h3 dona una casella de fugida al rei. Si la torre surt de la primera fila (Td7? o Td2?), ...Tb1+ guanya: Td1 Txd1 és mat. Fer aire al rei és una jugada posicional que prevé el mat a la fila del darrere.",
+    "concepts": [
+      "aire-al-rei",
+      "mat-fila-darrere"
+    ],
+    "tags": [
+      "estratègia",
+      "seguretat-del-rei"
+    ],
+    "options": [
+      "h2h3",
+      "d1d7",
+      "d1d2"
+    ],
+    "solution": [
+      "h2h3"
+    ]
+  }
+]

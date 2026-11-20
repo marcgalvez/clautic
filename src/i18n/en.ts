@@ -8,6 +8,8 @@ export const en: Partial<Record<MessageKey, string>> = {
   'nav.exercises': 'Exercises',
   'nav.analysis': 'Board & analysis',
   'nav.progress': 'Progress',
+  'nav.games': 'Games',
+  'nav.profile': 'Profile',
   'nav.settings': 'Settings',
   'theme.light': 'Light',
   'theme.dark': 'Dark',
