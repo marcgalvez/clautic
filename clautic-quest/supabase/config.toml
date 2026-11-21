@@ -1,0 +1,3 @@
+# Configuració mínima per a la integració GitHub ↔ Supabase.
+# Les migracions són a supabase/migrations/ i s’apliquen en ordre.
+project_id = "clautic-quest"

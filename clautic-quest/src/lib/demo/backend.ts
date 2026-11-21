@@ -3,10 +3,11 @@
 import { PGlite, type Transaction } from '@electric-sql/pglite';
 import { pgcrypto } from '@electric-sql/pglite/contrib/pgcrypto';
 import authStub from '../../../dev/auth_stub.sql?raw';
+import demoData from '../../../dev/demo_data.sql?raw';
 
 const migrations = import.meta.glob('../../../supabase/migrations/*.sql', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
 export const DEMO_DB = 'clautic-quest-demo';
-const VERSION = '1';
+const VERSION = '2';
 
 let dbPromise: Promise<PGlite> | null = null;
 const listeners = new Set<(s: string) => void>();
@@ -21,6 +22,7 @@ async function open(): Promise<PGlite> {
     status('Construint ClauTIC City (només el primer cop)…');
     await db.exec(authStub);
     for (const k of Object.keys(migrations).sort()) await db.exec(migrations[k]);
+    await db.exec(demoData);
     await db.exec(`insert into public.settings (key, value) values ('demo_version', '"${VERSION}"') on conflict (key) do update set value = excluded.value`);
   }
   status('');
