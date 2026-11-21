@@ -1,0 +1,680 @@
+// Esquema de dades de la plataforma de reserves (multiempresa).
+// Regla d'or: tota taula amb dades d'una empresa porta `organizationId`
+// i totes les consultes del servidor hi filtren (vegeu src/lib/auth/guards.ts).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────── Usuaris i sessions ───────────────────────────
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  locale       String    @default("ca")
+  isSuperAdmin Boolean   @default(false)
+  disabled     Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  lastLoginAt  DateTime?
+
+  sessions    Session[]
+  memberships OrganizationMember[]
+  auditLogs   AuditLog[]
+}
+
+model Session {
+  // Guardem el hash SHA-256 del token; el token en clar només viu a la galeta.
+  id        String   @id
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  ip        String?
+  userAgent String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ─────────────────────────── Empreses ───────────────────────────
+
+enum OrganizationStatus {
+  PENDING_APPROVAL // registrada, esperant que el superadministrador doni accés
+  ACTIVE
+  SUSPENDED
+}
+
+model Organization {
+  id              String             @id @default(cuid())
+  slug            String             @unique
+  name            String
+  status          OrganizationStatus @default(PENDING_APPROVAL)
+  statusReason    String?
+  approvedAt      DateTime?
+  approvedById    String?
+  contactEmail    String
+  contactPhone    String?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  settings          OrganizationSettings?
+  subscription      Subscription?
+  members           OrganizationMember[]
+  professionals     Professional[]
+  services          Service[]
+  businessHours     BusinessHours[]
+  schedules         ProfessionalSchedule[]
+  timeOff           TimeOff[]
+  googleConnections GoogleCalendarConnection[]
+  googleWatches     GoogleCalendarWatch[]
+  busyCaches        CalendarBusyCache[]
+  customers         Customer[]
+  consents          ConsentRecord[]
+  appointments      Appointment[]
+  appointmentEvents AppointmentEvent[]
+  calendarSyncJobs  CalendarSyncJob[]
+  reminderJobs      ReminderJob[]
+  whatsappMessages  WhatsAppMessage[]
+  whatsappSenders   WhatsAppSender[]
+  integrationErrors IntegrationErrorLog[]
+  auditLogs         AuditLog[]
+  professionalSvcs  ProfessionalService[]
+}
+
+// Accés comercial. Preparat per a Stripe (externalProvider/externalId) però,
+// de moment, el superadministrador el gestiona a mà quan l'empresa paga.
+enum PlanCode {
+  TRIAL
+  BASIC
+  PRO
+}
+
+enum SubscriptionStatus {
+  PENDING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  EXPIRED
+}
+
+model Subscription {
+  id               String             @id @default(cuid())
+  organizationId   String             @unique
+  plan             PlanCode           @default(BASIC)
+  status           SubscriptionStatus @default(PENDING)
+  purchasedAt      DateTime?
+  startsAt         DateTime?
+  endsAt           DateTime? // null = sense data de fi
+  amountCents      Int?
+  currency         String             @default("EUR")
+  paymentReference String?
+  notes            String?
+  externalProvider String? // "stripe" en el futur
+  externalId       String?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+enum MemberRole {
+  OWNER
+  ADMIN
+  PROFESSIONAL
+}
+
+model OrganizationMember {
+  id             String     @id @default(cuid())
+  organizationId String
+  userId         String
+  role           MemberRole
+  professionalId String?    @unique
+  createdAt      DateTime   @default(now())
+
+  organization Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  professional Professional? @relation(fields: [professionalId], references: [id], onDelete: SetNull)
+
+  @@unique([organizationId, userId])
+  @@index([userId])
+}
+
+enum EmailRequirement {
+  HIDDEN
+  OPTIONAL
+  REQUIRED
+}
+
+enum ShortNoticeReminderPolicy {
+  SKIP // per defecte: si es reserva amb < 24 h no s'envia el de 24 h
+  SEND_IMMEDIATELY // s'envia en el moment de reservar (si queden > 2 h)
+}
+
+enum GoogleCancelMode {
+  DELETE
+  MARK_CANCELLED
+}
+
+model OrganizationSettings {
+  organizationId          String                    @id
+  timezone                String                    @default("Europe/Madrid")
+  defaultLocale           String                    @default("ca")
+  phone                   String?
+  address                 String?
+  logoUrl                 String?
+  accentColor             String                    @default("#0f766e")
+  minNoticeMinutes        Int                       @default(120)
+  maxAdvanceDays          Int                       @default(60)
+  slotStepMinutes         Int                       @default(15)
+  emailRequirement        EmailRequirement          @default(OPTIONAL)
+  allowCustomerCancel     Boolean                   @default(true)
+  allowCustomerReschedule Boolean                   @default(true)
+  cancelDeadlineHours     Int                       @default(12)
+  cancellationPolicy      String?
+  bookingTerms            String?
+  privacyPolicy           String?
+  privacyContactEmail     String?
+  remindersEnabled        Boolean                   @default(true)
+  reminderHoursBefore     Int                       @default(24)
+  shortNoticePolicy       ShortNoticeReminderPolicy @default(SKIP)
+  googleCancelMode        GoogleCancelMode          @default(DELETE)
+  dataRetentionMonths     Int                       @default(24)
+  whatsappSenderId        String? // null = número de la plataforma
+  updatedAt               DateTime                  @updatedAt
+
+  organization   Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  whatsappSender WhatsAppSender? @relation(fields: [whatsappSenderId], references: [id], onDelete: SetNull)
+}
+
+// ─────────────────────────── Catàleg i horaris ───────────────────────────
+
+model Professional {
+  id                    String   @id @default(cuid())
+  organizationId        String
+  name                  String
+  email                 String?
+  color                 String   @default("#0f766e")
+  active                Boolean  @default(true)
+  sortOrder             Int      @default(0)
+  canManageAvailability Boolean  @default(false)
+  // Calendari de Google on s'escriuen les seves cites i d'on es llegeix l'ocupació.
+  googleConnectionId    String?
+  googleCalendarId      String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  organization     Organization              @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  googleConnection GoogleCalendarConnection? @relation(fields: [googleConnectionId], references: [id], onDelete: SetNull)
+  services         ProfessionalService[]
+  schedules        ProfessionalSchedule[]
+  timeOff          TimeOff[]
+  appointments     Appointment[]
+  member           OrganizationMember?
+
+  @@index([organizationId])
+}
+
+model Service {
+  id                  String   @id @default(cuid())
+  organizationId      String
+  name                String
+  description         String?
+  durationMinutes     Int
+  priceCents          Int?
+  bufferBeforeMinutes Int      @default(0)
+  bufferAfterMinutes  Int      @default(0)
+  active              Boolean  @default(true)
+  sortOrder           Int      @default(0)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  organization  Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  professionals ProfessionalService[]
+  appointments  Appointment[]
+
+  @@index([organizationId])
+}
+
+model ProfessionalService {
+  organizationId String
+  professionalId String
+  serviceId      String
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  professional Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+  service      Service      @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@id([professionalId, serviceId])
+  @@index([organizationId])
+}
+
+// Franges en minuts des de mitjanit (hora local del centre). weekday: 1=dl … 7=dg (ISO).
+model BusinessHours {
+  id             String @id @default(cuid())
+  organizationId String
+  weekday        Int
+  startMinute    Int
+  endMinute      Int
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, weekday])
+}
+
+model ProfessionalSchedule {
+  id             String @id @default(cuid())
+  organizationId String
+  professionalId String
+  weekday        Int
+  startMinute    Int
+  endMinute      Int
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  professional Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+
+  @@index([professionalId, weekday])
+}
+
+enum TimeOffType {
+  VACATION
+  HOLIDAY
+  BLOCK
+}
+
+// professionalId null = afecta tot el centre (festiu, tancament).
+model TimeOff {
+  id             String      @id @default(cuid())
+  organizationId String
+  professionalId String?
+  type           TimeOffType @default(BLOCK)
+  startsAt       DateTime
+  endsAt         DateTime
+  reason         String?
+  createdAt      DateTime    @default(now())
+
+  organization Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  professional Professional? @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, startsAt])
+}
+
+// ─────────────────────────── Google Calendar ───────────────────────────
+
+enum ConnectionStatus {
+  ACTIVE
+  ERROR
+  REVOKED
+}
+
+model GoogleCalendarConnection {
+  id               String           @id @default(cuid())
+  organizationId   String
+  googleEmail      String
+  googleSub        String
+  accessTokenEnc   String // AES-256-GCM
+  refreshTokenEnc  String // AES-256-GCM
+  accessExpiresAt  DateTime
+  scopes           String
+  status           ConnectionStatus @default(ACTIVE)
+  lastError        String?
+  lastErrorAt      DateTime?
+  createdById      String?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  organization  Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  professionals Professional[]
+  watches       GoogleCalendarWatch[]
+  busyCaches    CalendarBusyCache[]
+
+  @@unique([organizationId, googleSub])
+}
+
+// Canals de notificacions push (events.watch).
+model GoogleCalendarWatch {
+  id             String   @id @default(cuid())
+  organizationId String
+  connectionId   String
+  calendarId     String
+  channelId      String   @unique
+  resourceId     String
+  tokenHash      String
+  expiresAt      DateTime
+  createdAt      DateTime @default(now())
+
+  organization Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  connection   GoogleCalendarConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+
+  @@index([connectionId, calendarId])
+}
+
+// Memòria cau dels intervals ocupats (FreeBusy). La invaliden les notificacions push
+// i la reconciliació periòdica. A la confirmació sempre es consulta en directe.
+model CalendarBusyCache {
+  id             String   @id @default(cuid())
+  organizationId String
+  connectionId   String
+  calendarId     String
+  rangeStart     DateTime
+  rangeEnd       DateTime
+  busy           Json // [{start, end}] ISO UTC
+  fetchedAt      DateTime
+  stale          Boolean  @default(false)
+
+  organization Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  connection   GoogleCalendarConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+
+  @@unique([connectionId, calendarId])
+}
+
+// ─────────────────────────── Clients i reserves ───────────────────────────
+
+model Customer {
+  id                String    @id @default(cuid())
+  organizationId    String
+  firstName         String
+  lastName          String
+  phoneE164         String
+  email             String?
+  locale            String    @default("ca")
+  whatsappConsent   Boolean   @default(false)
+  whatsappConsentAt DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  organization     Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  appointments     Appointment[]
+  consents         ConsentRecord[]
+  whatsappMessages WhatsAppMessage[]
+
+  @@unique([organizationId, phoneE164])
+}
+
+enum ConsentType {
+  WHATSAPP_OPERATIONAL
+  PRIVACY_POLICY
+}
+
+// Registre immutable de consentiments (RGPD: demostrar quan i com).
+model ConsentRecord {
+  id             String      @id @default(cuid())
+  organizationId String
+  customerId     String
+  type           ConsentType
+  granted        Boolean
+  textVersion    String
+  text           String
+  ip             String?
+  userAgent      String?
+  createdAt      DateTime    @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customer     Customer     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@index([customerId])
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+  NO_SHOW
+}
+
+enum AppointmentSource {
+  PUBLIC
+  DASHBOARD
+}
+
+enum SyncStatus {
+  NOT_APPLICABLE // el professional no té calendari connectat
+  PENDING
+  SYNCED
+  FAILED
+}
+
+model Appointment {
+  id               String            @id @default(cuid())
+  organizationId   String
+  professionalId   String
+  serviceId        String
+  customerId       String
+  startsAt         DateTime
+  endsAt           DateTime
+  // Interval realment ocupat (amb marges abans/després). Sobre aquest interval
+  // hi ha una restricció d'exclusió a PostgreSQL que impedeix solapaments.
+  blockStart       DateTime
+  blockEnd         DateTime
+  status           AppointmentStatus @default(CONFIRMED)
+  source           AppointmentSource @default(PUBLIC)
+  serviceName      String
+  durationMinutes  Int
+  priceCents       Int?
+  internalNote     String? // mai dades de salut
+  manageTokenHash  String            @unique
+  manageTokenEnc   String // xifrat: cal per reconstruir l'enllaç al recordatori
+  googleCalendarId String?
+  googleEventId    String?
+  googleSyncStatus SyncStatus        @default(NOT_APPLICABLE)
+  googleSyncError  String?
+  googleSyncedAt   DateTime?
+  cancelledAt      DateTime?
+  cancelledBy      String? // CUSTOMER | USER:<id> | SYSTEM
+  cancelReason     String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  organization Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  professional Professional       @relation(fields: [professionalId], references: [id], onDelete: Restrict)
+  service      Service            @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  customer     Customer           @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  events       AppointmentEvent[]
+  syncJobs     CalendarSyncJob[]
+  reminderJobs ReminderJob[]
+  messages     WhatsAppMessage[]
+
+  @@index([organizationId, startsAt])
+  @@index([professionalId, startsAt])
+}
+
+enum ActorType {
+  CUSTOMER
+  USER
+  SYSTEM
+}
+
+model AppointmentEvent {
+  id             String    @id @default(cuid())
+  organizationId String
+  appointmentId  String
+  type           String // CREATED, RESCHEDULED, CANCELLED, STATUS_CHANGED, GOOGLE_SYNCED, GOOGLE_SYNC_FAILED, REMINDER_*
+  actorType      ActorType
+  actorUserId    String?
+  data           Json?
+  createdAt      DateTime  @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  appointment  Appointment  @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+
+  @@index([appointmentId])
+}
+
+// ─────────────────────────── Cues persistents ───────────────────────────
+
+enum JobStatus {
+  PENDING
+  PROCESSING
+  DONE
+  FAILED
+  CANCELLED
+}
+
+enum CalendarSyncAction {
+  UPSERT
+  DELETE
+}
+
+// Patró "outbox": cada canvi d'una cita genera una tasca de sincronització
+// que el treballador processa amb reintents i backoff.
+model CalendarSyncJob {
+  id             String             @id @default(cuid())
+  organizationId String
+  appointmentId  String
+  action         CalendarSyncAction
+  status         JobStatus          @default(PENDING)
+  attempts       Int                @default(0)
+  maxAttempts    Int                @default(6)
+  runAt          DateTime           @default(now())
+  lockedAt       DateTime?
+  lastError      String?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  appointment  Appointment  @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+
+  @@index([status, runAt])
+}
+
+enum ReminderStatus {
+  PENDING
+  PROCESSING
+  SENT
+  DELIVERED
+  READ
+  FAILED
+  CANCELLED
+  SKIPPED
+}
+
+model ReminderJob {
+  id                    String         @id @default(cuid())
+  organizationId        String
+  appointmentId         String
+  kind                  String         @default("REMINDER_24H")
+  scheduledFor          DateTime
+  // Hora de la cita en el moment de programar-lo: si no coincideix en enviar, no s'envia.
+  appointmentStartsAt   DateTime
+  status                ReminderStatus @default(PENDING)
+  // Clau d'idempotència: una cita + una hora d'inici + un tipus = com a màxim un enviament.
+  idempotencyKey        String         @unique
+  attempts              Int            @default(0)
+  maxAttempts           Int            @default(4)
+  lockedAt              DateTime?
+  sentAt                DateTime?
+  lastError             String?
+  skipReason            String?
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+
+  organization Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  appointment  Appointment       @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+  messages     WhatsAppMessage[]
+
+  @@index([status, scheduledFor])
+  @@index([appointmentId])
+}
+
+// ─────────────────────────── WhatsApp ───────────────────────────
+
+// Capa d'abstracció per a números emissors. A la v1 n'hi ha un de plataforma
+// (organizationId null, credencials a les variables d'entorn).
+model WhatsAppSender {
+  id             String   @id @default(cuid())
+  organizationId String?
+  provider       String   @default("meta_cloud")
+  phoneNumberId  String
+  displayPhone   String
+  active         Boolean  @default(true)
+  createdAt      DateTime @default(now())
+
+  organization Organization?          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  settings     OrganizationSettings[]
+}
+
+enum MessageStatus {
+  QUEUED
+  SENT
+  DELIVERED
+  READ
+  FAILED
+}
+
+model WhatsAppMessage {
+  id                String        @id @default(cuid())
+  organizationId    String
+  appointmentId     String?
+  reminderJobId     String?
+  customerId        String
+  toPhone           String
+  templateName      String
+  language          String
+  provider          String
+  providerMessageId String?       @unique
+  status            MessageStatus @default(QUEUED)
+  errorCode         String?
+  errorMessage      String?
+  variables         Json
+  sentAt            DateTime?
+  deliveredAt       DateTime?
+  readAt            DateTime?
+  failedAt          DateTime?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  appointment  Appointment? @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
+  reminderJob  ReminderJob? @relation(fields: [reminderJobId], references: [id], onDelete: SetNull)
+  customer     Customer     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, createdAt])
+}
+
+// ─────────────────────────── Observabilitat i seguretat ───────────────────────────
+
+model IntegrationErrorLog {
+  id             String   @id @default(cuid())
+  organizationId String?
+  integration    String // GOOGLE | WHATSAPP
+  operation      String
+  message        String
+  details        Json?
+  createdAt      DateTime @default(now())
+
+  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([integration, createdAt])
+  @@index([organizationId, createdAt])
+}
+
+model AuditLog {
+  id             String   @id @default(cuid())
+  organizationId String?
+  actorUserId    String?
+  action         String
+  entityType     String?
+  entityId       String?
+  metadata       Json?
+  ip             String?
+  createdAt      DateTime @default(now())
+
+  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  actor        User?         @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, createdAt])
+}
+
+model RateLimitBucket {
+  key         String   @id
+  count       Int
+  windowStart DateTime
+}
