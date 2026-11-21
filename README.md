@@ -48,3 +48,10 @@ El Client ID no és secret (l'inici de sessió fa servir PKCE, sense servidor ni
 ## Pogo i Dolçaina
 
 Fanzine digital d'ska, punk, folk i rock (Països Catalans, Euskal Herria, resta de l'Estat i internacional) a la carpeta [`pogo/`](pogo/). Web: https://marcgalvez.github.io/clautic/pogo/
+
+
+---
+
+## Altres projectes del repositori
+
+- **[`reserves/`](reserves/)** — SaaS de reserves online amb Google Calendar i recordatoris per WhatsApp (Next.js + PostgreSQL).

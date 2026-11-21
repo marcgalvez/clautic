@@ -72,3 +72,11 @@ export const isOrgAdmin = (ctx: OrgContext) => ADMIN_ROLES.includes(ctx.role);
 export function appointmentScope(ctx: OrgContext) {
   return ctx.role === "PROFESSIONAL" ? { organizationId: ctx.orgId, professionalId: ctx.professionalId ?? "__none__" } : { organizationId: ctx.orgId };
 }
+
+/** Per a accions que modifiquen dades: bloquejades si el compte està suspès o caducat. */
+export async function requireWrite(roles?: MemberRole[]): Promise<OrgContext> {
+  const ctx = await requireOrg(roles);
+  if ((ctx.access === "SUSPENDED" || ctx.access === "EXPIRED") && !ctx.user.isSuperAdmin) throw new ForbiddenError("account_blocked");
+  return ctx;
+}
+export const requireAdminWrite = () => requireWrite(ADMIN_ROLES);

@@ -136,3 +136,15 @@ export async function processCalendarSyncJobs(limit = 20, onlyJobId?: string): P
   return { done, failed };
 }
 
+
+/** Quan canvia el calendari d'un professional, les cites futures es tornen a sincronitzar. */
+export async function resyncFutureAppointments(orgId: string, professionalId: string) {
+  const list = await db.appointment.findMany({ where: { organizationId: orgId, professionalId, status: { in: ["PENDING", "CONFIRMED"] }, startsAt: { gt: new Date() } }, select: { id: true, organizationId: true } });
+  for (const a of list) {
+    await db.$transaction(async (tx) => {
+      await tx.appointment.update({ where: { id: a.id }, data: { googleSyncStatus: "PENDING" } });
+      await enqueueCalendarSync(tx, a, "UPSERT");
+    });
+  }
+  return list.length;
+}
