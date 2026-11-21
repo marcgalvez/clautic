@@ -60,6 +60,14 @@ Els alumnes entren només amb el seu **nom d'usuari**. Internament es fa servir 
 
 Només es poden registrar comptes amb un codi d'invitació vàlid: ho controla el *trigger* `handle_new_user`.
 
+## Versió de demostració (sense servidor)
+
+`npm run build:demo` genera una versió estàtica a `../clautic-quest-demo/`, preparada per a GitHub Pages. Tota la base de dades (les mateixes migracions, RLS i funcions) s'executa **dins del navegador** amb PostgreSQL en WebAssembly ([PGlite](https://pglite.dev)), i les dades es guarden a IndexedDB. El primer cop triga uns 5 segons a construir ClauTIC City.
+
+- Les dades són fictícies i es guarden **només en aquell navegador**: no es comparteixen entre dispositius.
+- El botó groc **🧪 DEMO** (a baix a l'esquerra) permet tornar la demo a l'estat inicial.
+- `npm run dev:demo` executa la demo en mode de desenvolupament.
+
 ## Desenvolupament local (sense Supabase)
 
 Cal PostgreSQL 16 en local. `dev/local-api.mjs` emula l'autenticació i l'RPC de Supabase amb el mateix rol `authenticated` i les mateixes claims JWT, i `dev/auth_stub.sql` emula l'esquema `auth`.

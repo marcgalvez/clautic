@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useRpc } from '@/lib/api';
+import { DEMO } from '@/lib/supabase';
 import { ROLE_LABEL, type Role } from '@/lib/types';
 import { Card, ErrorBox, PageHeader, Spinner, Tabs } from '@/components/ui';
 
@@ -9,7 +10,7 @@ export default function AdminInvitations() {
   const { data, error, loading, reload } = useRpc<I[]>('admin_invitations');
   const [role, setRole] = useState<Role | 'tots'>('student');
   const list = useMemo(() => (data ?? []).filter((i) => role === 'tots' || i.role === role), [data, role]);
-  const url = `${window.location.origin}/activar`;
+  const url = DEMO ? `${window.location.origin}${window.location.pathname}#/activar` : `${window.location.origin}/activar`;
   return (
     <div className="space-y-5">
       <PageHeader title="Invitacions pendents" icon="🎟️" subtitle="Cada alumne, família o professor activa el seu compte amb un codi únic."
