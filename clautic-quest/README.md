@@ -2,6 +2,8 @@
 
 Plataforma de gamificació educativa amb un poble futurista compartit, **ClauTIC City**, per a una acadèmia de robòtica, videojocs i Minecraft Education. Té quatre rols (administració, professorat, alumnat i famílies) i tota la interfície és en català.
 
+> 🌐 **App real**: https://marcgalvez.github.io/clautic/clautic-quest-app/ · 🧪 **Demo**: https://marcgalvez.github.io/clautic/clautic-quest-demo/
+>
 > 📐 El disseny previ (mapa de pantalles, base de dades, disseny visual, flux de 5 segons i fases) és a [`docs/DISSENY.md`](docs/DISSENY.md).
 
 ## Què inclou
@@ -59,7 +61,7 @@ Les migracions creen una instal·lació **neta**: tota la configuració, però c
    insert into public.invitations (code, role, full_name) values ('EL-TEU-CODI-SECRET', 'admin', 'Direcció');
    ```
    Després, a l'app, ves a **Activa el teu compte**, escriu aquest codi i tria el teu correu i la teva contrasenya. Des del panell d'administració ja pots importar alumnes i convidar professors i famílies.
-4. **Frontend**: compila amb les variables `VITE_SUPABASE_URL` i `VITE_SUPABASE_PUBLISHABLE_KEY` (Settings → API).
+4. **Frontend**: `npm run build:pages` compila l'app real a `../clautic-quest-app/` (GitHub Pages) amb els valors de `.env.pages` (`VITE_SUPABASE_URL` i `VITE_SUPABASE_PUBLISHABLE_KEY`, que són públics; la seguretat la fa RLS).
 
 Només es poden registrar comptes amb un codi d'invitació vàlid: ho controla el *trigger* `handle_new_user`.
 
