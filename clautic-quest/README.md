@@ -26,7 +26,9 @@ supabase/migrations/
   …003_core_functions.sql  nivells, concessió de punts, desfer, assistència, missions, alta per invitació
   …004_student_family.sql  tauler de l'alumne, ciutat, botiga, cases, informes, estadístiques de grup
   …005_admin.sql           administració, importació, activitats, estadístiques, permisos d'execució
-  …006_demo_data.sql       configuració inicial + dades fictícies (66 alumnes, 10 setmanes d'historial)
+  …006_initial_config.sql  configuració inicial: curs, barris, grups, competències, punts, botiga, insígnies, missions
+  …007_remove_demo_accounts.sql  seguretat: elimina comptes de demo si una versió antiga els havia creat
+dev/demo_data.sql          dades fictícies (66 alumnes, comptes de demo): NOMÉS per a la demo i les proves locals
 ```
 
 ## Comptes de demostració
@@ -46,17 +48,18 @@ La contrasenya de tots els comptes és `clautic2026`. A la pantalla d'inici hi h
 
 Els alumnes entren només amb el seu **nom d'usuari**. Internament es fa servir `usuari@alumnes.clautic.app`, de manera que no cal que tinguin correu.
 
-## Posada en marxa a Lovable Cloud / Supabase
+## Posada en marxa amb Supabase (base de dades real)
 
-1. Crea el projecte apuntant a la carpeta `clautic-quest/`.
-2. Aplica les migracions de `supabase/migrations/` en ordre.
-3. A **Authentication → Providers → Email**, desactiva la confirmació de correu (*auto-confirm*). Els comptes d'alumne fan servir un domini intern.
-4. Variables: `VITE_SUPABASE_URL` i `VITE_SUPABASE_PUBLISHABLE_KEY` (Lovable les configura soles).
-5. **Per a producció**: elimina `…006_demo_data.sql` (o buida les dades fictícies) i crea el primer compte d'administració amb una invitació:
+Les migracions creen una instal·lació **neta**: tota la configuració, però cap alumne ni cap compte de demo.
+
+1. **Integració GitHub**: a Supabase, *Project Settings → Integrations → GitHub*, connecta el repositori i posa **Supabase directory = `clautic-quest`**. Activa **Deploy to production** amb la branca `master`. Les migracions s'apliquen soles a cada canvi a `master`.
+2. **Autenticació**: a *Authentication → Sign In / Providers → Email*, desactiva **Confirm email** (els alumnes no tenen correu).
+3. **Primer administrador**: a *SQL Editor*, crea una invitació amb un codi secret que només sàpigues tu:
    ```sql
-   insert into invitations (code, role, full_name) values ('ADMIN-INICIAL', 'admin', 'Direcció');
+   insert into public.invitations (code, role, full_name) values ('EL-TEU-CODI-SECRET', 'admin', 'Direcció');
    ```
-   Després activa'l des de `/activar`.
+   Després, a l'app, ves a **Activa el teu compte**, escriu aquest codi i tria el teu correu i la teva contrasenya. Des del panell d'administració ja pots importar alumnes i convidar professors i famílies.
+4. **Frontend**: compila amb les variables `VITE_SUPABASE_URL` i `VITE_SUPABASE_PUBLISHABLE_KEY` (Settings → API).
 
 Només es poden registrar comptes amb un codi d'invitació vàlid: ho controla el *trigger* `handle_new_user`.
 
@@ -74,7 +77,7 @@ Cal PostgreSQL 16 en local. `dev/local-api.mjs` emula l'autenticació i l'RPC de
 
 ```bash
 npm install
-npm run db:reset     # crea la BD "clautic" amb totes les migracions (PGPASSWORD=postgres)
+npm run db:reset     # BD "clautic" amb migracions + dades de demo (NO_DEMO=1 per a una BD neta)
 npm run db:test      # 53 proves de servidor: permisos, RLS, antiduplicats, desfer, assistència, botiga…
 npm run dev:api      # API local a :54321
 npm run dev          # app a :8080 (fa servir .env.local)

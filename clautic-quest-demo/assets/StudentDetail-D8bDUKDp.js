@@ -1,1 +1,0 @@
-import{d as e,u as a,j as t}from"./index-Dt7yRln-.js";import{S as o}from"./StudentReport-CXAZKl36.js";import"./format-B8Hakrdi.js";function u(){const{id:s}=e(),n=a();return t.jsxs("div",{children:[t.jsx("button",{className:"btn-ghost mb-4 print:hidden",onClick:()=>n(-1),children:"← Torna"}),t.jsx(o,{studentId:s,houseLink:`/profe/casa/${s}`})]})}export{u as default};
