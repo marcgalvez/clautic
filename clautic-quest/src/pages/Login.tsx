@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSession } from '@/lib/session';
 import { homeFor } from '@/lib/home';
+import { DEMO as DEMO_MODE } from '@/lib/supabase';
 import { Logo } from '@/components/Shells';
 import { HouseView } from '@/components/House';
 
@@ -66,7 +67,7 @@ export default function Login() {
           </form>
           <p className="mt-4 text-center text-sm text-ice/60">Tens un codi d’invitació? <Link to="/activar" className="font-semibold text-cian hover:underline">Activa el teu compte</Link></p>
 
-          <div className="mt-8 rounded-2xl border border-dashed border-white/15 p-4">
+          {DEMO_MODE && <div className="mt-8 rounded-2xl border border-dashed border-white/15 p-4">
             <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-ice/40">Comptes de demostració · contrasenya <code className="text-cian">clautic2026</code></p>
             <div className="grid gap-1.5">
               {DEMO.map((d) => (
@@ -76,7 +77,7 @@ export default function Login() {
                 </button>
               ))}
             </div>
-          </div>
+          </div>}
         </div>
       </div>
     </div>

@@ -10,7 +10,7 @@ export default function AdminInvitations() {
   const { data, error, loading, reload } = useRpc<I[]>('admin_invitations');
   const [role, setRole] = useState<Role | 'tots'>('student');
   const list = useMemo(() => (data ?? []).filter((i) => role === 'tots' || i.role === role), [data, role]);
-  const url = DEMO ? `${window.location.origin}${window.location.pathname}#/activar` : `${window.location.origin}/activar`;
+  const url = DEMO || import.meta.env.VITE_HASH_ROUTER === '1' ? `${window.location.origin}${window.location.pathname}#/activar` : `${window.location.origin}/activar`;
   return (
     <div className="space-y-5">
       <PageHeader title="Invitacions pendents" icon="🎟️" subtitle="Cada alumne, família o professor activa el seu compte amb un codi únic."

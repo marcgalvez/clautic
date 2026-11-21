@@ -6,7 +6,7 @@ import { DEMO } from './lib/supabase';
 import { DemoBanner } from './components/DemoBanner';
 
 // A la demo estàtica (GitHub Pages) fem servir rutes amb # perquè no cal configurar el servidor.
-const Router = DEMO ? HashRouter : BrowserRouter;
+const Router = DEMO || import.meta.env.VITE_HASH_ROUTER === '1' ? HashRouter : BrowserRouter;
 import { SessionProvider } from './lib/session';
 import { ToastProvider } from './lib/toast';
 import './index.css';

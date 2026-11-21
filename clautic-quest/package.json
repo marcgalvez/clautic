@@ -12,7 +12,8 @@
     "db:reset": "bash dev/reset_db.sh",
     "db:test": "psql -U postgres -h localhost -d clautic -f dev/test.sql",
     "dev:demo": "vite --mode demo",
-    "build:demo": "tsc -b && vite build --mode demo"
+    "build:demo": "tsc -b && vite build --mode demo",
+    "build:pages": "tsc -b && vite build --mode pages"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.4.6",
