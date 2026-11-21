@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; }
+html, body, #root { min-height: 100%; }
+body {
+  @apply bg-night-900 font-sans text-ice antialiased;
+  background-image:
+    radial-gradient(1200px 600px at 80% -10%, rgba(139, 92, 246, .18), transparent 60%),
+    radial-gradient(900px 500px at -10% 20%, rgba(34, 211, 238, .12), transparent 60%),
+    radial-gradient(800px 400px at 50% 110%, rgba(229, 33, 59, .10), transparent 60%);
+  background-attachment: fixed;
+  -webkit-tap-highlight-color: transparent;
+}
+.theme-light { color-scheme: light; @apply bg-slate-50 text-slate-800; }
+h1, h2, h3, .font-display { font-family: 'Chakra Petch', system-ui, sans-serif; letter-spacing: .01em; }
+
+@layer components {
+  .glass { @apply rounded-2xl border border-white/10 bg-night-800/70 backdrop-blur-md; }
+  .glass-strong { @apply rounded-2xl border border-white/10 bg-night-700/85 backdrop-blur-lg; }
+  .btn { @apply inline-flex select-none items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition active:scale-[.97] disabled:cursor-not-allowed disabled:opacity-50; }
+  .btn-primary { @apply btn bg-gradient-to-br from-brand-soft to-brand text-white shadow-glow-red hover:brightness-110; }
+  .btn-cian { @apply btn bg-cian text-night-900 hover:bg-cian-soft; }
+  .btn-ghost { @apply btn bg-white/5 text-ice ring-1 ring-white/10 hover:bg-white/10; }
+  .btn-danger { @apply btn bg-brand/15 text-brand-soft ring-1 ring-brand/40 hover:bg-brand/25; }
+  .input { @apply w-full rounded-xl border border-white/10 bg-night-950/60 px-3 py-2.5 text-sm text-ice placeholder:text-ice/30 focus:border-cian/60 focus:outline-none focus:ring-2 focus:ring-cian/20; }
+  .label { @apply mb-1 block text-xs font-semibold uppercase tracking-wider text-ice/50; }
+  .chip { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold; }
+  .table-clean { @apply w-full text-left text-sm; }
+  .table-clean th { @apply border-b border-white/10 px-3 py-2 text-xs font-semibold uppercase tracking-wider text-ice/50; }
+  .table-clean td { @apply border-b border-white/5 px-3 py-2 align-middle; }
+  .table-clean tr:hover td { @apply bg-white/[.02]; }
+  .theme-light .glass { @apply border-slate-200 bg-white shadow-sm backdrop-blur-none; }
+  .theme-light .btn-ghost { @apply bg-white text-slate-700 ring-slate-200 hover:bg-slate-50; }
+  .theme-light .label { @apply text-slate-500; }
+}
+
+.scrollbar-thin::-webkit-scrollbar { height: 6px; width: 6px; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .15); border-radius: 9px; }
+
+/* Animacions SVG de la ciutat */
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+@keyframes hover-y { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@keyframes pulse-glow { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+@keyframes hue { to { filter: hue-rotate(360deg); } }
+@keyframes scan { 0% { transform: translateY(0); opacity: 0; } 30% { opacity: .8; } 100% { transform: translateY(-14px); opacity: 0; } }
+.anim-spin { animation: spin-slow 6s linear infinite; transform-box: fill-box; transform-origin: center; }
+.anim-spin-fast { animation: spin-slow 1.2s linear infinite; transform-box: fill-box; transform-origin: center; }
+.anim-hover { animation: hover-y 3.2s ease-in-out infinite; }
+.anim-pulse { animation: pulse-glow 2.4s ease-in-out infinite; }
+.anim-hue { animation: hue 6s linear infinite; }
+.anim-scan { animation: scan 2.6s ease-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .anim-spin, .anim-spin-fast, .anim-hover, .anim-pulse, .anim-hue, .anim-scan, .animate-bob { animation: none !important; }
+}
+.iso-hit { cursor: pointer; transition: filter .15s; }
+.iso-hit:hover { filter: brightness(1.15) drop-shadow(0 0 6px rgba(34, 211, 238, .7)); }

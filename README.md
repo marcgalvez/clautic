@@ -1,3 +1,5 @@
+> **També en aquest repositori:** [ClauTIC Quest](clautic-quest/) — plataforma de gamificació educativa amb ClauTIC City (React + Lovable Cloud).
+
 # SOLC · vinils, punk i intercanvi
 
 App web per a col·leccionistes de vinils de punk, rock, hardcore, post-punk i garage.
